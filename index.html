@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DEV MUHAMAD — چارەسەری دیجیتاڵ</title>
+<meta name="description" content="DEV MUHAMAD — دروستکردنی سیستەمی مۆدێرن و چارەسەری دیجیتاڵ بۆ کۆمپانیا و کاروبارەکان."/>
+<meta property="og:title" content="DEV MUHAMAD — چارەسەری دیجیتاڵ"/>
+<meta property="og:type" content="website"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+/* ── TOKENS ── */
+:root{
+  --p:#4F46E5;        /* indigo primary */
+  --p-dark:#3730A3;
+  --p-mid:#6366F1;
+  --p-light:#818CF8;
+  --p-xlight:#C7D2FE;
+  --v:#7C3AED;        /* violet accent */
+  --v-light:#A78BFA;
+  --tl:#0891B2;       /* teal accent */
+  --tl-light:#67E8F9;
+  --bg:#FFFFFF;
+  --bg-soft:#F9F8FF;  /* very slight indigo tint */
+  --bg-alt:#EEF2FF;   /* indigo-50 */
+  --bg-card:#FFFFFF;
+  --tx:#1E1B4B;       /* deep indigo-navy */
+  --tx-mid:#4B5563;
+  --tx-muted:#6B7280;
+  --bd:#E0E7FF;       /* indigo-tinted border */
+  --bd-light:#F0F0FF;
+  --sh-sm:0 1px 4px rgba(79,70,229,.07),0 1px 2px rgba(0,0,0,.03);
+  --sh:0 4px 20px rgba(79,70,229,.09),0 2px 8px rgba(0,0,0,.04);
+  --sh-lg:0 12px 48px rgba(79,70,229,.13),0 4px 16px rgba(0,0,0,.06);
+  --r:16px;
+  --r-sm:10px;
+  --r-xs:8px;
+  --r-full:9999px;
+  --fku:'Noto Sans Arabic','Segoe UI',sans-serif;
+  --fen:'Inter','Segoe UI',sans-serif;
+  --ease:.22s cubic-bezier(.4,0,.2,1);
+}
+
+html{scroll-behavior:smooth}
+body{font-family:var(--fku);background:var(--bg);color:var(--tx);line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body.en{font-family:var(--fen);direction:ltr}
+body.en [data-ku]{display:none}
+body:not(.en) [data-en]{display:none}
+
+/* ── SVG ICONS ── */
+.ico{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.ico svg{display:block}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;right:0;left:0;z-index:100;
+  background:rgba(255,255,255,.93);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--bd-light);
+  transition:box-shadow var(--ease);
+}
+nav.scrolled{box-shadow:var(--sh)}
+.nav-inner{
+  max-width:1180px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;height:68px;
+}
+.nav-logo{
+  font-family:var(--fen);font-size:.84rem;font-weight:800;
+  letter-spacing:.1em;text-transform:uppercase;text-decoration:none;
+  color:var(--p);display:flex;align-items:center;gap:6px;
+}
+.nav-logo-dot{width:7px;height:7px;border-radius:50%;background:var(--v);flex-shrink:0}
+.nav-logo span{color:var(--tx)}
+.nav-links{display:flex;align-items:center;gap:28px;list-style:none}
+.nav-links a{font-size:.875rem;font-weight:500;color:var(--tx-muted);text-decoration:none;transition:color var(--ease)}
+.nav-links a:hover{color:var(--p)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.lang-btn{
+  display:flex;align-items:center;gap:5px;
+  padding:6px 14px;border-radius:var(--r-full);
+  border:1.5px solid var(--bd);background:transparent;
+  font-size:.78rem;font-weight:700;color:var(--tx-mid);
+  cursor:pointer;transition:all var(--ease);font-family:var(--fen);
+}
+.lang-btn:hover{border-color:var(--p);color:var(--p);background:var(--bg-alt)}
+.nav-cta{
+  padding:8px 20px;border-radius:var(--r-full);
+  background:var(--p);color:#fff;
+  font-size:.85rem;font-weight:600;text-decoration:none;
+  transition:all var(--ease);white-space:nowrap;
+  box-shadow:0 2px 8px rgba(79,70,229,.25);
+}
+.nav-cta:hover{background:var(--p-dark);transform:translateY(-1px);box-shadow:0 6px 16px rgba(79,70,229,.35)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.hamburger span{width:22px;height:2px;background:var(--tx);border-radius:2px;transition:all var(--ease);display:block}
+.mobile-menu{
+  display:none;position:fixed;top:68px;right:0;left:0;
+  background:#fff;border-bottom:1px solid var(--bd);
+  padding:12px 24px;z-index:99;flex-direction:column;gap:0;
+}
+.mobile-menu.open{display:flex}
+.mobile-menu a{
+  padding:13px 0;font-size:.95rem;font-weight:500;
+  color:var(--tx);text-decoration:none;border-bottom:1px solid var(--bd-light);
+}
+.mobile-menu a:last-child{border-bottom:none}
+
+/* ── LAYOUT ── */
+section{padding:96px 28px}
+.container{max-width:1180px;margin:0 auto}
+.section-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--bg-alt);color:var(--p);
+  font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  padding:5px 14px;border-radius:var(--r-full);margin-bottom:18px;
+  border:1px solid rgba(79,70,229,.15);
+}
+.section-eyebrow-dot{width:5px;height:5px;border-radius:50%;background:var(--p);flex-shrink:0}
+h2.section-title{
+  font-size:clamp(1.8rem,3.5vw,2.6rem);
+  font-weight:700;line-height:1.22;color:var(--tx);margin-bottom:14px;
+}
+.section-desc{font-size:1.05rem;color:var(--tx-muted);max-width:540px;line-height:1.8}
+.section-head{margin-bottom:60px}
+
+/* ── BUTTONS ── */
+.btn-p{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:13px 28px;border-radius:var(--r-full);
+  background:var(--p);color:#fff;font-size:.95rem;font-weight:600;
+  text-decoration:none;border:none;cursor:pointer;
+  transition:all var(--ease);
+  box-shadow:0 4px 14px rgba(79,70,229,.28);
+}
+.btn-p:hover{background:var(--p-dark);transform:translateY(-2px);box-shadow:0 8px 24px rgba(79,70,229,.36)}
+.btn-o{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:13px 28px;border-radius:var(--r-full);
+  background:transparent;color:var(--tx);font-size:.95rem;font-weight:600;
+  text-decoration:none;cursor:pointer;border:1.5px solid var(--bd);
+  transition:all var(--ease);
+}
+.btn-o:hover{border-color:var(--p);color:var(--p);background:var(--bg-alt)}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .55s ease,transform .55s ease}
+.reveal.visible{opacity:1;transform:none}
+
+/* ══════════════════════════════════════
+   HERO
+══════════════════════════════════════ */
+#hero{
+  min-height:100vh;display:flex;align-items:center;
+  padding-top:68px;position:relative;overflow:hidden;
+  background:var(--bg);
+}
+.hero-bg{position:absolute;inset:0;pointer-events:none}
+.hero-blob{
+  position:absolute;border-radius:50%;
+  background:radial-gradient(circle,rgba(79,70,229,.07) 0%,transparent 68%);
+}
+.hero-blob-1{width:640px;height:640px;top:-15%;right:-8%;animation:bpulse 9s ease-in-out infinite}
+.hero-blob-2{width:480px;height:480px;bottom:-18%;left:-6%;background:radial-gradient(circle,rgba(124,58,237,.05) 0%,transparent 68%);animation:bpulse 12s ease-in-out infinite reverse}
+.hero-blob-3{width:300px;height:300px;top:35%;left:30%;background:radial-gradient(circle,rgba(8,145,178,.04) 0%,transparent 68%);animation:bpulse 7s ease-in-out infinite 2s}
+@keyframes bpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
+
+/* subtle grid overlay */
+.hero-bg::after{
+  content:'';position:absolute;inset:0;
+  background-image:linear-gradient(var(--bd-light) 1px,transparent 1px),linear-gradient(90deg,var(--bd-light) 1px,transparent 1px);
+  background-size:48px 48px;opacity:.4;
+}
+
+.hero-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  align-items:center;gap:72px;position:relative;z-index:1;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(79,70,229,.07);border:1px solid rgba(79,70,229,.18);
+  color:var(--p);font-size:.78rem;font-weight:700;letter-spacing:.05em;
+  padding:6px 14px;border-radius:var(--r-full);margin-bottom:22px;
+}
+.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--p);animation:blink 2s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hero-title{
+  font-size:clamp(2.3rem,5vw,4rem);
+  font-weight:700;line-height:1.13;color:var(--tx);margin-bottom:20px;
+}
+.hero-title .grad{
+  background:linear-gradient(135deg,var(--p) 0%,var(--v) 60%,var(--tl) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{
+  font-size:1.08rem;color:var(--tx-muted);
+  line-height:1.82;margin-bottom:36px;max-width:460px;
+}
+.hero-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+
+/* hero visual */
+.hero-visual{display:flex;justify-content:center;align-items:center;position:relative}
+.hv-wrap{position:relative;width:360px;height:360px}
+
+/* big card */
+.hv-main{
+  position:absolute;top:0;right:0;
+  width:220px;height:220px;border-radius:24px;
+  background:linear-gradient(145deg,var(--p) 0%,var(--v) 100%);
+  box-shadow:0 16px 56px rgba(79,70,229,.3);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  animation:hfloat1 6.5s ease-in-out infinite;
+  color:#fff;
+}
+.hv-main-label{font-size:.8rem;font-weight:600;opacity:.85;font-family:var(--fen);letter-spacing:.04em}
+/* secondary card */
+.hv-sec{
+  position:absolute;bottom:50px;right:50px;
+  width:180px;height:120px;border-radius:18px;
+  background:#fff;border:1px solid var(--bd);
+  box-shadow:var(--sh-lg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+  animation:hfloat2 8s ease-in-out infinite;
+  color:var(--tx);
+}
+.hv-sec-lbl{font-size:.78rem;color:var(--tx-muted);font-weight:500}
+/* small accent card */
+.hv-sm{
+  position:absolute;top:160px;left:0;
+  width:120px;height:110px;border-radius:16px;
+  background:var(--bg-alt);border:1px solid var(--bd);
+  box-shadow:var(--sh);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  animation:hfloat3 7.5s ease-in-out infinite;
+  color:var(--p);
+}
+.hv-sm-lbl{font-size:.7rem;font-weight:600;color:var(--tx-mid)}
+@keyframes hfloat1{0%,100%{transform:translateY(0)}50%{transform:translateY(-11px)}}
+@keyframes hfloat2{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes hfloat3{0%,100%{transform:translateY(0)}50%{transform:translateY(-13px)}}
+
+/* ══════════════════════════════════════
+   ABOUT
+══════════════════════════════════════ */
+#about{background:var(--bg-soft)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+.about-text p{font-size:1.02rem;color:var(--tx-muted);line-height:1.82;margin-bottom:28px}
+.about-pills{display:flex;flex-wrap:wrap;gap:10px}
+.pill{
+  display:inline-flex;align-items:center;gap:7px;
+  background:#fff;border:1.5px solid var(--bd);
+  padding:6px 14px;border-radius:var(--r-full);
+  font-size:.82rem;font-weight:600;color:var(--tx-mid);
+  transition:all var(--ease);
+}
+.pill:hover{border-color:var(--p);color:var(--p);background:var(--bg-alt)}
+.pill .pill-ico{width:16px;height:16px;flex-shrink:0}
+
+.about-stats{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.asc{
+  background:var(--bg-card);border:1.5px solid var(--bd);
+  border-radius:var(--r);padding:28px 22px;text-align:center;
+  box-shadow:var(--sh-sm);transition:all var(--ease);
+}
+.asc:hover{transform:translateY(-4px);box-shadow:var(--sh);border-color:rgba(79,70,229,.3)}
+.asc .num{font-size:2.1rem;font-weight:800;line-height:1;font-family:var(--fen);color:var(--p)}
+.asc .lbl{font-size:.8rem;color:var(--tx-muted);margin-top:6px;line-height:1.4}
+.asc.dark{background:linear-gradient(145deg,var(--p),var(--v));border-color:transparent}
+.asc.dark .num,.asc.dark .lbl{color:#fff}
+.asc.dark .num{color:#fff}
+.asc.teal-card{background:linear-gradient(145deg,rgba(8,145,178,.08),rgba(8,145,178,.04));border-color:rgba(8,145,178,.2)}
+.asc.teal-card .num{color:var(--tl)}
+
+/* ══════════════════════════════════════
+   SYSTEMS
+══════════════════════════════════════ */
+#systems{background:var(--bg)}
+.sys-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.sys-card{
+  background:var(--bg-card);border:1.5px solid var(--bd);
+  border-radius:var(--r);padding:28px 22px;
+  position:relative;overflow:hidden;
+  transition:all var(--ease);
+}
+.sys-card::after{
+  content:'';position:absolute;inset:0;border-radius:var(--r);
+  background:linear-gradient(135deg,rgba(79,70,229,.025),rgba(124,58,237,.015));
+  opacity:0;transition:opacity var(--ease);pointer-events:none;
+}
+.sys-card:hover{transform:translateY(-7px);box-shadow:var(--sh-lg);border-color:rgba(79,70,229,.25)}
+.sys-card:hover::after{opacity:1}
+.sys-card-top{
+  position:absolute;top:0;right:0;left:0;height:3px;
+  border-radius:var(--r) var(--r) 0 0;
+  background:linear-gradient(90deg,var(--p),var(--v));
+  transform:scaleX(0);transform-origin:right;
+  transition:transform .3s ease;
+}
+.sys-card:hover .sys-card-top{transform:scaleX(1)}
+
+.sys-ico{
+  width:50px;height:50px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:18px;flex-shrink:0;
+}
+.ico-bg-p{background:rgba(79,70,229,.1)}
+.ico-bg-v{background:rgba(124,58,237,.1)}
+.ico-bg-tl{background:rgba(8,145,178,.1)}
+.ico-bg-g{background:var(--bd-light)}
+
+.sys-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 10px;border-radius:var(--r-full);
+  font-size:.72rem;font-weight:700;margin-bottom:12px;
+}
+.badge-live{background:rgba(16,185,129,.1);color:#059669}
+.badge-live-dot{width:5px;height:5px;border-radius:50%;background:#10B981}
+.badge-game{background:rgba(124,58,237,.1);color:var(--v)}
+.badge-soon{background:rgba(107,114,128,.1);color:var(--tx-muted)}
+.sys-card h3{font-size:1rem;font-weight:700;margin-bottom:8px;color:var(--tx)}
+.sys-card p{font-size:.85rem;color:var(--tx-muted);line-height:1.68;margin-bottom:20px}
+.sys-link{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.82rem;font-weight:700;color:var(--p);text-decoration:none;
+  transition:gap var(--ease);
+}
+.sys-link:hover{gap:10px}
+
+/* ══════════════════════════════════════
+   SERVICES
+══════════════════════════════════════ */
+#services{background:var(--bg-soft)}
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.svc-card{
+  background:var(--bg-card);border:1.5px solid var(--bd);
+  border-radius:var(--r);padding:28px 24px;
+  transition:all var(--ease);
+}
+.svc-card:hover{box-shadow:var(--sh);transform:translateY(-4px);border-color:rgba(79,70,229,.22)}
+.svc-ico{
+  width:46px;height:46px;border-radius:13px;
+  background:var(--bg-alt);display:flex;align-items:center;justify-content:center;
+  margin-bottom:16px;border:1px solid var(--bd);
+}
+.svc-card h3{font-size:.95rem;font-weight:700;margin-bottom:7px;color:var(--tx)}
+.svc-card p{font-size:.84rem;color:var(--tx-muted);line-height:1.68}
+
+/* ══════════════════════════════════════
+   WHY
+══════════════════════════════════════ */
+#why{background:var(--bg)}
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.why-card{
+  padding:28px 24px;border-radius:var(--r);
+  border:1.5px solid var(--bd);
+  transition:all var(--ease);position:relative;overflow:hidden;
+}
+.why-card:hover{border-color:rgba(79,70,229,.28);box-shadow:var(--sh);background:var(--bg-soft)}
+.why-ico{
+  width:46px;height:46px;border-radius:13px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:16px;
+}
+.why-card h3{font-size:.95rem;font-weight:700;margin-bottom:7px;color:var(--tx)}
+.why-card p{font-size:.84rem;color:var(--tx-muted);line-height:1.68}
+
+/* ══════════════════════════════════════
+   STATS
+══════════════════════════════════════ */
+#stats{
+  background:linear-gradient(135deg,var(--p-dark) 0%,var(--p) 45%,var(--v) 100%);
+  padding:80px 28px;position:relative;overflow:hidden;
+}
+#stats::before{
+  content:'';position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:44px 44px;
+}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:48px;position:relative;z-index:1}
+.stat-item{text-align:center}
+.stat-num{
+  font-size:3rem;font-weight:800;color:#fff;
+  font-family:var(--fen);line-height:1;margin-bottom:8px;
+}
+.stat-label{font-size:.9rem;color:rgba(255,255,255,.72);line-height:1.4}
+.stat-ico{
+  width:44px;height:44px;border-radius:12px;
+  background:rgba(255,255,255,.12);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 16px;
+}
+
+/* ══════════════════════════════════════
+   CONTACT
+══════════════════════════════════════ */
+#contact{background:var(--bg-soft)}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start}
+.contact-form{display:flex;flex-direction:column;gap:16px}
+.form-group{display:flex;flex-direction:column;gap:7px}
+.form-group label{font-size:.84rem;font-weight:700;color:var(--tx)}
+.form-group input,.form-group textarea{
+  padding:12px 16px;border:1.5px solid var(--bd);
+  border-radius:var(--r-sm);font-size:.9rem;
+  font-family:inherit;color:var(--tx);background:#fff;
+  transition:border-color var(--ease),box-shadow var(--ease);
+  outline:none;resize:vertical;
+}
+.form-group input:focus,.form-group textarea:focus{
+  border-color:var(--p);
+  box-shadow:0 0 0 3px rgba(79,70,229,.1);
+}
+.form-group textarea{min-height:120px}
+.contact-info h3{font-size:1.45rem;font-weight:700;margin-bottom:12px;color:var(--tx)}
+.contact-info>p{font-size:.95rem;color:var(--tx-muted);line-height:1.8;margin-bottom:28px}
+.social-links{display:flex;flex-direction:column;gap:10px}
+.social-link{
+  display:flex;align-items:center;gap:12px;
+  padding:13px 16px;background:#fff;
+  border:1.5px solid var(--bd);border-radius:var(--r-sm);
+  text-decoration:none;color:var(--tx);
+  font-size:.9rem;font-weight:600;
+  transition:all var(--ease);
+}
+.social-link:hover{border-color:var(--p);background:var(--bg-alt);transform:translateX(-4px)}
+body.en .social-link:hover{transform:translateX(4px)}
+.social-link-ico{
+  width:36px;height:36px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.form-success{
+  display:none;padding:14px 18px;
+  background:rgba(16,185,129,.08);border:1.5px solid rgba(16,185,129,.25);
+  border-radius:var(--r-sm);color:#059669;font-size:.9rem;font-weight:600;
+}
+.form-success.show{display:flex;align-items:center;gap:10px}
+
+/* ══════════════════════════════════════
+   FOOTER
+══════════════════════════════════════ */
+footer{background:var(--tx);color:rgba(255,255,255,.55);padding:52px 28px 28px}
+.footer-inner{max-width:1180px;margin:0 auto}
+.footer-top{
+  display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;
+  gap:52px;padding-bottom:44px;
+  border-bottom:1px solid rgba(255,255,255,.09);margin-bottom:28px;
+}
+.footer-logo{
+  font-family:var(--fen);font-weight:800;font-size:.9rem;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:#fff;display:flex;align-items:center;gap:6px;margin-bottom:14px;
+}
+.footer-logo-dot{width:7px;height:7px;border-radius:50%;background:var(--p-light)}
+.footer-logo span{color:var(--p-light)}
+.footer-brand p{font-size:.83rem;line-height:1.78;max-width:210px}
+.footer-col h4{font-size:.83rem;font-weight:700;color:#fff;margin-bottom:16px;letter-spacing:.03em}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.footer-col ul a{font-size:.83rem;color:rgba(255,255,255,.5);text-decoration:none;transition:color var(--ease)}
+.footer-col ul a:hover{color:#fff}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between}
+.footer-bottom p{font-size:.79rem}
+.footer-lang{
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);
+  color:rgba(255,255,255,.65);padding:6px 16px;border-radius:var(--r-full);
+  font-size:.78rem;font-family:var(--fen);font-weight:700;
+  cursor:pointer;transition:all var(--ease);
+}
+.footer-lang:hover{background:rgba(255,255,255,.13);color:#fff}
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media(max-width:1024px){
+  .sys-grid{grid-template-columns:repeat(2,1fr)}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:32px}
+  .footer-top{grid-template-columns:1fr 1fr;gap:32px}
+}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .hero-grid{grid-template-columns:1fr;gap:40px;text-align:center}
+  .hero-sub{max-width:100%}
+  .hero-actions{justify-content:center}
+  .hero-visual{display:none}
+  .about-grid,.contact-grid{grid-template-columns:1fr;gap:44px}
+  .about-stats{grid-template-columns:repeat(4,1fr)}
+  .svc-grid,.why-grid{grid-template-columns:1fr 1fr}
+  .sys-grid{grid-template-columns:1fr}
+  section{padding:68px 20px}
+}
+@media(max-width:560px){
+  .svc-grid,.why-grid{grid-template-columns:1fr}
+  .about-stats{grid-template-columns:1fr 1fr}
+  .footer-top{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center}
+  .stats-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-dot"></div>
+      DEV <span>MUHAMAD</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about" data-ku>دەربارەی ئێمە</a><a href="#about" data-en>About</a></li>
+      <li><a href="#systems" data-ku>سیستەمەکان</a><a href="#systems" data-en>Systems</a></li>
+      <li><a href="#services" data-ku>خزمەتگوزارییەکان</a><a href="#services" data-en>Services</a></li>
+      <li><a href="#contact" data-ku>پەیوەندی</a><a href="#contact" data-en>Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="lang-btn" onclick="toggleLang()" aria-label="Switch language">
+        <!-- globe icon -->
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg>
+        <span data-ku>EN</span><span data-en>KU</span>
+      </button>
+      <a href="#contact" class="nav-cta" data-ku>پەیوەندی</a>
+      <a href="#contact" class="nav-cta" data-en>Get in Touch</a>
+    </div>
+    <div class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="closeMenu()" data-ku>دەربارەی ئێمە</a>
+  <a href="#about" onclick="closeMenu()" data-en>About</a>
+  <a href="#systems" onclick="closeMenu()" data-ku>سیستەمەکان</a>
+  <a href="#systems" onclick="closeMenu()" data-en>Systems</a>
+  <a href="#services" onclick="closeMenu()" data-ku>خزمەتگوزارییەکان</a>
+  <a href="#services" onclick="closeMenu()" data-en>Services</a>
+  <a href="#contact" onclick="closeMenu()" data-ku>پەیوەندی</a>
+  <a href="#contact" onclick="closeMenu()" data-en>Contact</a>
+</div>
+
+<!-- ══════════════════════════════════════
+     HERO
+══════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-bg">
+    <div class="hero-blob hero-blob-1"></div>
+    <div class="hero-blob hero-blob-2"></div>
+    <div class="hero-blob hero-blob-3"></div>
+  </div>
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-badge" data-ku>
+          <div class="hero-badge-dot"></div>
+          چارەسەری دیجیتاڵ · کوردستان
+        </div>
+        <div class="hero-badge" data-en>
+          <div class="hero-badge-dot"></div>
+          Digital Solutions · Kurdistan
+        </div>
+        <h1 class="hero-title" data-ku>
+          سیستەمی مۆدێرن<br/>بۆ <span class="grad">کاروبارت</span>
+        </h1>
+        <h1 class="hero-title" data-en>
+          Modern Systems<br/>for <span class="grad">Your Business</span>
+        </h1>
+        <p class="hero-sub" data-ku>DEV MUHAMAD براندێکە بۆ دروستکردنی چارەسەری دیجیتاڵی بایەخدار — وێب ئەپ، سیستەمی بەڕێوەبردن و چارەسەری تەکنەلۆژی بۆ کاروبارەکانت.</p>
+        <p class="hero-sub" data-en>DEV MUHAMAD builds meaningful digital solutions — web apps, management systems, and technology tools that power businesses across Kurdistan.</p>
+        <div class="hero-actions">
+          <a href="#systems" class="btn-p" data-ku>
+            بینینی سیستەمەکان
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 3 12 9 6"/></svg>
+          </a>
+          <a href="#systems" class="btn-p" data-en>
+            View Systems
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 21 12 15 6"/></svg>
+          </a>
+          <a href="#contact" class="btn-o" data-ku>پەیوەندیمان پێوەبکە</a>
+          <a href="#contact" class="btn-o" data-en>Contact Us</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hv-wrap">
+          <!-- main card -->
+          <div class="hv-main">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="1.6"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+            <div class="hv-main-label">DEV MUHAMAD</div>
+          </div>
+          <!-- secondary -->
+          <div class="hv-sec">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="1.7"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            <span class="hv-sec-lbl" data-ku>ئەپی مۆدێرن</span>
+            <span class="hv-sec-lbl" data-en>Modern App</span>
+          </div>
+          <!-- small -->
+          <div class="hv-sm">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <span class="hv-sm-lbl">UI/UX</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     ABOUT
+══════════════════════════════════════ -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <div class="section-eyebrow"><div class="section-eyebrow-dot"></div><span data-ku>دەربارەی ئێمە</span><span data-en>About Us</span></div>
+        <h2 class="section-title" data-ku>براندێک بۆ<br/>دروستکردنی ئاینده</h2>
+        <h2 class="section-title" data-en>A Brand Built<br/>for the Future</h2>
+        <p data-ku>DEV MUHAMAD ستودیۆیەکی تەکنەلۆژییە کە لە کوردستان دامەزراوە. ئامانجمان دروستکردنی سیستەمی مۆدێرن و ئەپی وێبییە کە کاروبارەکانی کوردستان بتوانن لەگەڵ دونیای دیجیتاڵ هاوپێچ بن.</p>
+        <p data-en>DEV MUHAMAD is a technology studio based in Kurdistan, building modern digital systems and web applications that help businesses grow and thrive in the digital world.</p>
+        <div class="about-pills">
+          <span class="pill">
+            <svg class="pill-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            <span data-ku>دروستکردن</span><span data-en>Build</span>
+          </span>
+          <span class="pill">
+            <svg class="pill-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg>
+            UI/UX
+          </span>
+          <span class="pill">
+            <svg class="pill-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            API
+          </span>
+          <span class="pill">
+            <svg class="pill-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span data-ku>پاراستن</span><span data-en>Security</span>
+          </span>
+          <span class="pill">
+            <svg class="pill-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+            <span data-ku>مۆبایل</span><span data-en>Mobile</span>
+          </span>
+        </div>
+      </div>
+      <div class="about-stats reveal">
+        <div class="asc dark">
+          <div class="num">10+</div>
+          <div class="lbl" data-ku>پرۆژەی تەواوکراو</div><div class="lbl" data-en>Projects Done</div>
+        </div>
+        <div class="asc">
+          <div class="num" style="color:var(--v)">4</div>
+          <div class="lbl" data-ku>سیستەمی ئامادە</div><div class="lbl" data-en>Live Systems</div>
+        </div>
+        <div class="asc">
+          <div class="num">100%</div>
+          <div class="lbl">Responsive</div>
+        </div>
+        <div class="asc teal-card">
+          <div class="num">RTL</div>
+          <div class="lbl" data-ku>کوردی یەکەم</div><div class="lbl" data-en>Kurdish First</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SYSTEMS
+══════════════════════════════════════ -->
+<section id="systems">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow"><div class="section-eyebrow-dot"></div><span data-ku>سیستەمەکان</span><span data-en>Systems</span></div>
+      <h2 class="section-title" data-ku>پرۆدەکتەکانمان</h2>
+      <h2 class="section-title" data-en>Our Products</h2>
+      <p class="section-desc" data-ku>سیستەمەکانمان بە تایبەتی بۆ کاروبارەکانی کوردستان دروست کراون.</p>
+      <p class="section-desc" data-en>Our systems are built specifically for businesses in Kurdistan and the region.</p>
+    </div>
+    <div class="sys-grid">
+
+      <!-- QR Menu -->
+      <div class="sys-card reveal">
+        <div class="sys-card-top"></div>
+        <div class="sys-ico ico-bg-p">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="3" height="3"/><rect x="18" y="14" width="3" height="3"/><rect x="14" y="18" width="3" height="3"/><rect x="18" y="18" width="3" height="3"/><rect x="5" y="5" width="3" height="3" fill="#4F46E5" stroke="none"/><rect x="16" y="5" width="3" height="3" fill="#4F46E5" stroke="none"/><rect x="5" y="16" width="3" height="3" fill="#4F46E5" stroke="none"/></svg>
+        </div>
+        <div class="sys-badge badge-live">
+          <div class="badge-live-dot"></div>
+          <span data-ku>ئامادەیە</span><span data-en>Live</span>
+        </div>
+        <h3 data-ku>سیستەمی مینوی QR</h3>
+        <h3 data-en>QR Menu System</h3>
+        <p data-ku>مینوی ئەلیکترۆنی زیرەک بۆ خواردنگەکان — سێ زمانی کوردی، عەرەبی و ئینگلیزی، بە دیزاینی لوکس.</p>
+        <p data-en>Smart digital menus for restaurants — trilingual Kurdish, Arabic & English with luxury dark design.</p>
+        <a href="#" class="sys-link" data-ku>بینینی زیاتر
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 3 12 9 6"/></svg>
+        </a>
+        <a href="#" class="sys-link" data-en>Learn More
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 21 12 15 6"/></svg>
+        </a>
+      </div>
+
+      <!-- ERP -->
+      <div class="sys-card reveal">
+        <div class="sys-card-top"></div>
+        <div class="sys-ico ico-bg-v">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div class="sys-badge badge-live">
+          <div class="badge-live-dot"></div>
+          <span data-ku>ئامادەیە</span><span data-en>Live</span>
+        </div>
+        <h3 data-ku>سیستەمی بەڕێوەبردنی دوکان</h3>
+        <h3 data-en>Shop ERP System</h3>
+        <p data-ku>سیستەمی بەڕێوەبردنی تەواو — کاڵا، فرۆشتن، قەرز و ڕاپۆرت بە زمانی کوردی.</p>
+        <p data-en>Full shop management — inventory, sales, debts, and detailed reports in Kurdish.</p>
+        <a href="#" class="sys-link" data-ku>بینینی زیاتر
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 3 12 9 6"/></svg>
+        </a>
+        <a href="#" class="sys-link" data-en>Learn More
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 21 12 15 6"/></svg>
+        </a>
+      </div>
+
+      <!-- Sexur Game -->
+      <div class="sys-card reveal">
+        <div class="sys-card-top"></div>
+        <div class="sys-ico ico-bg-tl">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="1.8"><path d="M17.5 10c0 5-8.5 11-8.5 11S.5 15 .5 10a8.5 8.5 0 0 1 17 0z"/><circle cx="9" cy="10" r="3"/><path d="M15 5.5l3.5 2M15 14.5l3.5-2M20 8h2M20 12h2"/></svg>
+        </div>
+        <div class="sys-badge badge-game">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="#7C3AED"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <span data-ku>یاری ئۆنلاین</span><span data-en>Online Game</span>
+        </div>
+        <h3>Sexur Game</h3>
+        <p data-ku>یارییەکی ئۆنلاین بۆ گرووپ — Social Deduction بە دیزاینی کوردی بۆ ئینتەرنێت.</p>
+        <p data-en>A multiplayer online social deduction game — Kurdish-designed and built for the web.</p>
+        <a href="https://sexurgame.com" target="_blank" class="sys-link" data-ku>بینینی یاری
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 3 12 9 6"/></svg>
+        </a>
+        <a href="https://sexurgame.com" target="_blank" class="sys-link" data-en>Play Now
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 21 12 15 6"/></svg>
+        </a>
+      </div>
+
+      <!-- Coming Soon -->
+      <div class="sys-card reveal" style="border-style:dashed;background:var(--bg-soft)">
+        <div class="sys-ico ico-bg-g">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <div class="sys-badge badge-soon">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="#6B7280"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke="white" stroke-width="2" fill="none"/></svg>
+          <span data-ku>بەزووی</span><span data-en>Coming Soon</span>
+        </div>
+        <h3 data-ku>پرۆژەی داهاتوو</h3>
+        <h3 data-en>Next Project</h3>
+        <p data-ku>ئێمە بەردەوام کاردەکەین لەسەر چارەسەری نوێ. لە ئاگادارکردنەوەکانمان بمێنەرەوە.</p>
+        <p data-en>We're always working on something new. Stay tuned for our next release.</p>
+        <a href="#contact" class="sys-link" style="color:var(--tx-muted)" data-ku>ئاگادار بم
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 3 12 9 6"/></svg>
+        </a>
+        <a href="#contact" class="sys-link" style="color:var(--tx-muted)" data-en>Notify Me
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 21 12 15 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SERVICES
+══════════════════════════════════════ -->
+<section id="services">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow"><div class="section-eyebrow-dot"></div><span data-ku>خزمەتگوزارییەکان</span><span data-en>Services</span></div>
+      <h2 class="section-title" data-ku>چی دەتوانین بۆت بکەین</h2>
+      <h2 class="section-title" data-en>What We Can Do For You</h2>
+    </div>
+    <div class="svc-grid">
+      <div class="svc-card reveal">
+        <div class="svc-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg>
+        </div>
+        <h3 data-ku>دروستکردنی وێب ئەپ</h3><h3 data-en>Web App Development</h3>
+        <p data-ku>دروستکردنی وێب ئەپی چالاک، خێرا و مۆدێرن بۆ هەر جۆرە کاروبارێک.</p>
+        <p data-en>Building fast, modern, and responsive web applications for any business type.</p>
+      </div>
+      <div class="svc-card reveal">
+        <div class="svc-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 8h10M7 12h6"/></svg>
+        </div>
+        <h3 data-ku>سیستەمی بەڕێوەبردنی کاروبار</h3><h3 data-en>Business Management Systems</h3>
+        <p data-ku>سیستەمی تایبەتمەند — فرۆشتن، کاڵا، کارمەند و داهات.</p>
+        <p data-en>Custom systems — sales, inventory, staff, and revenue tracking.</p>
+      </div>
+      <div class="svc-card reveal">
+        <div class="svc-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="1.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </div>
+        <h3>UI/UX Design</h3>
+        <p data-ku>دیزاینی ڕووکار بە ئامانجی ئاسانکاری و جوانی — کاربەر خۆش دەبینێت.</p>
+        <p data-en>Interface design focused on usability and beauty — users will love the experience.</p>
+      </div>
+      <div class="svc-card reveal">
+        <div class="svc-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="1.8"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        </div>
+        <h3>API Integration</h3>
+        <p data-ku>بەستنەوەی سیستەمەکانت — Payment، WhatsApp، Supabase و هتد.</p>
+        <p data-en>Connecting your systems — Payment gateways, WhatsApp, Supabase, and more.</p>
+      </div>
+      <div class="svc-card reveal">
+        <div class="svc-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="1.8"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        </div>
+        <h3 data-ku>پشتگیری تەکنیکی</h3><h3 data-en>Technical Support</h3>
+        <p data-ku>پشتگیری بەردەوام — نوێکردنەوە، ڕاستکردنەوەی خەڵەتی و گەشەپێدان.</p>
+        <p data-en>Ongoing support — updates, bug fixes, and continued improvement.</p>
+      </div>
+      <div class="svc-card reveal" style="border-color:rgba(79,70,229,.2);background:var(--bg-alt)">
+        <div class="svc-ico" style="background:rgba(79,70,229,.12);border-color:rgba(79,70,229,.15)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <h3 data-ku>شێوپێدانی دیجیتاڵ</h3><h3 data-en>Digital Consulting</h3>
+        <p data-ku>یارمەتیت دەدەین باشترین ڕێگاچارەی دیجیتاڵ بدۆزیتەوە بۆ کاروبارەکەت.</p>
+        <p data-en>We help you discover the best digital path for your business growth.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     WHY
+══════════════════════════════════════ -->
+<section id="why">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow"><div class="section-eyebrow-dot"></div><span data-ku>بۆچی ئێمە؟</span><span data-en>Why Us?</span></div>
+      <h2 class="section-title" data-ku>ئەوەی ئێمەمان جیاواز دەکات</h2>
+      <h2 class="section-title" data-en>What Sets Us Apart</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <div class="why-ico" style="background:rgba(79,70,229,.08)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <h3 data-ku>دیزاینی مۆدێرن</h3><h3 data-en>Modern Design</h3>
+        <p data-ku>هەر دیزاینێک بە دەق و بیر و ئامانج دەچینێتەوە — ئاسان، جوان و پشکنراو.</p>
+        <p data-en>Every design is crafted with purpose — clean, beautiful, and user-tested.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-ico" style="background:rgba(8,145,178,.08)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="1.8"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <h3 data-ku>خێرایی بەرز</h3><h3 data-en>High Performance</h3>
+        <p data-ku>سیستەمەکانمان بۆ خێرایی ئۆپتیمایز دەکرێن — لودینگی خێرا، ئەکسپیریەنسی باش.</p>
+        <p data-en>Our systems are optimized for speed — fast loading, great experience.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-ico" style="background:rgba(124,58,237,.08)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <h3 data-ku>پاراستنی زانیاری</h3><h3 data-en>Data Security</h3>
+        <p data-ku>زانیارییەکانت پارێزراون — بە ئینکریپشن، کۆنترۆڵی دەستگەیشتن و بەکپ.</p>
+        <p data-en>Your data is protected — encryption, access control, and backups.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-ico" style="background:rgba(79,70,229,.08)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="1.8"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+        </div>
+        <h3>Responsive Design</h3>
+        <p data-ku>هەموو سیستەمەکانمان لەسەر مۆبایل، تابلێت و کۆمپیوتەر بە تەواوی کاردەکەن.</p>
+        <p data-en>All our systems work flawlessly on mobile, tablet, and desktop.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-ico" style="background:rgba(8,145,178,.08)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="1.8"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        </div>
+        <h3 data-ku>نوێکردنەوەی بەردەوام</h3><h3 data-en>Continuous Updates</h3>
+        <p data-ku>پرۆژەکەت تەسلیم دەکرێت و ئێمە بەردەوام پشتگیری دەکەین و نوێیدەکەینەوە.</p>
+        <p data-en>Your project is delivered and we continue to support and improve it.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-ico" style="background:rgba(124,58,237,.08)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3 data-ku>کوردی یەکەم</h3><h3 data-en>Kurdish First</h3>
+        <p data-ku>سیستەمەکانمان بۆ زمان و چاندی کوردی دروست دەکرێن — RTL، فۆنت و ئینتەرفەیسی کوردی.</p>
+        <p data-en>Our systems are built for Kurdish language and culture — RTL, fonts, and Kurdish UI.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     STATS
+══════════════════════════════════════ -->
+<section id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item reveal">
+        <div class="stat-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="1.8"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div class="stat-num">10+</div>
+        <div class="stat-label" data-ku>پرۆژەی تەواوکراو</div>
+        <div class="stat-label" data-en>Completed Projects</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <div class="stat-num">4</div>
+        <div class="stat-label" data-ku>سیستەمی ئامادە</div>
+        <div class="stat-label" data-en>Live Systems</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg>
+        </div>
+        <div class="stat-num">3</div>
+        <div class="stat-label" data-ku>زمانی پشتگیری</div>
+        <div class="stat-label" data-en>Supported Languages</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 15a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 4.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 12c1.29 2.2 3.89 4.8 6.09 6.09l1.27-.84a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 19.5v-2.58z"/></svg>
+        </div>
+        <div class="stat-num">24/7</div>
+        <div class="stat-label" data-ku>پشتگیری</div>
+        <div class="stat-label" data-en>Support</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     CONTACT
+══════════════════════════════════════ -->
+<section id="contact">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow"><div class="section-eyebrow-dot"></div><span data-ku>پەیوەندی</span><span data-en>Contact</span></div>
+      <h2 class="section-title" data-ku>پەیوەندیمان پێوە بکە</h2>
+      <h2 class="section-title" data-en>Get In Touch</h2>
+      <p class="section-desc" data-ku>ئامادەین گوێ لە پرۆژەکەت بگرین. پەیامێک بنێرە — زوو وەڵامت دەدەینەوە.</p>
+      <p class="section-desc" data-en>We're ready to hear about your project. Send us a message — we'll respond quickly.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-form reveal">
+        <div class="form-group">
+          <label data-ku>ناوت</label><label data-en>Your Name</label>
+          <input type="text" id="fname"/>
+        </div>
+        <div class="form-group">
+          <label data-ku>ژمارەی مۆبایل یان ئیمەیڵ</label><label data-en>Phone or Email</label>
+          <input type="text" id="fcontact"/>
+        </div>
+        <div class="form-group">
+          <label data-ku>پەیامت</label><label data-en>Your Message</label>
+          <textarea id="fmessage"></textarea>
+        </div>
+        <button class="btn-p" onclick="submitForm()" style="align-self:flex-start">
+          <span data-ku>ناردنی پەیام</span><span data-en>Send Message</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+        </button>
+        <div class="form-success" id="formSuccess">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span data-ku>سوپاس! پەیامەکەت وەرگیراو — زوو وەڵامت دەدەینەوە.</span>
+          <span data-en>Thank you! Your message has been received — we'll reply soon.</span>
+        </div>
+      </div>
+      <div class="contact-info reveal">
+        <h3 data-ku>ئێمە لەم شوێنانەدا</h3>
+        <h3 data-en>Find Us Here</h3>
+        <p data-ku>ئاماژەی پرۆژەت لێرە بنێرە یان لەم کانالانەی خوارەوە پەیوەندیمان پێوەبکە.</p>
+        <p data-en>Send your project brief here or reach us through these channels below.</p>
+        <div class="social-links">
+          <a href="https://wa.me/9647700000000" target="_blank" class="social-link">
+            <div class="social-link-ico" style="background:#dcfce7">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#16a34a"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.115.549 4.099 1.513 5.824L.06 23.73a.75.75 0 0 0 .914.911l5.99-1.558A11.95 11.95 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.75 9.75 0 0 1-4.96-1.354l-.36-.212-3.695.96.983-3.607-.22-.363A9.75 9.75 0 0 1 2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75z"/></svg>
+            </div>
+            WhatsApp
+          </a>
+          <a href="https://facebook.com/devmuhamad" target="_blank" class="social-link">
+            <div class="social-link-ico" style="background:#EEF2FF">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#4F46E5"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </div>
+            Facebook
+          </a>
+          <a href="https://instagram.com/devmuhamad" target="_blank" class="social-link">
+            <div class="social-link-ico" style="background:#fdf2f8">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#7C3AED"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </div>
+            Instagram
+          </a>
+          <a href="mailto:dev@devmuhamad.com" class="social-link">
+            <div class="social-link-ico" style="background:#EEF2FF">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            Email
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     FOOTER
+══════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <div class="footer-logo-dot"></div>
+          DEV <span>MUHAMAD</span>
+        </div>
+        <p data-ku>براندێکی تەکنەلۆژی لە کوردستان — دروستکردنی سیستەمی مۆدێرن بۆ کاروبارەکانت.</p>
+        <p data-en>A technology brand from Kurdistan — building modern systems for your business.</p>
+      </div>
+      <div class="footer-col">
+        <h4 data-ku>لینکەکان</h4><h4 data-en>Links</h4>
+        <ul>
+          <li><a href="#about" data-ku>دەربارەی ئێمە</a><a href="#about" data-en>About</a></li>
+          <li><a href="#systems" data-ku>سیستەمەکان</a><a href="#systems" data-en>Systems</a></li>
+          <li><a href="#services" data-ku>خزمەتگوزارییەکان</a><a href="#services" data-en>Services</a></li>
+          <li><a href="#contact" data-ku>پەیوەندی</a><a href="#contact" data-en>Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-ku>پرۆدەکتەکان</h4><h4 data-en>Products</h4>
+        <ul>
+          <li><a href="#">QR Menu System</a></li>
+          <li><a href="#">Shop ERP</a></li>
+          <li><a href="https://sexurgame.com" target="_blank">Sexur Game</a></li>
+          <li><a href="#" data-ku>بەزووی...</a><a href="#" data-en>Coming Soon</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-ku>پەیوەندی</h4><h4 data-en>Connect</h4>
+        <ul>
+          <li><a href="#">WhatsApp</a></li>
+          <li><a href="#">Facebook</a></li>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Email</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p data-ku>© 2025 DEV MUHAMAD · هەموو مافەکان پارێزراون</p>
+      <p data-en>© 2025 DEV MUHAMAD · All rights reserved</p>
+      <button class="footer-lang" onclick="toggleLang()">
+        <span data-ku>Switch to English</span><span data-en>بگۆڕە بۆ کوردی</span>
+      </button>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── LANG ──
+function toggleLang(){
+  document.body.classList.toggle('en');
+  const en=document.body.classList.contains('en');
+  document.documentElement.setAttribute('lang',en?'en':'ckb');
+  document.documentElement.setAttribute('dir',en?'ltr':'rtl');
+  localStorage.setItem('lang',en?'en':'ku');
+}
+if(localStorage.getItem('lang')==='en'){
+  document.body.classList.add('en');
+  document.documentElement.setAttribute('lang','en');
+  document.documentElement.setAttribute('dir','ltr');
+}
+
+// ── NAV ──
+window.addEventListener('scroll',()=>document.getElementById('navbar').classList.toggle('scrolled',scrollY>20));
+
+// ── MOBILE ──
+function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open')}
+function closeMenu(){document.getElementById('mobileMenu').classList.remove('open')}
+
+// ── REVEAL ──
+const io=new IntersectionObserver((entries)=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('visible'),i*55);
+      io.unobserve(e.target);
+    }
+  });
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+// ── FORM ──
+function submitForm(){
+  if(!document.getElementById('fname').value.trim())return;
+  if(!document.getElementById('fcontact').value.trim())return;
+  if(!document.getElementById('fmessage').value.trim())return;
+  const s=document.getElementById('formSuccess');
+  s.classList.add('show');
+  document.getElementById('fname').value='';
+  document.getElementById('fcontact').value='';
+  document.getElementById('fmessage').value='';
+  setTimeout(()=>s.classList.remove('show'),5000);
+}
+</script>
+</body>
+</html>
