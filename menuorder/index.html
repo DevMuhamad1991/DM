@@ -3,559 +3,816 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>  منافیش جبل حلب</title>
+  <title>منافیش جبل حلب</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
 
   <style>
-    :root {
-      --bg-base: #FDF6EC;
-      --bg-layer: #FFFFFF;
-      --bg-section: #FFF9F2;
-      --card-bg: #FFFFFF;
-      --card-border: rgba(180,120,40,0.12);
-      --card-shadow: 0 2px 16px rgba(160,90,20,0.10);
-      --card-shadow-h: 0 8px 32px rgba(160,90,20,0.18);
-      --accent: #E07B2A;
-      --accent-2: #F5A623;
-      --accent-light: #FEF0DC;
-      --accent-glow: rgba(224,123,42,0.20);
-      --text-primary: #2C1810;
-      --text-secondary: #6B3A1F;
-      --text-muted: #A07050;
-      --text-faint: #C4A882;
-      --danger: #D64545;
-      --success: #2E8B57;
-      --success-light: #E8F5EE;
-      --header-bg: rgba(253,246,236,0.92);
-      --tab-bg: rgba(253,246,236,0.97);
-      --divider: rgba(180,120,40,0.14);
-      --radius-card: 20px;
-      --radius-btn: 12px;
-      --radius-pill: 999px;
-      --blur: blur(16px);
-      --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
-      --header-h: 68px;
-      --tab-h: 54px;
-      --font: 'Noto Sans Arabic', sans-serif;
-    }
+	:root {
+	  --bg-base: #FDF6EC;
+	  --bg-layer: #FFFFFF;
+	  --card-bg: #FFFFFF;
+	  --card-border: rgba(180,120,40,0.12);
+	  --card-shadow: 0 2px 16px rgba(160,90,20,0.08);
+	  --card-shadow-h: 0 10px 36px rgba(160,90,20,0.16);
+	  --accent: #E07B2A;
+	  --accent-2: #F5A623;
+	  --accent-light: #FEF0DC;
+	  --accent-glow: rgba(224,123,42,0.20);
+	  --text-primary: #2C1810;
+	  --text-secondary: #6B3A1F;
+	  --text-muted: #A07050;
+	  --text-faint: #C4A882;
+	  --header-bg: rgba(253,246,236,0.92);
+	  --tab-bg: rgba(253,246,236,0.97);
+	  --divider: rgba(180,120,40,0.13);
+	  --radius-card: 22px;
+	  --radius-btn: 12px;
+	  --radius-pill: 999px;
+	  --blur: blur(16px);
+	  --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+	  --header-h: 68px;
+	  --tab-h: 54px;
+	  --font: 'Noto Sans Arabic', sans-serif;
+	}
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+	*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+	html { scroll-behavior: smooth; }
 
-    body {
-      font-family: var(--font);
-      background: var(--bg-base);
-      color: var(--text-primary);
-      min-height: 100dvh;
-      overflow-x: hidden;
-      background-image:
-        radial-gradient(ellipse 70% 35% at 50% 0%, rgba(224,123,42,0.07) 0%, transparent 65%),
-        radial-gradient(ellipse 40% 20% at 100% 100%, rgba(245,166,35,0.05) 0%, transparent 60%);
-    }
+	body {
+	  font-family: var(--font);
+	  background: var(--bg-base);
+	  color: var(--text-primary);
+	  min-height: 100dvh;
+	  overflow-x: hidden;
+	  background-image:
+		radial-gradient(ellipse 70% 35% at 50% 0%, rgba(224,123,42,0.07) 0%, transparent 65%),
+		radial-gradient(ellipse 40% 20% at 100% 100%, rgba(245,166,35,0.05) 0%, transparent 60%);
+	}
 
-    img { display: block; width: 100%; }
-    button { font-family: var(--font); cursor: pointer; border: none; outline: none; }
-    input, textarea { font-family: var(--font); outline: none; }
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
+	img { display: block; width: 100%; }
+	button { font-family: var(--font); cursor: pointer; border: none; outline: none; }
+	::-webkit-scrollbar { width: 4px; }
+	::-webkit-scrollbar-track { background: transparent; }
+	::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
 
-    /* HEADER */
-    #header {
-      position: fixed;
-      top: 0; right: 0; left: 0;
-      height: var(--header-h);
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 20px;
-      background: var(--header-bg);
-      backdrop-filter: var(--blur);
-      -webkit-backdrop-filter: var(--blur);
-      border-bottom: 1px solid var(--divider);
-      box-shadow: 0 1px 12px rgba(160,90,20,0.06);
-    }
+	/* ── HEADER ── */
+	#header {
+	  position: fixed; top: 0; right: 0; left: 0;
+	  height: var(--header-h); z-index: 100;
+	  display: flex; align-items: center; justify-content: space-between;
+	  padding: 0 20px;
+	  background: var(--header-bg);
+	  backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+	  border-bottom: 1px solid var(--divider);
+	  box-shadow: 0 1px 12px rgba(160,90,20,0.06);
+	}
+	.header-brand { display: flex; align-items: center; gap: 11px; }
+	.header-logo {
+	  width: 44px; height: 44px; border-radius: 14px;
+	  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+	  display: flex; align-items: center; justify-content: center;
+	  box-shadow: 0 3px 12px var(--accent-glow); flex-shrink: 0;
+	}
+	.header-logo i { font-size: 22px; color: #fff; }
+	.header-name { font-size: 1.05rem; font-weight: 800; color: var(--text-primary); line-height: 1.25; }
+	.header-subtitle { font-size: 0.72rem; color: var(--text-muted); margin-top: 1px; }
 
-    .header-brand { display: flex; align-items: center; gap: 11px; }
+	.lang-toggle {
+	  display: flex; align-items: center;
+	  background: var(--accent-light);
+	  border: 1px solid rgba(224,123,42,0.2);
+	  border-radius: var(--radius-pill);
+	  padding: 3px; gap: 2px;
+	}
+	.lang-btn {
+	  padding: 5px 13px; font-size: 0.78rem; font-weight: 700;
+	  color: var(--text-muted); background: transparent;
+	  border-radius: var(--radius-pill); transition: var(--transition);
+	}
+	.lang-btn.active { background: var(--accent); color: #fff; box-shadow: 0 2px 8px var(--accent-glow); }
 
-    .header-logo {
-      width: 44px; height: 44px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 3px 12px var(--accent-glow);
-      flex-shrink: 0;
-    }
-    .header-logo i { font-size: 22px; color: #fff; }
-    .header-name { font-size: 1.1rem; font-weight: 800; color: var(--text-primary); line-height: 1.25; }
-    .header-subtitle { font-size: 0.72rem; color: var(--text-muted); margin-top: 1px; }
+	/* ── TABS ── */
+	#tabs-wrapper {
+	  position: fixed; top: var(--header-h); right: 0; left: 0; z-index: 90;
+	  background: var(--tab-bg);
+	  backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+	  border-bottom: 1px solid var(--divider);
+	}
+	#tabs { display: flex; gap: 8px; padding: 10px 18px; overflow-x: auto; scrollbar-width: none; }
+	#tabs::-webkit-scrollbar { display: none; }
+	.tab-btn {
+	  flex-shrink: 0; padding: 7px 18px; border-radius: var(--radius-pill);
+	  font-size: 0.86rem; font-weight: 700; color: var(--text-muted);
+	  background: transparent; border: 1.5px solid transparent;
+	  transition: var(--transition); white-space: nowrap;
+	}
+	.tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 3px 10px var(--accent-glow); }
+	.tab-btn:not(.active):hover { background: var(--accent-light); color: var(--accent); border-color: rgba(224,123,42,0.2); }
 
-    .lang-toggle {
-      display: flex; align-items: center;
-      background: var(--accent-light);
-      border: 1px solid rgba(224,123,42,0.2);
-      border-radius: var(--radius-pill);
-      padding: 3px; gap: 2px;
-    }
-    .lang-btn {
-      padding: 5px 13px;
-      font-size: 0.78rem; font-weight: 700;
-      color: var(--text-muted);
-      background: transparent;
-      border-radius: var(--radius-pill);
-      transition: var(--transition);
-    }
-    .lang-btn.active { background: var(--accent); color: #fff; box-shadow: 0 2px 8px var(--accent-glow); }
+	/* ── MAIN ── */
+	#main {
+	  padding-top: calc(var(--header-h) + var(--tab-h) + 16px);
+	  padding-bottom: 80px;
+	  padding-right: 16px; padding-left: 16px;
+	  max-width: 900px; margin: 0 auto;
+	}
 
-    /* TABS */
-    #tabs-wrapper {
-      position: fixed;
-      top: var(--header-h); right: 0; left: 0;
-      z-index: 90;
-      background: var(--tab-bg);
-      backdrop-filter: var(--blur);
-      -webkit-backdrop-filter: var(--blur);
-      border-bottom: 1px solid var(--divider);
-    }
-    #tabs { display: flex; gap: 8px; padding: 10px 18px; overflow-x: auto; scrollbar-width: none; }
-    #tabs::-webkit-scrollbar { display: none; }
-    .tab-btn {
-      flex-shrink: 0;
-      padding: 7px 18px;
-      border-radius: var(--radius-pill);
-      font-size: 0.86rem; font-weight: 700;
-      color: var(--text-muted);
-      background: transparent;
-      border: 1.5px solid transparent;
-      transition: var(--transition); white-space: nowrap;
-    }
-    .tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 3px 10px var(--accent-glow); }
-    .tab-btn:not(.active):hover { background: var(--accent-light); color: var(--accent); border-color: rgba(224,123,42,0.2); }
+	.section-heading {
+	  font-size: 0.95rem; font-weight: 800; color: var(--text-secondary);
+	  margin: 28px 0 16px;
+	  display: flex; align-items: center; gap: 10px;
+	  text-transform: uppercase; letter-spacing: 0.04em;
+	}
+	.section-heading::before {
+	  content: ''; width: 4px; height: 18px;
+	  background: linear-gradient(to bottom, var(--accent), var(--accent-2));
+	  border-radius: 2px; flex-shrink: 0;
+	}
+	.section-heading::after { content: ''; flex: 1; height: 1px; background: var(--divider); }
 
-    /* MAIN */
-    #main {
-      padding-top: calc(var(--header-h) + var(--tab-h) + 12px);
-      padding-bottom: 100px;
-      padding-right: 16px;
-      padding-left: 16px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
+	.menu-section { margin-bottom: 8px; }
+	.menu-grid {
+	  display: grid;
+	  grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+	  gap: 14px;
+	}
 
-    .section-heading {
-      font-size: 1rem; font-weight: 800;
-      color: var(--text-secondary);
-      margin: 28px 0 14px;
-      display: flex; align-items: center; gap: 10px;
-      text-transform: uppercase; letter-spacing: 0.04em;
-    }
-    .section-heading::before {
-      content: '';
-      width: 4px; height: 18px;
-      background: linear-gradient(to bottom, var(--accent), var(--accent-2));
-      border-radius: 2px; flex-shrink: 0;
-    }
-    .section-heading::after { content: ''; flex: 1; height: 1px; background: var(--divider); }
+	/* ── MENU CARD ── */
+	.menu-card {
+	  background: var(--card-bg);
+	  border: 1px solid var(--card-border);
+	  border-radius: var(--radius-card);
+	  overflow: hidden;
+	  display: flex; flex-direction: column;
+	  box-shadow: var(--card-shadow);
+	  cursor: pointer;
+	  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+	  position: relative;
+	}
+	.menu-card:hover {
+	  transform: translateY(-6px);
+	  box-shadow: var(--card-shadow-h);
+	  border-color: rgba(224,123,42,0.28);
+	}
+	.menu-card:active { transform: translateY(-2px); }
 
-    .menu-section { margin-bottom: 6px; }
-    .menu-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(158px, 1fr));
-      gap: 14px;
-    }
+	.card-img-wrap {
+	  position: relative;
+	  aspect-ratio: 1 / 1;   /* مربع — بچووکتر و بە ڕیز */
+	  overflow: hidden;
+	  background: var(--accent-light);
+	}
+	.card-img-wrap img {
+	  width: 100%; height: 100%; object-fit: cover;
+	  transition: transform 0.5s ease;
+	  will-change: transform;
+	}
+	.menu-card:hover .card-img-wrap img { transform: scale(1.08); }
 
-    /* MENU CARD */
-    .menu-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-card);
-      overflow: hidden;
-      display: flex; flex-direction: column;
-      box-shadow: var(--card-shadow);
-      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
-      cursor: pointer;
-    }
-    .menu-card:hover { transform: translateY(-5px); box-shadow: var(--card-shadow-h); border-color: rgba(224,123,42,0.25); }
+	/* Category tag top-right */
+	.card-cat-tag {
+	  position: absolute; top: 9px; right: 9px;
+	  background: rgba(255,255,255,0.88);
+	  backdrop-filter: blur(8px);
+	  border: 1px solid rgba(224,123,42,0.18);
+	  border-radius: 8px;
+	  padding: 2px 8px;
+	  font-size: 0.7rem; font-weight: 700;
+	  color: var(--accent);
+	  white-space: nowrap;
+	}
 
-    .card-img-wrap {
-      position: relative;
-      aspect-ratio: 4/3;
-      overflow: hidden;
-      background: var(--accent-light);
-    }
-    .card-img-wrap img {
-      height: 100%; object-fit: cover;
-      transition: transform 0.45s ease;
-      will-change: transform;
-    }
-    .menu-card:hover .card-img-wrap img { transform: scale(1.07); }
+	/* Price badge bottom-left */
+	.card-price-badge {
+	  position: absolute; bottom: 9px; left: 9px;
+	  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+	  border-radius: 9px;
+	  padding: 3px 10px;
+	  font-size: 0.8rem; font-weight: 800;
+	  color: #fff;
+	  box-shadow: 0 2px 8px var(--accent-glow);
+	}
 
-    .card-price-badge {
-      position: absolute; bottom: 8px; left: 8px;
-      background: rgba(255,255,255,0.92);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(224,123,42,0.2);
-      border-radius: 8px;
-      padding: 3px 9px;
-      font-size: 0.82rem; font-weight: 800;
-      color: var(--accent);
-    }
+	.card-body {
+	  padding: 11px 13px 13px;
+	  display: flex; flex-direction: column; gap: 3px; flex: 1;
+	}
+	.card-name {
+	  font-size: 0.93rem; font-weight: 800;
+	  color: var(--text-primary); line-height: 1.35;
+	}
+	.card-desc {
+	  font-size: 0.74rem; color: var(--text-muted);
+	  line-height: 1.5;
+	  display: -webkit-box;
+	  -webkit-line-clamp: 2;
+	  -webkit-box-orient: vertical;
+	  overflow: hidden;
+	}
 
-    .card-body { padding: 12px 12px 14px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
-    .card-name { font-size: 0.95rem; font-weight: 700; color: var(--text-primary); line-height: 1.35; }
+	/* tap arrow hint */
+	.card-tap-hint {
+	  margin-top: 8px;
+	  display: flex; align-items: center; gap: 5px;
+	  font-size: 0.72rem; color: var(--text-faint); font-weight: 600;
+	}
+	.card-tap-hint i { font-size: 0.82rem; color: var(--accent); }
 
-    /* ITEM MODAL */
-    #item-overlay {
-      position: fixed; inset: 0;
-      background: rgba(44,24,16,0.45);
-      z-index: 200;
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.25s ease;
-      display: flex; align-items: center; justify-content: center;
-      padding: 20px;
-    }
-    #item-overlay.open { opacity: 1; pointer-events: all; }
+	/* ── ITEM MODAL ── */
+	#item-overlay {
+	  position: fixed; inset: 0;
+	  background: rgba(44,24,16,0.50);
+	  z-index: 200; opacity: 0; pointer-events: none;
+	  transition: opacity 0.25s ease;
+	  display: flex; align-items: center; justify-content: center;
+	  padding: 20px;
+	}
+	#item-overlay.open { opacity: 1; pointer-events: all; }
 
-    #item-modal {
-      background: var(--bg-layer);
-      border-radius: 24px;
-      width: 100%; max-width: 400px;
-      overflow: hidden;
-      box-shadow: 0 20px 60px rgba(44,24,16,0.25);
-      transform: scale(0.92) translateY(16px);
-      transition: transform 0.28s cubic-bezier(0.34,1.2,0.64,1);
-      will-change: transform;
-    }
-    #item-overlay.open #item-modal { transform: scale(1) translateY(0); }
+	#item-modal {
+	  background: var(--bg-layer);
+	  border-radius: 24px;
+	  width: 100%; max-width: 400px;
+	  overflow: hidden;
+	  box-shadow: 0 24px 64px rgba(44,24,16,0.28);
+	  transform: scale(0.90) translateY(20px);
+	  transition: transform 0.3s cubic-bezier(0.34,1.2,0.64,1);
+	  will-change: transform;
+	}
+	#item-overlay.open #item-modal { transform: scale(1) translateY(0); }
 
-    .item-modal-img {
-      position: relative;
-      aspect-ratio: 16/9;
-      overflow: hidden;
-      background: var(--accent-light);
-    }
-    .item-modal-img img {
-      height: 100%; object-fit: cover;
-      /* no lazy for modal — already loaded from card */
-    }
-    .item-modal-img .close-item-btn {
-      position: absolute; top: 12px; right: 12px;
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.92);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(224,123,42,0.2);
-      color: var(--text-secondary);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.15rem;
-      transition: var(--transition);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
-    }
-    .item-modal-img .close-item-btn:hover { background: var(--accent); color: #fff; }
+	.item-modal-img {
+	  position: relative;
+	  aspect-ratio: 16/9;
+	  overflow: hidden;
+	  background: var(--accent-light);
+	}
+	.item-modal-img img { width: 100%; height: 100%; object-fit: cover; }
 
-    .item-modal-body { padding: 20px 20px 24px; }
-    .item-modal-name { font-size: 1.2rem; font-weight: 800; color: var(--text-primary); margin-bottom: 6px; }
-    .item-modal-price {
-      font-size: 1.4rem; font-weight: 800;
-      color: var(--accent);
-      margin-bottom: 18px;
-    }
-    .item-modal-price span { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+	.close-item-btn {
+	  position: absolute; top: 12px; right: 12px;
+	  width: 36px; height: 36px; border-radius: 50%;
+	  background: rgba(255,255,255,0.92);
+	  backdrop-filter: blur(8px);
+	  border: 1px solid rgba(224,123,42,0.2);
+	  color: var(--text-secondary);
+	  display: flex; align-items: center; justify-content: center;
+	  font-size: 1.15rem;
+	  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+	  transition: var(--transition);
+	}
+	.close-item-btn:hover { background: var(--accent); color: #fff; }
 
-    /* FOOTER */
-    #footer {
-      background: linear-gradient(135deg, #2C1810 0%, #4A2010 100%);
-      color: rgba(255,255,255,0.85);
-      padding: 36px 20px 28px;
-      text-align: center;
-      margin-top: 20px;
-    }
-    .footer-logo {
-      width: 52px; height: 52px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 12px;
-      box-shadow: 0 4px 16px rgba(224,123,42,0.35);
-    }
-    .footer-logo i { font-size: 26px; color: #fff; }
-    .footer-name { font-size: 1.15rem; font-weight: 800; color: #fff; margin-bottom: 4px; }
-    .footer-tagline { font-size: 0.82rem; color: rgba(255,255,255,0.55); margin-bottom: 18px; }
-    .footer-divider { width: 40px; height: 2px; background: var(--accent); border-radius: 2px; margin: 0 auto 18px; }
-    .footer-about { font-size: 0.85rem; color: rgba(255,255,255,0.65); line-height: 1.7; max-width: 320px; margin: 0 auto 20px; }
-    .footer-credit {
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.45);
-      display: flex; align-items: center; justify-content: center; gap: 6px;
-      flex-wrap: wrap;
-    }
-    .footer-credit-link {
-      color: var(--accent-2);
-      font-weight: 700;
-      text-decoration: none;
-      cursor: pointer;
-      transition: color var(--transition);
-      background: none; border: none;
-      font-family: var(--font); font-size: 0.8rem;
-    }
-    .footer-credit-link:hover { color: #fff; }
-    .footer-wa-btn {
-      display: inline-flex; align-items: center; gap: 7px;
-      margin-top: 14px;
-      padding: 9px 20px;
-      border-radius: var(--radius-pill);
-      background: #25D366;
-      color: #fff;
-      font-size: 0.85rem; font-weight: 700;
-      text-decoration: none;
-      box-shadow: 0 3px 12px rgba(37,211,102,0.3);
-      transition: opacity var(--transition), transform 0.15s;
-    }
-    .footer-wa-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+	.item-modal-body { padding: 20px 20px 26px; }
+	.item-modal-name { font-size: 1.22rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px; }
+	.item-modal-price { font-size: 1.45rem; font-weight: 800; color: var(--accent); }
 
-    /* RESPONSIVE */
-    @media (min-width: 480px) {
-      .menu-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
-    }
-    @media (min-width: 720px) {
-      #main { padding-right: 24px; padding-left: 24px; }
-      .menu-grid { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); }
-    }
+	/* ── FOOTER — same bg as page ── */
+	#footer {
+	  background: var(--bg-base);   /* هەمان رەنگی سەرەکی */
+	  border-top: 1px solid var(--divider);
+	  color: var(--text-muted);
+	  padding: 36px 20px 28px;
+	  text-align: center;
+	  margin-top: 10px;
+	}
+	.footer-logo {
+	  width: 52px; height: 52px; border-radius: 16px;
+	  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+	  display: flex; align-items: center; justify-content: center;
+	  margin: 0 auto 12px;
+	  box-shadow: 0 4px 16px var(--accent-glow);
+	}
+	.footer-logo i { font-size: 26px; color: #fff; }
+	.footer-name { font-size: 1.1rem; font-weight: 800; color: var(--text-primary); margin-bottom: 4px; }
+	.footer-tagline { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 16px; }
+	.footer-divider { width: 40px; height: 2px; background: linear-gradient(to right, var(--accent), var(--accent-2)); border-radius: 2px; margin: 0 auto 16px; }
+	.footer-about {
+	  font-size: 0.85rem; color: var(--text-muted); line-height: 1.75;
+	  max-width: 320px; margin: 0 auto 20px;
+	}
+	.footer-credit {
+	  font-size: 0.8rem; color: var(--text-faint);
+	  display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap;
+	}
+	.footer-credit-link {
+	  color: var(--accent); font-weight: 700;
+	  cursor: pointer; background: none; border: none;
+	  font-family: var(--font); font-size: 0.8rem;
+	  transition: color var(--transition);
+	}
+	.footer-credit-link:hover { color: var(--accent-2); }
+	.footer-wa-btn {
+	  display: inline-flex; align-items: center; gap: 7px;
+	  margin-top: 14px; padding: 9px 22px;
+	  border-radius: var(--radius-pill);
+	  background: #25D366; color: #fff;
+	  font-size: 0.85rem; font-weight: 700; font-family: var(--font);
+	  text-decoration: none;
+	  box-shadow: 0 3px 12px rgba(37,211,102,0.28);
+	  transition: opacity var(--transition), transform 0.15s;
+	}
+	.footer-wa-btn:hover { opacity: 0.9; transform: translateY(-1px); }
 
-    .hidden { display: none !important; }
+	/* ── RESPONSIVE ── */
+	@media (min-width: 480px) { .menu-grid { grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); } }
+	@media (min-width: 720px) {
+	  #main { padding-right: 24px; padding-left: 24px; }
+	  .menu-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+	}
+
+	.hidden { display: none !important; }
   </style>
 </head>
 <body>
 
   <!-- HEADER -->
   <header id="header">
-    <div class="header-brand">
-      <div class="header-logo"><i class="ri-restaurant-2-fill"></i></div>
-      <div>
-        <div class="header-name" data-i18n="restaurantName">  منافیش جبل حلب</div>
-        <div class="header-subtitle" data-i18n="restaurantTagline">خواردنی تازە و خۆشتام</div>
-      </div>
-    </div>
-    <div class="lang-toggle">
-      <button class="lang-btn active" id="btn-ku" onclick="setLang('ku')">کوردی</button>
-      <button class="lang-btn" id="btn-ar" onclick="setLang('ar')">عربي</button>
-    </div>
+	<div class="header-brand">
+	  <div class="header-logo"><i class="ri-restaurant-2-fill"></i></div>
+	  <div>
+		<div class="header-name" data-i18n="restaurantName">منافیش جبل حلب</div>
+		<div class="header-subtitle" data-i18n="restaurantTagline">خواردنی تازە و خۆشتام</div>
+	  </div>
+	</div>
+	<div class="lang-toggle">
+	  <button class="lang-btn active" id="btn-ku" onclick="setLang('ku')">کوردی</button>
+	  <button class="lang-btn" id="btn-ar" onclick="setLang('ar')">عربي</button>
+	</div>
   </header>
 
-  <!-- CATEGORY TABS -->
-  <div id="tabs-wrapper">
-    <div id="tabs"></div>
-  </div>
+  <!-- TABS -->
+  <div id="tabs-wrapper"><div id="tabs"></div></div>
 
   <!-- MAIN -->
   <main id="main"></main>
 
   <!-- FOOTER -->
   <footer id="footer">
-    <div class="footer-logo"><i class="ri-restaurant-2-fill"></i></div>
-    <div class="footer-name" data-i18n="restaurantName">منافیش جبل حلب </div>
-    <div class="footer-tagline" data-i18n="restaurantTagline">خواردنی تازە و خۆشتام</div>
-    <div class="footer-divider"></div>
-    <div class="footer-about" data-i18n="footerAbout">
-      خواردنگەی منافیش جبل حلب یەکێکە لە باشترین فاست فووده‌کانی ناوچەکە، بە بەرهەمی تازە و چێژی نەگۆڕ، هەر ڕۆژ ئامادەی خزمەتکردنتانین.
-    </div>
-    <div class="footer-credit">
-      <span data-i18n="madeBy">دروستکراوە لەلایەن</span>
-      <button class="footer-credit-link" href="https://wa.me/9647509628683" onclick="openDev()">@Devmuhamad</button>
-    </div>
-    <div>
-    
-    </div>
+	<div class="footer-logo"><i class="ri-restaurant-2-fill"></i></div>
+	<div class="footer-name" data-i18n="restaurantName">منافیش جبل حلب</div>
+	<div class="footer-tagline" data-i18n="restaurantTagline">خواردنی تازە و خۆشتام</div>
+	<div class="footer-divider"></div>
+	<div class="footer-about" data-i18n="footerAbout">خواردنگەی منافیش جبل حلب یەکێکە لە باشترین خواردنگەکانی ناوچەکە، بە بەرهەمی تازە و چێژی نەگۆڕ، هەر ڕۆژ ئامادەی خزمەتکردنتانین.</div>
+	<div class="footer-credit">
+	  <span data-i18n="madeBy">دروستکراوە لەلایەن</span>
+	  <button class="footer-credit-link" onclick="openDev()">@Devmuhamad</button>
+	</div>
+	<div>
+	  <a class="footer-wa-btn" href="https://wa.me/9647509628683" target="_blank" rel="noopener">
+		<i class="ri-whatsapp-line"></i>
+		<span data-i18n="contactUs">پەیوەندیمان پێوە بکە</span>
+	  </a>
+	</div>
   </footer>
 
   <!-- ITEM MODAL -->
   <div id="item-overlay" onclick="handleOverlayClick(event)">
-    <div id="item-modal">
-      <div class="item-modal-img">
-        <img id="modal-img" src="" alt="" />
-        <button class="close-item-btn" onclick="closeItemModal()"><i class="ri-close-line"></i></button>
-      </div>
-      <div class="item-modal-body">
-        <div class="item-modal-name" id="modal-name"></div>
-        <div class="item-modal-price" id="modal-price"></div>
-      </div>
-    </div>
+	<div id="item-modal">
+	  <div class="item-modal-img">
+		<img id="modal-img" src="" alt="" />
+		<button class="close-item-btn" onclick="closeItemModal()"><i class="ri-close-line"></i></button>
+	  </div>
+	  <div class="item-modal-body">
+		<div class="item-modal-name" id="modal-name"></div>
+		<div class="item-modal-price" id="modal-price"></div>
+	  </div>
+	</div>
   </div>
 
   <script>
-    /* ---- TRANSLATIONS ---- */
-    const TRANSLATIONS = {
-      ku: {
-        restaurantName: 'ئاراش فاست فوود',
-        restaurantTagline: 'خواردنی تازە و خۆشتام',
-        allCategories: 'هەموو',
-        footerAbout: 'خواردنگەی ئاراش یەکێکە لە باشترین فاست فووده‌کانی ناوچەکە، بە بەرهەمی تازە و چێژی نەگۆڕ، هەر ڕۆژ ئامادەی خزمەتکردنتانین.',
-        madeBy: 'دروستکراوە لەلایەن',
-        currency: 'IQD',
-      },
-      ar: {
-        restaurantName: 'آراش فاست فود',
-        restaurantTagline: 'طعام طازج ولذيذ',
-        allCategories: 'الكل',
-        footerAbout: 'مطعم آراش واحد من أفضل مطاعم الوجبات السريعة في المنطقة، بمكونات طازجة وطعم لا يتغير، نحن مستعدون لخدمتكم كل يوم.',
-        madeBy: 'تم التطوير بواسطة',
-        currency: 'IQD',
-      }
-    };
+	/* ── TRANSLATIONS ── */
+	const TRANSLATIONS = {
+	  ku: {
+		restaurantName: 'منافیش جبل حلب',
+		restaurantTagline: 'خواردنی تازە و خۆشتام',
+		allCategories: 'هەموو',
+		footerAbout: 'خواردنگەی منافیش جبل حلب یەکێکە لە باشترین خواردنگەکانی ناوچەکە، بە بەرهەمی تازە و چێژی نەگۆڕ، هەر ڕۆژ ئامادەی خزمەتکردنتانین.',
+		madeBy: 'دروستکراوە لەلایەن',
+		contactUs: 'پەیوەندیمان پێوە بکە',
+		tapHint: 'بکوژە بۆ وردەکاری',
+		currency: 'IQD',
+	  },
+	  ar: {
+		restaurantName: 'مناقيش جبل حلب',
+		restaurantTagline: 'طعام طازج ولذيذ',
+		allCategories: 'الكل',
+		footerAbout: 'مطعم مناقيش جبل حلب واحد من أفضل المطاعم في المنطقة، بمكونات طازجة وطعم لا يتغير، نحن مستعدون لخدمتكم كل يوم.',
+		madeBy: 'تم التطوير بواسطة',
+		contactUs: 'تواصل معنا',
+		tapHint: 'اضغط للتفاصيل',
+		currency: 'IQD',
+	  }
+	};
 
-    /* ---- MENU DATA ---- */
-    const MENU_DATA = [
-      {
-        id: 1, cat: 'pizza',
-        category: { ku: 'پیتزا', ar: 'بيتزا' },
-        name: { ku: 'پیتزای مارگاریتا', ar: 'بيتزا مارغريتا' },
-        price: 7500,
-        img: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=500&q=75',
-      },
-      {
-        id: 2, cat: 'burger',
-        category: { ku: 'بەرگەر', ar: 'برغر' },
-        name: { ku: 'بەرگەری کلاسیک', ar: 'برغر كلاسيك' },
+	/* ── MENU DATA ── */
+	const MEALS = [
+  {
+    id: 1,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'منقوشەی پەتاتە', ar: 'منقوشة بطاطا' },
+    price: 1500,
+    img: ''
+  },
+  {
+    id: 2,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'کیلۆ لەحم بالعجین بە سەوزە', ar: 'كيلو لحم بالعجين بالخضرة' },
+    price: 25000,
+    img: ''
+  },
+  {
+    id: 3,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'بیدای تێکەڵ لەگەڵ هێلکە و پەنجە', ar: 'بيدا مشكل مع بيض وجبن وطماطا' },
+    price: 3000,
+    img: ''
+  },
+  {
+    id: 4,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'بیدای سوجوق', ar: 'بيدا سجق' },
+    price: 3000,
+    img: ''
+  },
+  {
+    id: 5,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'منقوشەی زەعتەر لەگەڵ سەوزە', ar: 'منقوشة زعتر مع خضار' },
+    price: 1500,
+    img: ''
+  },
+  {
+    id: 6,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'منقوشەی پەنیر لەگەڵ مەعدەنۆس', ar: 'منقوشة جبن مع بقدونس' },
+    price: 1500,
+    img: ''
+  },
+  {
+    id: 7,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'بیدای زەعتەر لەگەڵ پەنیر', ar: 'بيدا زعتر بالجبن' },
+    price: 2500,
+    img: ''
+  },
+  {
+    id: 8,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'لەحم بالعجین لەگەڵ پەنیر', ar: 'لحم عجين بالجبن' },
+    price: 2500,
+    img: ''
+  },
+  {
+    id: 9,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'منقوشەی مۆرتادیلا لەگەڵ پەنیر', ar: 'منقوشة مرتديلا مع جبن' },
+    price: 1500,
+    img: ''
+  },
+  {
+    id: 10,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'بیدای مریشک لەگەڵ پەنیر', ar: 'بيدا دجاج بالجبن' },
+    price: 3000,
+    img: ''
+  },
+  {
+    id: 11,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'بیدای محەمەرە لەگەڵ پەنیر', ar: 'بيدا محمرة بالجبن' },
+    price: 2500,
+    img: ''
+  },
+  {
+    id: 12,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'منقوشەی مۆرتادیلا لەگەڵ سەوزە', ar: 'منقوشة مرتديلا مع خضار' },
+    price: 1500,
+    img: ''
+  },
+  {
+    id: 13,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'منقوشەی سپیناخ', ar: 'منقوشة سبيناخ' },
+    price: 1500,
+    img: ''
+  },
+  {
+    id: 14,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'لەحم بالعجین لەگەڵ هێلکە', ar: 'لحم عجين بالبيض' },
+    price: 2500,
+    img: ''
+  },
+  {
+    id: 15,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'بیدای سەوزە', ar: 'بيدا خضروات' },
+    price: 3000,
+    img: ''
+  },
+  {
+    id: 16,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'بیدای کەرەفس، گەنمەشامی، زەیتوون و پەنیر', ar: 'بيدا كرافس ذرة زيتون وجبن' },
+    price: 3000,
+    img: ''
+  },
+  {
+    id: 17,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'بیدای پەنیر', ar: 'بيدا جبنة' },
+    price: 2500,
+    img: ''
+  },
+  {
+    id: 18,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'منقوشەی زەعتەر لەگەڵ پەنیر', ar: 'منقوشة زعتر مع جبنة' },
+    price: 1500,
+    img: ''
+  },
+  {
+    id: 19,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'مینی پیتزا', ar: 'ميني بيتزا' },
+    price: 1750,
+    img: ''
+  },
+  {
+    id: 20,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'بیدای پەنیر لەگەڵ هێلکە', ar: 'بيدا جبنة مع بيض' },
+    price: 3000,
+    img: ''
+  },
+  {
+    id: 21,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'بیدای گۆشت', ar: 'بيدا لحمة' },
+    price: 3500,
+    img: ''
+  },
+  {
+    id: 22,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'بیدای تێکەڵ', ar: 'بيدا مشكل' },
+    price: 3500,
+    img: ''
+  },
+  {
+    id: 23,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'بیدای سوجوق لەگەڵ هێلکە', ar: 'بيدا سجق مع بيض' },
+    price: 3500,
+    img: ''
+  },
+  {
+    id: 24,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'بیدای سەوزە لەگەڵ زەیتوون', ar: 'بيدا خضروات مع زيتون' },
+    price: 3000,
+    img: ''
+  },
+  {
+    id: 25,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'منقوشەی پەنیر و زەیتوون', ar: 'منقوشة جبنة وزيتون' },
+    price: 1500,
+    img: ''
+  },
+  {
+    id: 26,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'بیدای گۆشتی پارچەیی', ar: 'بيدا لحم شرائح' },
+    price: 3500,
+    img: ''
+  },
+  {
+    id: 27,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'بیدای قارچ لەگەڵ پەنیر و گەنمەشامی', ar: 'بيدا فطر مع جبنة وذرة' },
+    price: 3000,
+    img: ''
+  },
+  {
+    id: 28,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'تاررند بیدا', ar: 'تاررند بيدا' },
+    price: 3500,
+    img: ''
+  },
+  {
+    id: 29,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'بیدای سپیناخ و پەنیر', ar: 'بيدا سبيناخ مع جبن' },
+    price: 3000,
+    img: ''
+  },
+  {
+    id: 30,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'بیدای گەنمەشامی لەگەڵ مەعدەنۆس', ar: 'بيدا ذرة مع بقدونس' },
+    price: 3000,
+    img: ''
+  },
+  {
+    id: 31,
+    cat: 'pizza',
+    category: { ku: 'پیتزا', ar: 'بيتزا' },
+    name: { ku: 'منقوشەی محەمەرە', ar: 'منقوشة محمرة' },
+    price: 1500,
+    img: ''
+  }
+];
 
-        price: 6000,
-        img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&q=75',
-      },
-      {
-        id: 3, cat: 'drink',
-        category: { ku: 'شەربەت', ar: 'مشروبات' },
-        name: { ku: 'شەربەتی لیمۆی سارد', ar: 'عصير ليمون بارد' },
-        price: 2500,
-        img: 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=500&q=75',
-      },
-    ];
+	/* ── STATE ── */
+	let currentLang = 'ku';
+	let activeTab   = 'all';
 
-    /* ---- STATE ---- */
-    let currentLang = 'ku';
-    let activeTab = 'all';
+	const t   = k => TRANSLATIONS[currentLang][k] || k;
+	const fmt = n => n.toLocaleString() + ' ' + t('currency');
 
-    const t = k => TRANSLATIONS[currentLang][k] || k;
-    const fmt = n => n.toLocaleString() + ' ' + t('currency');
+	/* ── LANGUAGE ──
+	   Only text nodes are updated — images are NEVER touched.
+	   Cards are rebuilt with innerHTML so only the text parts change;
+	   the <img> element keeps its src untouched via the DOM (we set src
+	   once on first render and never overwrite it). */
+	function setLang(lang) {
+	  currentLang = lang;
+	  document.documentElement.lang = lang;
+	  document.getElementById('btn-ku').classList.toggle('active', lang === 'ku');
+	  document.getElementById('btn-ar').classList.toggle('active', lang === 'ar');
 
-    /* ---- LANGUAGE ---- */
-    function setLang(lang) {
-      currentLang = lang;
-      document.documentElement.lang = lang;
-      document.getElementById('btn-ku').classList.toggle('active', lang === 'ku');
-      document.getElementById('btn-ar').classList.toggle('active', lang === 'ar');
-      // Update all data-i18n elements
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const v = TRANSLATIONS[lang][el.dataset.i18n];
-        if (v) el.textContent = v;
-      });
-      renderTabs();
-      renderMenu();
-      // Update open modal if any
-      if (document.getElementById('item-overlay').classList.contains('open')) {
-        closeItemModal();
-      }
-    }
+	  // Static i18n text nodes
+	  document.querySelectorAll('[data-i18n]').forEach(el => {
+		const v = TRANSLATIONS[lang][el.dataset.i18n];
+		if (v) el.textContent = v;
+	  });
 
-    /* ---- TABS ---- */
-    function getCategories() {
-      const seen = new Set(), cats = [];
-      MENU_DATA.forEach(i => {
-        if (!seen.has(i.cat)) { seen.add(i.cat); cats.push({ key: i.cat, label: i.category }); }
-      });
-      return cats;
-    }
+	  // Re-render tabs (text only — no images)
+	  renderTabs();
 
-    function renderTabs() {
-      const w = document.getElementById('tabs');
-      w.innerHTML = '';
-      const all = document.createElement('button');
-      all.className = 'tab-btn' + (activeTab === 'all' ? ' active' : '');
-      all.textContent = t('allCategories');
-      all.onclick = () => { activeTab = 'all'; renderTabs(); renderMenu(); };
-      w.appendChild(all);
-      getCategories().forEach(({ key, label }) => {
-        const b = document.createElement('button');
-        b.className = 'tab-btn' + (activeTab === key ? ' active' : '');
-        b.textContent = label[currentLang];
-        b.onclick = () => { activeTab = key; renderTabs(); renderMenu(); };
-        w.appendChild(b);
-      });
-    }
+	  // Update card text in-place WITHOUT touching images
+	  updateCardTexts();
 
-    /* ---- MENU RENDER ---- */
-    function renderMenu() {
-      const main = document.getElementById('main');
-      const items = activeTab === 'all' ? MENU_DATA : MENU_DATA.filter(i => i.cat === activeTab);
-      const groups = {};
-      items.forEach(i => { if (!groups[i.cat]) groups[i.cat] = []; groups[i.cat].push(i); });
-      main.innerHTML = '';
-      Object.entries(groups).forEach(([cat, catItems]) => {
-        const sec = document.createElement('section');
-        sec.className = 'menu-section';
-        const h = document.createElement('div');
-        h.className = 'section-heading';
-        h.textContent = catItems[0].category[currentLang];
-        sec.appendChild(h);
-        const grid = document.createElement('div');
-        grid.className = 'menu-grid';
-        catItems.forEach(item => grid.appendChild(buildCard(item)));
-        sec.appendChild(grid);
-        main.appendChild(sec);
-      });
-    }
+	  // Close modal if open
+	  if (document.getElementById('item-overlay').classList.contains('open')) closeItemModal();
+	}
 
-    function buildCard(item) {
-      const card = document.createElement('div');
-      card.className = 'menu-card';
-      card.onclick = () => openItemModal(item);
-      card.innerHTML = `
-        <div class="card-img-wrap">
-          <img src="${item.img}" alt="${item.name[currentLang]}" loading="lazy" decoding="async" />
-          <div class="card-price-badge">${fmt(item.price)}</div>
-        </div>
-        <div class="card-body">
-          <div class="card-name">${item.name[currentLang]}</div>
-        </div>`;
-      return card;
-    }
+	/* Update only the text nodes inside already-rendered cards */
+	function updateCardTexts() {
+	  MENU_DATA.forEach(item => {
+		const nameEl = document.getElementById(`cname-${item.id}`);
+		const catEl  = document.getElementById(`ccat-${item.id}`);
+		if (nameEl) nameEl.textContent = item.name[currentLang];
+		if (catEl)  catEl.textContent  = item.category[currentLang];
+	  });
+	}
 
-    /* ---- ITEM MODAL ---- */
-    function openItemModal(item) {
-      const img = document.getElementById('modal-img');
-      // Use already-cached src if possible
-      img.src = item.img.replace('w=500', 'w=800');
-      img.alt = item.name[currentLang];
-      document.getElementById('modal-name').textContent = item.name[currentLang];
-      document.getElementById('modal-price').innerHTML = `${fmt(item.price)}`;
-      document.getElementById('item-overlay').classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
+	/* ── TABS ── */
+	function getCategories() {
+	  const seen = new Set(), cats = [];
+	  MENU_DATA.forEach(i => { if (!seen.has(i.cat)) { seen.add(i.cat); cats.push({ key: i.cat, label: i.category }); } });
+	  return cats;
+	}
 
-    function closeItemModal() {
-      document.getElementById('item-overlay').classList.remove('open');
-      document.body.style.overflow = '';
-    }
+	function renderTabs() {
+	  const w = document.getElementById('tabs');
+	  w.innerHTML = '';
+	  const all = document.createElement('button');
+	  all.className = 'tab-btn' + (activeTab === 'all' ? ' active' : '');
+	  all.textContent = t('allCategories');
+	  all.onclick = () => { activeTab = 'all'; renderTabs(); renderMenu(); };
+	  w.appendChild(all);
+	  getCategories().forEach(({ key, label }) => {
+		const b = document.createElement('button');
+		b.className = 'tab-btn' + (activeTab === key ? ' active' : '');
+		b.textContent = label[currentLang];
+		b.onclick = () => { activeTab = key; renderTabs(); renderMenu(); };
+		w.appendChild(b);
+	  });
+	}
 
-    function handleOverlayClick(e) {
-      if (e.target === document.getElementById('item-overlay')) closeItemModal();
-    }
+	/* ── MENU RENDER ── */
+	function renderMenu() {
+	  const main  = document.getElementById('main');
+	  const items = activeTab === 'all' ? MENU_DATA : MENU_DATA.filter(i => i.cat === activeTab);
+	  const groups = {};
+	  items.forEach(i => { if (!groups[i.cat]) groups[i.cat] = []; groups[i.cat].push(i); });
+	  main.innerHTML = '';
+	  Object.entries(groups).forEach(([, catItems]) => {
+		const sec  = document.createElement('section');
+		sec.className = 'menu-section';
+		const h = document.createElement('div');
+		h.className = 'section-heading';
+		h.textContent = catItems[0].category[currentLang];
+		sec.appendChild(h);
+		const grid = document.createElement('div');
+		grid.className = 'menu-grid';
+		catItems.forEach(item => grid.appendChild(buildCard(item)));
+		sec.appendChild(grid);
+		main.appendChild(sec);
+	  });
+	}
 
-    /* ---- FOOTER DEV LINK ---- */
-    function openDev() {
-      window.open('https://wa.me/9647509628683', '_blank');
-    }
+	function buildCard(item) {
+	  const card = document.createElement('div');
+	  card.className = 'menu-card';
+	  card.onclick = () => openItemModal(item);
 
-    // Close modal on Escape
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') closeItemModal();
-    });
+	  // Build image element separately — src set ONCE and never changed
+	  const imgWrap = document.createElement('div');
+	  imgWrap.className = 'card-img-wrap';
 
-    /* ---- INIT ---- */
-    renderTabs();
-    renderMenu();
+	  const img = document.createElement('img');
+	  img.src	 = item.img;
+	  img.alt	 = item.name[currentLang];
+	  img.loading = 'lazy';
+	  img.decoding = 'async';
+	  imgWrap.appendChild(img);
+
+	  const priceBadge = document.createElement('div');
+	  priceBadge.className = 'card-price-badge';
+	  priceBadge.textContent = fmt(item.price);
+	  imgWrap.appendChild(priceBadge);
+
+	  card.appendChild(imgWrap);
+
+	  const body = document.createElement('div');
+	  body.className = 'card-body';
+	  body.innerHTML = `
+		<div class="card-name" id="cname-${item.id}">${item.name[currentLang]}</div>
+		<div class="card-tap-hint"><i class="ri-eye-line"></i><span>${t('tapHint')}</span></div>`;
+	  card.appendChild(body);
+
+	  return card;
+	}
+
+	/* ── ITEM MODAL ── */
+	function openItemModal(item) {
+	  const img = document.getElementById('modal-img');
+	  // Only update src if it actually changed (avoids flicker/reload)
+	  const hqSrc = item.img.replace('w=500', 'w=800');
+	  if (img.src !== hqSrc) img.src = hqSrc;
+	  img.alt = item.name[currentLang];
+	  document.getElementById('modal-name').textContent  = item.name[currentLang];
+	  document.getElementById('modal-price').textContent = fmt(item.price);
+	  document.getElementById('item-overlay').classList.add('open');
+	  document.body.style.overflow = 'hidden';
+	}
+
+	function closeItemModal() {
+	  document.getElementById('item-overlay').classList.remove('open');
+	  document.body.style.overflow = '';
+	}
+
+	function handleOverlayClick(e) {
+	  if (e.target === document.getElementById('item-overlay')) closeItemModal();
+	}
+
+	/* ── FOOTER DEV LINK ── */
+	function openDev() { window.open('https://wa.me/9647509628683', '_blank'); }
+
+	document.addEventListener('keydown', e => { if (e.key === 'Escape') closeItemModal(); });
+
+	/* ── INIT ── */
+	renderTabs();
+	renderMenu();
   </script>
 </body>
 </html>
