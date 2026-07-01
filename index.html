@@ -220,6 +220,12 @@ section{position:relative;scroll-margin-top:calc(var(--nav-h) + 18px);}
   position:relative;border-radius:var(--radius-lg);transform-style:preserve-3d;
   transition:transform .25s var(--ease);
 }
+.hero__stage{overflow:hidden;border-radius:var(--radius-lg);}
+.hero__main-track{display:flex;transition:transform .5s var(--ease);cursor:grab;box-shadow:var(--shadow-2);border-radius:var(--radius-lg);}
+.hero__main-track.dragging{transition:none;cursor:grabbing;}
+.hero__main-track a{min-width:100%;flex-shrink:0;display:block;user-select:none;-webkit-user-drag:none;aspect-ratio:16/12;}
+.hero__main-track .mockup{aspect-ratio:16/12;border-radius:var(--radius-lg);}
+
 .hero__mockup-lg{box-shadow:var(--shadow-2);}
 .hero__float{
   position:absolute;padding:12px 16px;border-radius:16px;
@@ -840,7 +846,7 @@ section{position:relative;scroll-margin-top:calc(var(--nav-h) + 18px);}
 
 	<div class="hero__visual" data-reveal="scale">
 <div class="hero__stage" id="heroStage">
-    <a href="#" target="_blank" class="mockup hero__mockup-lg" id="heroMockupLg" style="aspect-ratio:16/12;"></a>
+<div class="hero__main-track" id="heroMainTrack"></div>
 		<div class="hero__float f1">
 		  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
 		  دابەزینی خێرا
@@ -1670,13 +1676,68 @@ const HERO_LINKS = [
   /* ---------------------------------------------------------------------
    * 13. HERO: large mockup + 4-image slider strip
    * ------------------------------------------------------------------- */
-  const heroMain = document.getElementById('heroMockupLg');
-heroMain.innerHTML = mockupHTML(HERO_LINKS[0].seed);
-heroMain.href = HERO_LINKS[0].url;
-
-document.getElementById('heroStripTrack').innerHTML = `
+  document.getElementById('heroStripTrack').innerHTML = `
     <div class="hero__strip-slide">${HERO_LINKS.map(h=>`<a href="${h.url}" target="_blank">${mockupHTML(h.seed)}</a>`).join("")}</div>
 `;
+
+let heroIndex = 0;
+let heroAutoTimer = null;
+
+function renderHeroMain(){
+  const track = document.getElementById('heroMainTrack');
+  track.innerHTML = HERO_LINKS.map(h=>`<a href="${h.url}" target="_blank">${mockupHTML(h.seed)}</a>`).join("");
+  updateHeroSlide();
+}
+
+function updateHeroSlide(){
+  document.getElementById('heroMainTrack').style.transform = `translateX(${heroIndex*100}%)`;
+}
+
+function goToHeroSlide(i){
+  heroIndex = (i + HERO_LINKS.length) % HERO_LINKS.length;
+  updateHeroSlide();
+}
+
+function startHeroAutoplay(){
+  stopHeroAutoplay();
+  heroAutoTimer = setInterval(()=> goToHeroSlide(heroIndex+1), 4000);
+}
+function stopHeroAutoplay(){
+  if(heroAutoTimer) clearInterval(heroAutoTimer);
+}
+
+renderHeroMain();
+startHeroAutoplay();
+
+(function(){
+  const track = document.getElementById('heroMainTrack');
+  let startX=0, isDown=false, moved=0;
+
+  function down(x){ isDown=true; startX=x; moved=0; track.classList.add('dragging'); stopHeroAutoplay(); }
+  function move(x){
+    if(!isDown) return;
+    moved = x - startX;
+    track.style.transform = `translateX(calc(${heroIndex*-100}% + ${moved}px))`;
+  }
+  function up(){
+    if(!isDown) return;
+    isDown=false;
+    track.classList.remove('dragging');
+    if(moved > 60) goToHeroSlide(heroIndex-1);
+    else if(moved < -60) goToHeroSlide(heroIndex+1);
+    else updateHeroSlide();
+    startHeroAutoplay();
+  }
+
+  track.addEventListener('mousedown', e=>{ e.preventDefault(); down(e.pageX); });
+  window.addEventListener('mousemove', e=>move(e.pageX));
+  window.addEventListener('mouseup', up);
+
+  track.addEventListener('touchstart', e=>down(e.touches[0].pageX), {passive:true});
+  track.addEventListener('touchmove', e=>move(e.touches[0].pageX), {passive:true});
+  track.addEventListener('touchend', up);
+})();
+
   const heroStripNav = document.getElementById('heroStripNav');
   heroStripNav.innerHTML = `<button class="active" data-i="0"></button>`;
   // Only one slide currently rendered; nav kept for future multi-slide extension.
