@@ -1711,6 +1711,11 @@ function stopHeroAutoplay(){
 }
 
 renderHeroMain();
+const heroStageEl = document.getElementById('heroStage');
+heroStageEl.addEventListener('mouseenter', stopHeroAutoplay);
+heroStageEl.addEventListener('mouseleave', startHeroAutoplay);
+heroStageEl.addEventListener('touchstart', stopHeroAutoplay, {passive:true});
+
 startHeroAutoplay();
 document.getElementById('heroStripNav').addEventListener('click', (e)=>{
   const btn = e.target.closest('button');
