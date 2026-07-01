@@ -220,7 +220,7 @@ section{position:relative;scroll-margin-top:calc(var(--nav-h) + 18px);}
   position:relative;border-radius:var(--radius-lg);transform-style:preserve-3d;
   transition:transform .25s var(--ease);
 }
-.hero__stage{overflow:hidden;border-radius:var(--radius-lg);}
+.hero__stage{overflow:hidden;border-radius:var(--radius-lg);touch-action:pan-y;}
 .hero__main-track{display:flex;transition:transform .5s var(--ease);cursor:grab;box-shadow:var(--shadow-2);border-radius:var(--radius-lg);}
 .hero__main-track.dragging{transition:none;cursor:grabbing;}
 .hero__main-track a{min-width:100%;flex-shrink:0;display:block;user-select:none;-webkit-user-drag:none;aspect-ratio:16/12;}
@@ -1686,11 +1686,15 @@ let heroAutoTimer = null;
 function renderHeroMain(){
   const track = document.getElementById('heroMainTrack');
   track.innerHTML = HERO_LINKS.map(h=>`<a href="${h.url}" target="_blank">${mockupHTML(h.seed)}</a>`).join("");
+  const nav = document.getElementById('heroStripNav');
+  nav.innerHTML = HERO_LINKS.map((_,i)=>`<button data-i="${i}" class="${i===0?'active':''}"></button>`).join("");
   updateHeroSlide();
 }
 
+
 function updateHeroSlide(){
   document.getElementById('heroMainTrack').style.transform = `translateX(${heroIndex*100}%)`;
+  document.querySelectorAll('#heroStripNav button').forEach((d,i)=>d.classList.toggle('active', i===heroIndex));
 }
 
 function goToHeroSlide(i){
@@ -1708,6 +1712,12 @@ function stopHeroAutoplay(){
 
 renderHeroMain();
 startHeroAutoplay();
+document.getElementById('heroStripNav').addEventListener('click', (e)=>{
+  const btn = e.target.closest('button');
+  if(!btn) return;
+  goToHeroSlide(parseInt(btn.dataset.i,10));
+  startHeroAutoplay();
+});
 
 (function(){
   const track = document.getElementById('heroMainTrack');
@@ -1737,10 +1747,6 @@ startHeroAutoplay();
   track.addEventListener('touchmove', e=>move(e.touches[0].pageX), {passive:true});
   track.addEventListener('touchend', up);
 })();
-
-  const heroStripNav = document.getElementById('heroStripNav');
-  heroStripNav.innerHTML = `<button class="active" data-i="0"></button>`;
-  // Only one slide currently rendered; nav kept for future multi-slide extension.
 
   /* ---------------------------------------------------------------------
    * 14. STATS counter animation
