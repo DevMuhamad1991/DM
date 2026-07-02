@@ -1726,7 +1726,7 @@ document.getElementById('heroStripNav').addEventListener('click', (e)=>{
 
 (function(){
   const track = document.getElementById('heroMainTrack');
-  let startX=0, isDown=false, moved=0;
+  let startX=0, isDown=false, moved=0, usingTouch=false;
 
   function down(x){ isDown=true; startX=x; moved=0; track.classList.add('dragging'); stopHeroAutoplay(); }
   function move(x){
@@ -1744,14 +1744,25 @@ document.getElementById('heroStripNav').addEventListener('click', (e)=>{
     startHeroAutoplay();
   }
 
-  track.addEventListener('mousedown', e=>{ e.preventDefault(); down(e.pageX); });
-  window.addEventListener('mousemove', e=>move(e.pageX));
-  window.addEventListener('mouseup', up);
+  track.addEventListener('mousedown', e=>{
+    if(usingTouch) return;
+    e.preventDefault();
+    down(e.pageX);
+  });
+  window.addEventListener('mousemove', e=>{ if(!usingTouch) move(e.pageX); });
+  window.addEventListener('mouseup', e=>{ if(!usingTouch) up(); });
 
-  track.addEventListener('touchstart', e=>down(e.touches[0].pageX), {passive:true});
+  track.addEventListener('touchstart', e=>{
+    usingTouch = true;
+    down(e.touches[0].pageX);
+  }, {passive:true});
   track.addEventListener('touchmove', e=>move(e.touches[0].pageX), {passive:true});
-  track.addEventListener('touchend', up);
+  track.addEventListener('touchend', ()=>{
+    up();
+    setTimeout(()=>{ usingTouch = false; }, 500);
+  });
 })();
+
 
   /* ---------------------------------------------------------------------
    * 14. STATS counter animation
