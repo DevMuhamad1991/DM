@@ -1679,7 +1679,7 @@ const HERO_LINKS = [
    * 13. HERO: large mockup + 4-image slider strip
    * ------------------------------------------------------------------- */
   document.getElementById('heroStripTrack').innerHTML = `
-    <div class="hero__strip-slide">${HERO_LINKS.map(h=>`<a href="${h.url}" target="_blank">${mockupHTML(h.seed)}</a>`).join("")}</div>
+    <div class="hero__strip-slide">${HERO_LINKS.map(h=>`<a href="${h.url}" target="_blank" draggable="false">${mockupHTML(h.seed)}</a>`).join("")}</div>
 `;
 
 const heroSlideCount = HERO_LINKS.length;
@@ -1690,7 +1690,7 @@ let heroAnimating = false;
 function renderHeroMain(){
   const track = document.getElementById('heroMainTrack');
   const slides = [HERO_LINKS[heroSlideCount-1], ...HERO_LINKS, HERO_LINKS[0]];
-  track.innerHTML = slides.map(h=>`<a href="${h.url}" target="_blank">${mockupHTML(h.seed)}</a>`).join("");
+track.innerHTML = slides.map(h=>`<a href="${h.url}" target="_blank" draggable="false">${mockupHTML(h.seed)}</a>`).join("");
   const nav = document.getElementById('heroStripNav');
   nav.innerHTML = HERO_LINKS.map((_,i)=>`<button data-i="${i}" class="${i===0?'active':''}"></button>`).join("");
   setHeroPosition(false);
@@ -1756,6 +1756,13 @@ heroStageEl.addEventListener('touchstart', stopHeroAutoplay, {passive:true});
 (function(){
   const track = document.getElementById('heroMainTrack');
   let startX=0, isDown=false, moved=0, usingTouch=false;
+
+  track.addEventListener('click', function(e){
+    if(Math.abs(moved) > 5){
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }, true);
 
   function down(x){
     if(heroAnimating) return;
