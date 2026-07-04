@@ -230,7 +230,7 @@ const SUPABASE_ANON_KEY = "sb_publishable_jvK_LJjUDPRU1nNpt-2wUQ_h9uTmfVA";
 
 let sb = null;
 try{
-  if(SUPABASE_URL && SUPABASE_URL.startsWith('http')){
+  if(SUPABASE_URL && SUPABASE_URL.startsWith('https')){
     sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   }
 }catch(e){ console.error(e); }
