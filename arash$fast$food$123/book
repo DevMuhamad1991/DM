@@ -1,3 +1,101 @@
 a: arashfastfood123
 u: 
 k:
+
+-- 1. کەتەگۆری
+create table categories (
+  id bigint generated always as identity primary key,
+  cat_id text unique not null,
+  img text,
+  icon text,
+  label_ckb text not null,
+  label_ar text,
+  label_en text,
+  sort int default 0,
+  created_at timestamptz default now()
+);
+
+-- 2. خواردن
+create table meals (
+  id bigint generated always as identity primary key,
+  cat_id text,
+  img text,
+  price numeric default 0,
+  cal numeric default 0,
+  prep numeric default 0,
+  name_ckb text not null,
+  name_ar text,
+  name_en text,
+  desc_ckb text,
+  desc_ar text,
+  desc_en text,
+  sort int default 0,
+  created_at timestamptz default now()
+);
+
+-- 3. پەیوەندی خواردن بە چەند کەتەگۆرییەوە
+create table meal_categories (
+  meal_id bigint references meals(id) on delete cascade,
+  cat_id text,
+  primary key (meal_id, cat_id)
+);
+
+-- 4. ڕێکخستنەکانی سایت (تەنها ڕیزێک، id=1)
+create table site_settings (
+  id int primary key default 1,
+  brand_name text,
+  font_size int default 15,
+  color_bg text,
+  color_layer1 text,
+  color_layer2 text,
+  color_layer3 text,
+  color_gold text,
+  color_cream text,
+  announcement_ckb text,
+  announcement_ar text,
+  announcement_en text,
+  announcement_active boolean default false,
+  footer_about_ckb text,
+  footer_about_ar text,
+  footer_about_en text,
+  made_by_label text default 'DevMuhamad.com',
+  whatsapp_link text default 'https://wa.me/9647509628683',
+  view_count bigint default 0
+);
+insert into site_settings (id) values (1);
+
+-- 5. مێژووی چالاکی
+create table activity_log (
+  id bigint generated always as identity primary key,
+  action text,
+  details text,
+  device text,
+  created_at timestamptz default now()
+);
+
+-- 6. فەنکشنی پێوانەی قەبارەی داتابەیس
+create or replace function get_db_size()
+returns bigint
+language sql
+security definer
+as $$
+  select pg_database_size(current_database());
+$$;
+
+-- 7. چالاککردنی RLS و ڕێگەدان بە هەموو کردارەکان
+alter table categories enable row level security;
+alter table meals enable row level security;
+alter table meal_categories enable row level security;
+alter table site_settings enable row level security;
+alter table activity_log enable row level security;
+
+create policy "allow all categories" on categories for all using (true) with check (true);
+create policy "allow all meals" on meals for all using (true) with check (true);
+create policy "allow all meal_categories" on meal_categories for all using (true) with check (true);
+create policy "allow all site_settings" on site_settings for all using (true) with check (true);
+create policy "allow all activity_log" on activity_log for all using (true) with check (true);
+
+
+	1.	بڕۆ بۆ Storage لە panel-ی چەپ
+	2.	کرتە لە New bucket بکە، ناوی بنێ images
+	3.	کلیک لە Public bucket بکە (تاکو وێنەکان لە مێنوو دەربکەون)
