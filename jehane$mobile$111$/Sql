@@ -1,0 +1,143 @@
+-- ══════════════════════════════════════════
+-- کاڵاکان (Products)
+-- ══════════════════════════════════════════
+create table products (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  brand text,
+  model text,
+  category text not null,
+  buy_price numeric not null default 0,
+  sell_price numeric not null default 0,
+  qty integer not null default 0,
+  notes text,
+  barcode text,
+  created_at timestamptz not null default now()
+);
+
+-- ══════════════════════════════════════════
+-- فرۆشتن (Sales)
+-- ══════════════════════════════════════════
+create table sales (
+  id uuid primary key default gen_random_uuid(),
+  product_id uuid references products(id) on delete set null,
+  product_name text not null,
+  product_model text,
+  unit_price numeric not null default 0,
+  qty integer not null default 1,
+  total numeric not null default 0,
+  profit numeric not null default 0,
+  returned boolean not null default false,
+  returned_at timestamptz,
+  created_at timestamptz not null default now()
+);
+
+-- ══════════════════════════════════════════
+-- چاکسازی (Repairs)
+-- ══════════════════════════════════════════
+create table repairs (
+  id uuid primary key default gen_random_uuid(),
+  customer_name text not null,
+  phone text not null,
+  device text not null,
+  device_type text,
+  problem text not null,
+  cost numeric default 0,
+  status text not null default 'received',
+  notes text,
+  created_at timestamptz not null default now()
+);
+
+-- ══════════════════════════════════════════
+-- قەرزەکان (Debts)
+-- ══════════════════════════════════════════
+create table debts (
+  id uuid primary key default gen_random_uuid(),
+  customer_name text not null,
+  phone text not null,
+  amount numeric not null default 0,
+  paid_amount numeric not null default 0,
+  source text,
+  notes text,
+  due_date date,
+  status text not null default 'pending',
+  created_at timestamptz not null default now()
+);
+
+-- ══════════════════════════════════════════
+-- پلانەکان (Plans)
+-- ══════════════════════════════════════════
+create table plans (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  content text,
+  status text not null default 'active',
+  created_at timestamptz not null default now()
+);
+
+-- ══════════════════════════════════════════
+-- خەرجییەکان (Expenses)
+-- ══════════════════════════════════════════
+create table expenses (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  amount numeric not null default 0,
+  category text,
+  note text,
+  created_at timestamptz not null default now()
+);
+
+-- ══════════════════════════════════════════
+-- کاتیگۆریەکان (Categories)
+-- ══════════════════════════════════════════
+create table categories (
+  id uuid primary key default gen_random_uuid(),
+  name text not null unique,
+  created_at timestamptz not null default now()
+);
+
+-- ══════════════════════════════════════════
+-- ڕێکخستنەکان (Settings) - تەنها یەک ڕیز (id=1)
+-- ══════════════════════════════════════════
+create table settings (
+  id integer primary key default 1,
+  store_name text default 'Mobile Store',
+  store_phone text,
+  store_address text,
+  primary_color text default '#6C63FF',
+  secondary_color text default '#00D9A6',
+  theme_mode text default 'dark',
+  font_size text default 'medium',
+  density text default 'normal',
+  bg_pattern text default 'default',
+  bg_color text default '#080d1a',
+  currency text default 'iqd',
+  app_pin text default '1887',
+  reset_pin text default '1991',
+  auto_print boolean default false,
+  created_at timestamptz not null default now(),
+  constraint single_row check (id = 1)
+);
+
+insert into settings (id) values (1);
+
+-- ══════════════════════════════════════════
+-- چالاککردنی RLS + ڕێگەپێدان بە هەموو داتا (چونکە بارکۆدی publishable key بەکارهاتووە)
+-- ══════════════════════════════════════════
+alter table products enable row level security;
+alter table sales enable row level security;
+alter table repairs enable row level security;
+alter table debts enable row level security;
+alter table plans enable row level security;
+alter table expenses enable row level security;
+alter table categories enable row level security;
+alter table settings enable row level security;
+
+create policy "allow all products" on products for all using (true) with check (true);
+create policy "allow all sales" on sales for all using (true) with check (true);
+create policy "allow all repairs" on repairs for all using (true) with check (true);
+create policy "allow all debts" on debts for all using (true) with check (true);
+create policy "allow all plans" on plans for all using (true) with check (true);
+create policy "allow all expenses" on expenses for all using (true) with check (true);
+create policy "allow all categories" on categories for all using (true) with check (true);
+create policy "allow all settings" on settings for all using (true) with check (true);
