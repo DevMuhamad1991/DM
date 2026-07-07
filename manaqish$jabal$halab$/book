@@ -1,3 +1,10 @@
 acc: manaqishjabal@g
 url: https://iyfihswajujedgmxvcsr.supabase.co
 key: sb_publishable_jvK_LJjUDPRU1nNpt-2wUQ_h9uTmfVA
+
+
+new mobile footer
+alter table site_settings add column if not exists branch_phone text default '+9647508304009';
+alter table site_settings add column if not exists branch_text_ckb text default 'لقی ١ — هەڤاڵان، 20ـی یەکەم';
+alter table site_settings add column if not exists branch_text_ar text;
+alter table site_settings add column if not exists branch_text_en text;
