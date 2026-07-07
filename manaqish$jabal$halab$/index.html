@@ -194,10 +194,11 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:
 
 <footer class="footer">
   <p style="color:var(--muted);font-size:13px;line-height:1.8;margin-bottom:12px" id="footerAbout"></p>
-    <a href="tel:+9647509628683" style="color:var(--muted);text-decoration:none;display:block;font-size:13px">
+    <a href="tel:" id="footerBranchLink" style="color:var(--muted);text-decoration:none;display:block;font-size:13px">
     <i class="fa-solid fa-phone" style="color:var(--gold);margin-inline-end:6px"></i>
-    لقی ١ — هەڤاڵان، 20ـی یەکەم — 07508304009
+    <span id="footerBranchText"></span>
   </a>
+
   <p>
     <span id="footerRights">هەموو مافەکان پارێزراون</span> &copy; 2025 &mdash;
     <span id="footerMadeByLabel">دروستکراوە لەلایەن</span>
@@ -365,6 +366,8 @@ function applySettings(){
 
   const aboutKey = 'footer_about_'+S.lang;
   document.getElementById('footerAbout').textContent = SETTINGS[aboutKey] || SETTINGS.footer_about_ckb || '';
+  document.getElementById('footerBranchText').textContent = SETTINGS['branch_text_'+S.lang] || SETTINGS.branch_text_ckb || '';
+document.getElementById('footerBranchLink').href = 'tel:' + (SETTINGS.branch_phone || '');
   document.getElementById('footerWaLink').textContent = 'DevMuhamad.com';
 document.getElementById('footerWaLink').href = 'https://wa.me/9647509628683';
 }
