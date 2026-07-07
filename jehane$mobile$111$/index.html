@@ -3,12 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mobile Systems — سیستەمی بەڕێوەبردنی دوکان</title>
+<title>Mobile System — سیستەمی بەڕێوەبردنی دوکان</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-<link rel="apple-touch-icon" href="icon_192.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icon_192.png">
 <audio id="alertSound" src="https://cdn.freesound.org/previews/256/256113_3263906-lq.mp3" preload="auto"></audio>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#6C63FF">
@@ -1860,15 +1858,15 @@ kbd {
     <div class="card">
       <div class="card-body">
         <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
-          <span class="td-muted">ڤێرژنی سیستەم</span><span class="fw-700">3.1.0</span>
+          <span class="td-muted">ڤێرژنی سیستەم</span><span class="fw-700">2.5.0</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
-          <span class="td-muted">بەرواری دوایین نوێکردنەوە</span><span class="fw-700">2026-07-6</span>
+          <span class="td-muted">بەرواری دوایین نوێکردنەوە</span><span class="fw-700">2026-06-25</span>
         </div>
         <div style="padding:14px 0 0">
           <div class="td-muted" style="margin-bottom:8px">تایبەتمەندیە نوێیەکان:</div>
           <ul style="font-size:12.5px;color:var(--text2);padding-right:18px;line-height:1.9">
-            <li>زیادکردنی وێنە</li>
+            <li>زیادکردنی fab</li>
             <li>زیادکردنی بەشی نوێ</li>
             <li>پشتگیری داتا</li>
           </ul>
@@ -1940,7 +1938,7 @@ kbd {
       </div>
       <div>
         <div style="font-size:14px;font-weight:700;color:var(--text)">Dev Muhamad</div>
-        <div style="font-size:12px;color:var(--text2);margin-top:2px">پرۆگرامەری سیستەمەکە بۆ هەرنوێکارییەک بەخواستی خۆت پەیوەندی بکە</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:2px">پرۆگرامەری سیستەمەکە</div>
 <a href="https://wa.me/9647509628683" target="_blank" style="font-size:11px;color:#25D366;margin-top:4px;display:flex;align-items:center;gap:4px;text-decoration:none">
   <i class="ti ti-brand-whatsapp"></i> 07509628683
 </a>
@@ -1979,7 +1977,7 @@ kbd {
     <div class="card-body" style="text-align:center">
       <i class="ti ti-alert-triangle color-red" style="font-size:28px"></i>
       <div style="font-size:14px;font-weight:700;margin-top:8px">ناوچەی مەترسیدار</div>
-      <div style="font-size:12.5px;color:var(--text2);margin:6px 0 14px">سڕینەوەی هەموو داتاکانی دوکان — کردارێکە ناگەڕێتەوە</div>
+      <div style="font-size:12.5px;color:var(--text2);margin:6px 0 14px">سڕینەوەی هەموو داتاکانی دوکان — کردارێکی ناگەڕاوەتەوە</div>
       <button class="btn btn-danger" onclick="openResetAllModal()"><i class="ti ti-trash"></i> سڕینەوەی هەموو داتاکان</button>
     </div>
   </div>
@@ -2584,7 +2582,7 @@ kbd {
 
 		<div class="form-group">
 		  <label>تێبینی</label>
-		  <textarea class="form-control" id="pNotes" placeholder="تێبینی بنووسە..."></textarea>
+		  <textarea class="form-control" id="pNotes" placeholder="تێبینی دیاری..."></textarea>
 		</div>
 	  </div>
 	</div>
@@ -2688,8 +2686,8 @@ kbd {
   <option>تابلێت</option>
   <option>لاپتۆپ</option>
   <option>سمارت واچ</option>
-  <option>جیهاز</option>
   <option>هیتر</option>
+  <option>تر</option>
 </select>
 
 
@@ -2895,11 +2893,8 @@ kbd {
 
 <script>
 if('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js')
-    .then(reg => console.log('SW registered:', reg.scope))
-    .catch(err => console.error('SW registration failed:', err));
+  navigator.serviceWorker.register('/sw.js');
 }
-
 
 // ══════════════════════════════════════════════════════════════
 //  INDEXEDDB — ئۆفلاین پاشەکەوتکردن
@@ -3074,8 +3069,8 @@ async function processSyncQueue() {
 // ══════════════════════════════════════════════════════════════
 //  SUPABASE CONNECTION
 // ══════════════════════════════════════════════════════════════
-const SUPABASE_URL = 'https://rbwaynlgbstnbgkduxbq.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_n-SgbF92hOzRpSYtIMqz2A_xTSk4O3H';
+const SUPABASE_URL = 'https://mysfyodtvawjnumbxzup.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_1AbBOxAHs-LX32Ax16_fPA_0-xet0C0';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // In-memory cache of data (loaded from Supabase, kept in sync after every change)
@@ -3086,7 +3081,7 @@ let SETTINGS = { store_name:'Mobile Store', store_phone:'', store_address:'', pr
 function setConnStatus(state) {
   const el = document.getElementById('connStatus');
   if (!el) return;
-  if (state === 'online') { el.className = 'conn-status online'; el.innerHTML = '<span class="conn-dot"></span> DevMuhamad.com '; }
+  if (state === 'online') { el.className = 'conn-status online'; el.innerHTML = '<span class="conn-dot"></span> DevMuhamad@ '; }
   else if (state === 'offline') { el.className = 'conn-status offline'; el.innerHTML = '<span class="conn-dot"></span> پەیوەندی نیە'; }
   else { el.className = 'conn-status loading'; el.innerHTML = '<span class="conn-dot"></span> پەیوەندی...'; }
 }
@@ -3427,27 +3422,6 @@ async function savePlan() {
   const btn = document.getElementById('planSaveBtn');
   btn.disabled = true;
   try {
-    if(!isOnline) {
-      const id = editPlanId || crypto.randomUUID();
-      const localPlan = {
-        id, title, content, status: 'active',
-        createdAt: editPlanId
-          ? (CACHE.plans.find(x=>x.id===editPlanId)?.createdAt || new Date().toISOString())
-          : new Date().toISOString()
-      };
-      await idbPut('plans', localPlan);
-      if(editPlanId) {
-        CACHE.plans = CACHE.plans.map(p => p.id===editPlanId ? localPlan : p);
-        await addToSyncQueue({ type:'update', table:'plans', id: editPlanId, data:{title, content} });
-      } else {
-        CACHE.plans = [localPlan, ...CACHE.plans];
-        await addToSyncQueue({ type:'insert', table:'plans', data:{id, title, content, status:'active'} });
-      }
-      toast('ئۆفلاین — پلانەکە پاشەکەوتکرا، sync دەکرێت کاتێک ئینتەرنێت بگەڕێتەوە','info');
-      closeModal('planModal'); renderPlans();
-      return;
-    }
-
     if(editPlanId) {
       const { error } = await sb.from('plans').update({ title, content }).eq('id', editPlanId);
       if(error) throw error;
@@ -4138,69 +4112,40 @@ function editProduct(id) { openProductModal(id); }
 async function saveProduct() {
   const name=document.getElementById('pName').value.trim();
   const brand=document.getElementById('pBrand').value.trim();
-  const model=document.getElementById('pModel').value;
   const cat=document.getElementById('pCategory').value;
   const buy=parseFloat(document.getElementById('pBuyPrice').value)||0;
   const sell=parseFloat(document.getElementById('pSellPrice').value)||0;
   const qty=parseInt(document.getElementById('pQty').value)||0;
-  const barcode=document.getElementById('pBarcode').value.trim()||null;
-  const notes=document.getElementById('pNotes').value;
+  const barcode=document.getElementById('pBarcode').value.trim()||null; // ✅ زیادکرا
   if(!name||!cat||!sell) { toast('تکایە خانەی پێویستەکان پڕبکەرەوە','error'); return; }
-
+let image_url = editProductId ? (DB.get('products').find(x=>x.id===editProductId)?.imageUrl || null) : null;
   const btn = document.getElementById('pSaveBtn');
   btn.disabled = true;
-
-  let image_url = editProductId ? (DB.get('products').find(x=>x.id===editProductId)?.imageUrl || null) : null;
-
   try {
-    // وێنە تەنها لە کاتی ئۆنلاین بوون هەڵدەگیرێت (staraj پێویستی بە ئینتەرنێتە)
-    if(isOnline && selectedImageFile.product) {
-      image_url = await uploadImageToSupabase(selectedImageFile.product, 'products');
-    } else if(window._removedExistingImage_product) {
-      image_url = null;
-    } else if(!isOnline && selectedImageFile.product) {
-      toast('وێنە پێویستی بە ئینتەرنێتە — بەبێ وێنە پاشەکەوت دەکرێت','info');
-    }
+    if(selectedImageFile.product) {
+  image_url = await uploadImageToSupabase(selectedImageFile.product, 'products');
+} else if(window._removedExistingImage_product) {
+  image_url = null;
+}
 
-    const payload = {
-      name, brand, model, category: cat,
-      buy_price: buy, sell_price: sell, qty, notes, barcode, image_url
-    };
-
-    // ══════ دۆخی ئۆفلاین ══════
-    if(!isOnline) {
-      const id = editProductId || crypto.randomUUID();
-      const localProduct = {
-        id, name, brand, model, category: cat,
-        buyPrice: buy, sellPrice: sell, qty, notes, barcode,
-        imageUrl: image_url,
-        createdAt: editProductId
-          ? (DB.get('products').find(x=>x.id===editProductId)?.createdAt || new Date().toISOString())
-          : new Date().toISOString()
-      };
-
-      await idbPut('products', localProduct);
-
-      if(editProductId) {
-        CACHE.products = CACHE.products.map(p => p.id===editProductId ? localProduct : p);
-        await addToSyncQueue({ type:'update', table:'products', id: editProductId, data: payload });
-      } else {
-        CACHE.products = [localProduct, ...CACHE.products];
-        await addToSyncQueue({ type:'insert', table:'products', data: { id, ...payload } });
-      }
-
-      toast('ئۆفلاین — کاڵاکە پاشەکەوتکرا، sync دەکرێت کاتێک ئینتەرنێت بگەڕێتەوە','info');
-      closeModal('productModal'); renderInventory(); buildNotifications();
-      return;
-    }
-
-    // ══════ دۆخی ئۆنلاین (وەک خۆی) ══════
     if(editProductId) {
-      const { error } = await sb.from('products').update(payload).eq('id', editProductId);
+      const { error } = await sb.from('products').update({
+        name, brand, model: document.getElementById('pModel').value, category: cat,
+        buy_price: buy, sell_price: sell, qty, 
+        notes: document.getElementById('pNotes').value,
+        barcode,  // ✅ زیادکرا
+        image_url
+      }).eq('id', editProductId);
       if(error) throw error;
       toast('کاڵاکە نوێ کرایەوە','success');
     } else {
-      const { error } = await sb.from('products').insert(payload);
+      const { error } = await sb.from('products').insert({
+        name, brand, model: document.getElementById('pModel').value, category: cat,
+        buy_price: buy, sell_price: sell, qty, 
+        notes: document.getElementById('pNotes').value,
+        barcode,  // ✅ زیادکرا
+        image_url
+      });
       if(error) throw error;
       toast('کاڵای نوێ زیادکرا','success');
     }
@@ -4213,7 +4158,6 @@ async function saveProduct() {
     btn.disabled = false;
   }
 }
-
 
 async function deleteProduct(id) {
   if(!confirm('دڵنیایت لە سڕینەوەی ئەم کاڵایە؟')) return;
@@ -4638,31 +4582,30 @@ if(selectedImageFile.repair) {
   const btn = document.getElementById('rSaveBtn');
   btn.disabled = true;
   const data = {
- customer_name: name, phone, device, device_type: document.getElementById('rDeviceType').value,
- problem, cost: parseFloat(document.getElementById('rCost').value)||0,
- status: document.getElementById('rStatus').value, notes: document.getElementById('rNotes').value,
+	customer_name: name, phone, device, device_type: document.getElementById('rDeviceType').value,
+	problem, cost: parseFloat(document.getElementById('rCost').value)||0,
+	status: document.getElementById('rStatus').value, notes: document.getElementById('rNotes').value,
   image_url
   };
   try {
- if(editRepairId) {
-   const { error } = await sb.from('repairs').update(data).eq('id', editRepairId);
-   if(error) throw error;
-   toast('چاکسازیەکە نوێ کرایەوە','success');
- } else {
-   const { error } = await sb.from('repairs').insert(data);
-   if(error) throw error;
-   toast('چاکسازی نوێ زیادکرا','success');
- }
- await loadAllData();
- closeModal('repairModal'); renderRepairs(); buildNotifications();
+	if(editRepairId) {
+	  const { error } = await sb.from('repairs').update(data).eq('id', editRepairId);
+	  if(error) throw error;
+	  toast('چاکسازیەکە نوێ کرایەوە','success');
+	} else {
+	  const { error } = await sb.from('repairs').insert(data);
+	  if(error) throw error;
+	  toast('چاکسازی نوێ زیادکرا','success');
+	}
+	await loadAllData();
+	closeModal('repairModal'); renderRepairs(); buildNotifications();
   } catch(err) {
- console.error(err);
- toast('کێشە ڕوویدا: ' + (err.message||err), 'error');
+	console.error(err);
+	toast('کێشە ڕوویدا: ' + (err.message||err), 'error');
   } finally {
- btn.disabled = false;
+	btn.disabled = false;
   }
 }
-
 async function deleteRepair(id) {
   if(!confirm('دڵنیایت لە سڕینەوەی ئەم چاکسازییە؟')) return;
   try {
@@ -4798,43 +4741,24 @@ async function saveDebt() {
 
   const btn = document.getElementById('dSaveBtn');
   btn.disabled = true;
-
-  const payload = {
-    customer_name: name, phone, amount, paid_amount: 0,
-    source: 'other', notes: document.getElementById('dNotes').value,
-    due_date: document.getElementById('dDueDate').value || null,
-    status: 'pending'
-  };
-
   try {
-    if(!isOnline) {
-      const id = crypto.randomUUID();
-      const localDebt = {
-        id, customerName: name, phone, amount, paidAmount: 0,
-        source: 'other', notes: payload.notes, dueDate: payload.due_date,
-        status: 'pending', createdAt: new Date().toISOString()
-      };
-      await idbPut('debts', localDebt);
-      CACHE.debts = [localDebt, ...CACHE.debts];
-      await addToSyncQueue({ type:'insert', table:'debts', data: { id, ...payload } });
-      toast('ئۆفلاین — قەرزەکە پاشەکەوتکرا، sync دەکرێت کاتێک ئینتەرنێت بگەڕێتەوە','info');
-      closeModal('debtModal'); renderDebts(); buildNotifications();
-      return;
-    }
-
-    const { error } = await sb.from('debts').insert(payload);
-    if(error) throw error;
-    toast('قەرزی نوێ زیادکرا','success');
-    await loadAllData();
-    closeModal('debtModal'); renderDebts(); buildNotifications();
+	const { error } = await sb.from('debts').insert({
+	  customer_name: name, phone, amount, paid_amount: 0,
+	  source: 'other', notes: document.getElementById('dNotes').value,
+	  due_date: document.getElementById('dDueDate').value || null,
+	  status: 'pending'
+	});
+	if(error) throw error;
+	toast('قەرزی نوێ زیادکرا','success');
+	await loadAllData();
+	closeModal('debtModal'); renderDebts(); buildNotifications();
   } catch(err) {
-    console.error(err);
-    toast('کێشە ڕوویدا: ' + (err.message||err), 'error');
+	console.error(err);
+	toast('کێشە ڕوویدا: ' + (err.message||err), 'error');
   } finally {
-    btn.disabled = false;
+	btn.disabled = false;
   }
 }
-
 
 
 document.addEventListener('fullscreenchange', function() {
@@ -5249,33 +5173,15 @@ async function saveExpense() {
   const btn = document.getElementById('exSaveBtn');
   btn.disabled = true;
   try {
-    if(!isOnline) {
-      const id = editExpenseId || crypto.randomUUID();
-      const localExpense = {
-        id, title, amount, category, note,
-        createdAt: editExpenseId
-          ? (CACHE.expenses.find(x=>x.id===editExpenseId)?.createdAt || new Date().toISOString())
-          : new Date().toISOString()
-      };
-      await idbPut('expenses', localExpense);
-      if(editExpenseId) {
-        CACHE.expenses = CACHE.expenses.map(e => e.id===editExpenseId ? localExpense : e);
-        await addToSyncQueue({ type:'update', table:'expenses', id: editExpenseId, data:{title,amount,category,note} });
-      } else {
-        CACHE.expenses = [localExpense, ...CACHE.expenses];
-        await addToSyncQueue({ type:'insert', table:'expenses', data:{id,title,amount,category,note} });
-      }
-      toast('ئۆفلاین — خەرجییەکە پاشەکەوتکرا، sync دەکرێت کاتێک ئینتەرنێت بگەڕێتەوە','info');
-      closeModal('expenseModal'); renderExpenses(); renderDashboard();
-      return;
-    }
-
     if(editExpenseId) {
-      const { error } = await sb.from('expenses').update({ title, amount, category, note }).eq('id', editExpenseId);
+      const { error } = await sb.from('expenses')
+        .update({ title, amount, category, note })
+        .eq('id', editExpenseId);
       if(error) throw error;
       toast('خەرجییەکە نوێ کرایەوە','success');
     } else {
-      const { error } = await sb.from('expenses').insert({ title, amount, category, note });
+      const { error } = await sb.from('expenses')
+        .insert({ title, amount, category, note });
       if(error) throw error;
       toast('خەرجی نوێ زیادکرا','success');
     }
@@ -5577,8 +5483,8 @@ function printReceipt(items, total) {
       <hr class="divider">
 
       <div class="footer">
-        <div class="thanks">سوپاس بۆ کڕینت </div>
-        <p>پسووڵەکەت بپارێزە</p>
+        <div class="thanks">سوپاس بۆ کڕینت 🙏</div>
+        <p>پسووڵەکەت پاراستبێت</p>
         ${phone ? `<p>پەیوەندی: ${phone}</p>` : ''}
       </div>
 
@@ -5986,8 +5892,6 @@ document.addEventListener('click', function(e) {
     document.documentElement.requestFullscreen().catch(()=>{});
   }
 }, true);
-
-
 
 init();
 </script>
