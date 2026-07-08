@@ -3313,6 +3313,12 @@ function navigate(el, page) {
   document.getElementById('page-'+page)?.classList.add('active');
   document.getElementById('headerPageTitle').textContent = pageNames[page]||'';
   closeSidebar();
+ if(page === 'sales') {
+    saleCatFilter = '';
+    const searchBox = document.getElementById('quickSaleSearch');
+    if(searchBox) searchBox.value = '';
+  }
+
   renderPage(page);
 }
 function renderPage(p) {
