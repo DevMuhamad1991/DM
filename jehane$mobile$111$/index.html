@@ -4326,10 +4326,11 @@ function buildSaleCardHTML(p) {
     <div class="spc-name">${p.name}</div>
     <div class="spc-details">${p.brand}${p.model?' • '+p.model:''}</div>
     <div class="spc-cat"><span class="badge badge-purple">${p.category}</span></div>
-    <div class="spc-price">${fmt(p.sellPrice)} — ${p.qty} بەردەست</div>
+    <div class="spc-price">${fmt(p.sellPrice)} — <span id="stock-${p.id}">${p.qty}</span> بەردەست</div>
     <div class="spc-qty-container" id="qtyC-${p.id}">${buildQtyControlsHTML(p)}</div>
   </div>`;
 }
+
 
 function onSaleCardClick(e, id) {
   const inCart = saleCart.find(c=>c.id===id);
@@ -4378,13 +4379,41 @@ function applySaleFilters() {
 
 function updateSaleCardUI(id) {
   const card = document.querySelector(`.sale-product-card[data-id="${id}"]`);
-  if(!card) { renderQuickSaleGrid(); return; }
+  if(!card) return; // کارتەکە بوونی نییە (لەوانەیە فلتەرکراوە یان سڕاوەتەوە)
   const inCart = saleCart.find(c=>c.id===id);
   card.classList.toggle('in-cart', !!inCart);
   const qtyContainer = document.getElementById('qtyC-'+id);
   const p = DB.get('products').find(x=>x.id===id);
   if(qtyContainer && p) qtyContainer.innerHTML = buildQtyControlsHTML(p);
+  const stockEl = document.getElementById('stock-'+id);
+  if(stockEl && p) stockEl.textContent = p.qty;
 }
+
+// نوێکردنەوەی گرید بەبێ دووبارە بارکردنی وێنە
+// تەنها کاتێک لیستی کاڵاکان (زیاد/کەم بوونی کاڵا) گۆڕاوە گرید بە تەواوی دروست دەکاتەوە
+function syncSaleGrid() {
+  const products = DB.get('products').filter(p=>p.qty>0 || saleCart.find(c=>c.id===p.id));
+  const grid = document.getElementById('quickSaleGrid');
+  const existingIds = new Set(Array.from(grid.querySelectorAll('.sale-product-card')).map(c=>c.dataset.id));
+  const currentIds = new Set(products.map(p=>p.id));
+
+  const sameSet = existingIds.size === currentIds.size && [...existingIds].every(id=>currentIds.has(id));
+
+  if(!sameSet) {
+    // کاڵایەک زیاد یان کەم کراوە — پێویستە گرید بە تەواوی دروست بکرێتەوە
+    renderQuickSaleGrid();
+    return;
+  }
+
+  // هیچ کاڵایەک زیاد/کەم نەکراوە — تەنها بڕەکان نوێ بکەرەوە (وێنە دەست نادرێت)
+  saleCart.forEach(item => updateSaleCardUI(item.id));
+  products.forEach(p => {
+    const stockEl = document.getElementById('stock-'+p.id);
+    if(stockEl) stockEl.textContent = p.qty;
+  });
+  applySaleFilters();
+}
+
 
 
 function updateSaleStickyBar() {
@@ -4404,8 +4433,9 @@ function setSalePeriod(el) {
   renderSales();
 }
 function renderSales() {
-  renderQuickSaleGrid();
+  syncSaleGrid();
   const sales = DB.get('sales');
+
   const filtered = sales.filter(s=>isInPeriod(s.createdAt,salePeriod));
   const q = document.getElementById('saleSearch').value.toLowerCase();
   const shown = filtered.filter(s=>!q||s.productName.toLowerCase().includes(q));
@@ -4596,13 +4626,14 @@ if(isOnline) {
     }
   }
 
-    CACHE.sales = [...saleRows, ...CACHE.sales];
+      CACHE.sales = [...saleRows, ...CACHE.sales];
   toast('ئۆفلاین — فرۆشتن پاشەکەوتکرا، sync دەکرێت کاتێک ئینتەرنێت بگەڕێتەوە', 'info');
   saleCart=[];
-  renderQuickSaleGrid(); updateSaleStickyBar();
+  syncSaleGrid(); updateSaleStickyBar();
   btn.disabled = false;
   return;
 }
+
 
 
 
@@ -4614,10 +4645,10 @@ if(SETTINGS.auto_print) {
 }
 
 saleCart=[];
-renderQuickSaleGrid();
 updateSaleStickyBar();
 renderSales();
 buildNotifications();
+
 
   } catch(err) {
     console.error(err);
