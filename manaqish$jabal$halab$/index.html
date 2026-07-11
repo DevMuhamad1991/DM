@@ -906,7 +906,7 @@
 		</div>
     <button type="button" onclick="shareLocation()" style="width:100%;padding:11px;border-radius:var(--radius-btn);background:var(--accent-light);color:var(--accent);border:1.5px solid rgba(224,123,42,0.25);font-size:0.86rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:15px;cursor:pointer;">
   <i class="ri-map-pin-line"></i>
-  <span>📍 شێر کردنی لۆکەیشنەکەم</span>
+  <span> ناردنی لۆکەیشن</span>
 </button>
 
 
@@ -942,7 +942,7 @@
 	/* ---- TRANSLATIONS ---- */
 	const TRANSLATIONS = {
 	  ku: {
-		restaurantName:'ئاراش فاست فوود', restaurantTagline:'خواردنی تازە و خۆشتام',
+		restaurantName:'مناقیش جبل حلب', restaurantTagline:'خواردنی تازە و خۆشتام',
 		yourCart:'سەبەتەی کڕین', viewCart:'سەبەتە ببینە', cartTitle:'سەبەتەی کڕین',
 		totalLabel:'کۆی گشتی', checkout:'تەواوکردنی داواکاری', checkoutTitle:'تەواوکردنی داواکاری',
 		orderSummary:'پوختەی داواکاری', formName:'ناوی کریار', formNamePH:'ناوی تەواوت بنووسە...',
@@ -954,7 +954,7 @@
 		addToCart:'زیادکردن بۆ سەبەتە', added:'زیادکرا', allCategories:'هەموو',
 	  },
 	  ar: {
-		restaurantName:'آراش فاست فود', restaurantTagline:'طعام طازج ولذيذ',
+		restaurantName:'مناقیش جبل حلب', restaurantTagline:'طعام طازج ولذيذ',
 		yourCart:'سلة المشتريات', viewCart:'عرض السلة', cartTitle:'سلة المشتريات',
 		totalLabel:'المجموع الكلي', checkout:'إتمام الطلب', checkoutTitle:'إتمام الطلب',
 		orderSummary:'ملخص الطلب', formName:'اسم العميل', formNamePH:'اكتب اسمك الكامل...',
@@ -1198,7 +1198,7 @@ async function submitOrder() {
 
   if(!address.includes('google.com/maps')) {
     document.getElementById('f-address').style.borderColor = 'var(--danger)';
-    document.getElementById('f-address').placeholder = '📍 تکایە لۆکەیشنەکەت شێر بکە!';
+    document.getElementById('f-address').placeholder = '📍 تکایە لۆکەیشنەکەت بنێرە!';
     return;
   }
 
@@ -1255,7 +1255,19 @@ const waMsg = encodeURIComponent(
   `\n🍽️ خواردنەکان:\n${itemsText}\n\n` +
   `💰 کۆی گشتی: ${total.toLocaleString()} IQD`
 );
-window.open(`https://wa.me/${ownerPhone}?text=${waMsg}`, '_blank');
+const waWindow = window.open(`https://wa.me/${ownerPhone}?text=${waMsg}`, '_blank');
+
+if (waWindow) {
+  // ✅ واتساپ سەرکەوتووانە کرایەوە — ئێستا سەبەتە بەتاڵ بکەوە
+  cart = [];
+  saveCart();
+  updateCartBar();
+  renderCartDrawer();
+} else {
+  // ❌ popup بلۆک کرا — سەبەتە بەتاڵ مەکەوە، ئاگاداری بدەرەوە
+  alert('❌ براوزەرەکەت ڕێگرە لە کردنەوەی واتساپ کرد\n\nتکایە popup بلۆکەرەکەت لابدە یان ڕێگە بدە بۆ ئەم ماڵپەڕە');
+}
+
 
 }
 
