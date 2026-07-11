@@ -1255,19 +1255,7 @@ const waMsg = encodeURIComponent(
   `\n🍽️ خواردنەکان:\n${itemsText}\n\n` +
   `💰 کۆی گشتی: ${total.toLocaleString()} IQD`
 );
-const waWindow = window.open(`https://wa.me/${ownerPhone}?text=${waMsg}`, '_blank');
-
-if (waWindow) {
-  // ✅ واتساپ سەرکەوتووانە کرایەوە — ئێستا سەبەتە بەتاڵ بکەوە
-  cart = [];
-  saveCart();
-  updateCartBar();
-  renderCartDrawer();
-} else {
-  // ❌ popup بلۆک کرا — سەبەتە بەتاڵ مەکەوە، ئاگاداری بدەرەوە
-  alert('❌ براوزەرەکەت ڕێگرە لە کردنەوەی واتساپ کرد\n\nتکایە popup بلۆکەرەکەت لابدە یان ڕێگە بدە بۆ ئەم ماڵپەڕە');
-}
-
+window.open(`https://wa.me/${ownerPhone}?text=${waMsg}`, '_blank');
 
 }
 
@@ -1288,7 +1276,7 @@ function shareLocation() {
     err => {
       // کۆدی هەڵە دیاری بکە
       if(err.code === 1) {
-        alert('❌ إذنی لۆکەیشن نەدراوە\n\nتکایە:\n• لەسەر مۆبایل: ئایکۆنی قفل/لۆکەیشن لە بالای براوزەر بکەوە\n• إذنی لۆکەیشن بدە، پاشان دووبارە هەوڵ بدەرەوە');
+        alert('❌ مۆڵەتی لۆکەیشن نەدراوە\n\nتکایە:\n• لەسەر مۆبایل: ئایکۆنی قفل/لۆکەیشن لە بالای براوزەر بکەوە\n• مۆڵەتی لۆکەیشن بدە، پاشان دووبارە هەوڵ بدەرەوە');
       } else if(err.code === 2) {
         alert('❌ لۆکەیشن نەگیرا — GPS چالاک بکە');
       } else {
