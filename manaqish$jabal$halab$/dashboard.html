@@ -1527,27 +1527,36 @@ async function saveCategory(id){
   const body = { label_ku, label_ar };
   if(!id){ body.key = 'cat_' + Date.now(); }
   try{
-    console.log('Saving category:', body);
-
+    let res;
     if(id){
-      await fetch(`${SUPABASE_URL}/rest/v1/menu_categories?id=eq.${id}`, {
+      res = await fetch(`${SUPABASE_URL}/rest/v1/menu_categories?id=eq.${id}`, {
         method:'PATCH',
         headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Prefer':'return=minimal'},
         body: JSON.stringify(body)
       });
     } else {
       body.sort_order = MENU_CATEGORIES.length + 1;
-      await fetch(`${SUPABASE_URL}/rest/v1/menu_categories`, {
+      res = await fetch(`${SUPABASE_URL}/rest/v1/menu_categories`, {
         method:'POST',
         headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Prefer':'return=minimal'},
         body: JSON.stringify(body)
       });
     }
+    if(!res.ok){
+      const errText = await res.text();
+      console.error('SAVE CATEGORY FAILED:', res.status, errText);
+      showToast('هەڵە: ' + errText.slice(0,80));
+      return;
+    }
     closeMenuModal();
     await loadMenuData(); renderMenuCategories(); renderMenuItems();
     showToast('کەتەگۆری پاشەکەوت کرا ✓');
-  }catch(e){ showToast('هەڵەیەک ڕوویدا'); }
+  }catch(e){
+    console.error('SAVE CATEGORY ERROR:', e);
+    showToast('هەڵەیەک ڕوویدا');
+  }
 }
+
 
 async function deleteCategory(id){
   if(!confirm('دڵنیایت لە سڕینەوەی ئەم کەتەگۆریە؟ خواردنەکانی ناوی دەسڕدرێنەوە.')) return;
@@ -1573,13 +1582,42 @@ function openItemForm(id){
     <div class="form-group"><label class="form-label">وەسف بە کوردی</label><input type="text" class="form-input" id="item-desc-ku" value="${item?item.desc_ku||'':''}"/></div>
     <div class="form-group"><label class="form-label">وەسف بە عەرەبی</label><input type="text" class="form-input" id="item-desc-ar" value="${item?item.desc_ar||'':''}"/></div>
     <div class="form-group"><label class="form-label">نرخ (IQD)</label><input type="number" class="form-input" id="item-price" value="${item?item.price:''}"/></div>
-    <div class="form-group"><label class="form-label">لینکی وێنە</label><input type="text" class="form-input" dir="ltr" id="item-img" value="${item?item.img||'':''}"/></div>
+    <div class="form-group">
+      <label class="form-label">وێنەی خواردن</label>
+      <input type="file" accept="image/*" id="item-img-file" class="form-input" style="padding:8px"/>
+      <div id="item-img-preview" style="margin-top:8px">${item&&item.img?`<img src="${item.img}" style="width:70px;height:70px;border-radius:10px;object-fit:cover"/>`:''}</div>
+      <input type="hidden" id="item-img" value="${item?item.img||'':''}"/>
+    </div>
     <div style="display:flex;gap:10px;margin-top:6px">
       <button class="save-btn" onclick="saveItem(${item?item.id:'null'})"><i class="ri-save-line"></i>پاشەکەوتکردن</button>
       <button class="save-btn" style="background:var(--card-border);color:var(--text-primary)" onclick="closeMenuModal()">پاشگەزبوونەوە</button>
     </div>`;
   document.getElementById('menu-modal-overlay').classList.remove('hidden');
+
+  document.getElementById('item-img-file').addEventListener('change', async (e)=>{
+    const file = e.target.files[0];
+    if(!file) return;
+    const preview = document.getElementById('item-img-preview');
+    preview.innerHTML = '<span style="font-size:0.8rem;color:var(--text-muted)">بارکردن...</span>';
+    try{
+      const ext = file.name.split('.').pop();
+      const fileName = `item_${Date.now()}.${ext}`;
+      const res = await fetch(`${SUPABASE_URL}/storage/v1/object/menu-images/${fileName}`, {
+        method:'POST',
+        headers:{ 'apikey':SUPABASE_KEY, 'Authorization':'Bearer '+SUPABASE_KEY, 'Content-Type': file.type },
+        body: file
+      });
+      if(!res.ok) throw new Error(await res.text());
+      const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/menu-images/${fileName}`;
+      document.getElementById('item-img').value = publicUrl;
+      preview.innerHTML = `<img src="${publicUrl}" style="width:70px;height:70px;border-radius:10px;object-fit:cover"/>`;
+    }catch(err){
+      console.error('IMAGE UPLOAD ERROR:', err);
+      preview.innerHTML = '<span style="color:var(--danger);font-size:0.8rem">هەڵە لە بارکردنی وێنە</span>';
+    }
+  });
 }
+
 
 async function saveItem(id){
   const category_id = document.getElementById('item-cat').value;
@@ -1592,25 +1630,36 @@ async function saveItem(id){
   if(!category_id || !name_ku || !name_ar || !price){ showToast('هەموو خانە پێویستەکان پڕبکەرەوە'); return; }
   const body = { category_id, name_ku, name_ar, desc_ku, desc_ar, price, img };
   try{
+    let res;
     if(id){
-      await fetch(`${SUPABASE_URL}/rest/v1/menu_items?id=eq.${id}`, {
+      res = await fetch(`${SUPABASE_URL}/rest/v1/menu_items?id=eq.${id}`, {
         method:'PATCH',
         headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Prefer':'return=minimal'},
         body: JSON.stringify(body)
       });
     } else {
       body.sort_order = MENU_ITEMS.length + 1;
-      await fetch(`${SUPABASE_URL}/rest/v1/menu_items`, {
+      res = await fetch(`${SUPABASE_URL}/rest/v1/menu_items`, {
         method:'POST',
         headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Prefer':'return=minimal'},
         body: JSON.stringify(body)
       });
     }
+    if(!res.ok){
+      const errText = await res.text();
+      console.error('SAVE ITEM FAILED:', res.status, errText);
+      showToast('هەڵە: ' + errText.slice(0,80));
+      return;
+    }
     closeMenuModal();
     await loadMenuData(); renderMenuItems();
     showToast('خواردن پاشەکەوت کرا ✓');
-  }catch(e){ showToast('هەڵەیەک ڕوویدا'); }
+  }catch(e){
+    console.error('SAVE ITEM ERROR:', e);
+    showToast('هەڵەیەک ڕوویدا');
+  }
 }
+
 
 async function deleteItem(id){
   if(!confirm('دڵنیایت لە سڕینەوەی ئەم خواردنە؟')) return;
