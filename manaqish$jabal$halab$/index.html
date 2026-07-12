@@ -823,6 +823,102 @@
 }
 .wa-notice b { color: var(--text-primary); }
 
+/* ============================================================
+   FOOTER
+============================================================ */
+#site-footer {
+  background: var(--bg-section);
+  border-top: 1px solid var(--divider);
+  padding: 32px 16px 90px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.footer-inner {
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.footer-brand-name {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.footer-tagline {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  max-width: 320px;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.footer-chip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 16px;
+  border-radius: var(--radius-pill);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: var(--transition);
+  border: 1.5px solid transparent;
+}
+
+.footer-chip.chip-location {
+  background: var(--accent-light);
+  color: var(--accent);
+  border-color: rgba(224,123,42,0.25);
+}
+.footer-chip.chip-location:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.footer-chip.chip-whatsapp {
+  background: #E8FBF0;
+  color: #25D366;
+  border-color: rgba(37,211,102,0.3);
+}
+.footer-chip.chip-whatsapp:hover {
+  background: #25D366;
+  color: #fff;
+}
+
+.footer-divider {
+  width: 60px;
+  height: 1px;
+  background: var(--divider);
+  margin: 6px 0;
+}
+
+.footer-credit {
+  font-size: 0.74rem;
+  color: var(--text-faint);
+}
+
+.footer-credit a {
+  color: var(--text-muted);
+  font-weight: 700;
+  text-decoration: none;
+  transition: color var(--transition);
+}
+.footer-credit a:hover {
+  color: var(--accent);
+}
+
   </style>
 </head>
 <body>
@@ -851,6 +947,33 @@
 
   <!-- MAIN -->
   <main id="main"></main>
+
+  <!-- FOOTER -->
+  <footer id="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand-name" data-i18n="restaurantName">مناقیش جبل حلب</div>
+      <div class="footer-tagline" data-i18n="footerTagline">زیاتر لە ١٠ ساڵە خزمەتتان دەکەین بە خواردنی تازە و خۆشتام</div>
+
+      <div class="footer-links">
+        <a class="footer-chip chip-location" href="ناونیشانی-گووگڵ-مابسی-خۆت-لێرە-دابنێ" target="_blank">
+          <i class="ri-map-pin-2-line"></i>
+          <span>سلێمانی، گەڕەکی ئازادی</span>
+        </a>
+        <a class="footer-chip chip-whatsapp" href="https://wa.me/9647509628683" target="_blank">
+          <i class="ri-whatsapp-line"></i>
+          <span data-i18n="footerCallUs">پەیوەندیمان پێوە بکە</span>
+        </a>
+      </div>
+
+      <div class="footer-divider"></div>
+
+      <div class="footer-credit">
+        <span data-i18n="footerDevBy">دروستکراوە لەلایەن</span>
+        <a href="https://wa.me/ژمارەی_واتسئەپی_DevMuhamad" target="_blank">DevMuhamad</a>
+      </div>
+    </div>
+  </footer>
+
 
   <!-- BOTTOM CART BAR -->
   <div id="cart-bar">
@@ -978,6 +1101,7 @@
 		emptyCart:'سەبەتەکەت بەتاڵە', addItemsFirst:'خواردن زیاد بکە',
 		addToCart:'زیادکردن بۆ سەبەتە', added:'زیادکرا', allCategories:'هەموو',
     waRequired:'پێویستە واتسئەپت هەبێت', waRequiredDesc:'دوای پشتڕاستکردنەوە، داواکارییەکەت بە شێوەی پەیامی واتسئەپ دەنێردرێت بۆ خواردنگە.',
+    footerTagline:'زیاتر لە ١٠ ساڵە خزمەتتان دەکەین بە خواردنی تازە و خۆشتام', footerCallUs:'پەیوەندیمان پێوە بکە', footerDevBy:'دروستکراوە لەلایەن',
 	  },
 	  ar: {
 		restaurantName:'مناقیش جبل حلب', restaurantTagline:'طعام طازج ولذيذ',
@@ -991,6 +1115,7 @@
 		emptyCart:'سلتك فارغة', addItemsFirst:'أضف عناصر أولاً',
 		addToCart:'أضف إلى السلة', added:'أُضيف', allCategories:'الكل',
     waRequired:'يجب توفر واتساب', waRequiredDesc:'بعد التأكيد، سيتم إرسال طلبك كرسالة واتساب إلى المطعم.',
+    footerTagline:'أكثر من ١٠ سنوات من الخدمة بأطعم الأطباق الطازجة', footerCallUs:'تواصل معنا', footerDevBy:'تم التطوير بواسطة',
 	  }
 	};
 
