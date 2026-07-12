@@ -968,32 +968,7 @@
 	};
 
 	/* ---- MENU DATA ---- */
-	const MENU_DATA = [
-	  {
-		id:1, cat:'pizza',
-		category:{ ku:'پیتزا', ar:'بيتزا' },
-		name:{ ku:'پیتزای مارگاریتا', ar:'بيتزا مارغريتا' },
-		desc:{ ku:'گووماوی ئیتالی، چیزی تازە، گیایی', ar:'صلصة إيطالية، جبن طازج، توابل عشبية' },
-		price:7500,
-		img:'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&q=80',
-	  },
-	  {
-		id:2, cat:'burger',
-		category:{ ku:'بەرگەر', ar:'برغر' },
-		name:{ ku:'بەرگەری کلاسیک', ar:'برغر كلاسيك' },
-		desc:{ ku:'گۆشتی گووی، پەنیر چەدار، سەوزە تازە', ar:'لحم بقري، جبن شيدر، خضروات طازجة' },
-		price:6000,
-		img:'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80',
-	  },
-	  {
-		id:3, cat:'drink',
-		category:{ ku:'شەربەت', ar:'مشروبات' },
-		name:{ ku:'شەربەتی لیمۆی سارد', ar:'عصير ليمون بارد' },
-		desc:{ ku:'لیمۆی تازە، شەکر، یەخ', ar:'ليمون طازج، سكر، ثلج' },
-		price:2500,
-		img:'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=400&q=80',
-	  },
-	];
+let MENU_DATA = [];
 
 	/* ---- STATE ---- */
 	let currentLang = 'ku';
@@ -1071,7 +1046,7 @@
 	  card.className='menu-card';
 	  card.innerHTML=`
 		<div class="card-img-wrap">
-		  <img src="${item.img}" alt="${item.name[currentLang]}" loading="lazy"/>
+		  <img src="${item.img}" alt="${item.name[currentLang]}" loading="lazy" decoding="async"/>
 		  <div class="card-price-badge">${fmt(item.price)}</div>
 		</div>
 		<div class="card-body">
@@ -1303,9 +1278,61 @@ function resetAfterOrder() {
 }
 
 
+	/* ---- FETCH MENU ---- */
+	async function fetchMenuData() {
+	  try {
+		const res = await fetch(
+		  `${SUPABASE_URL}/rest/v1/menu_items?select=*,menu_categories(key,label_ku,label_ar,sort_order)&active=eq.true&order=sort_order.asc`,
+		  { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }
+		);
+		const rows = await res.json();
+		MENU_DATA = rows
+		  .filter(r => r.menu_categories)
+		  .map(r => ({
+			id: r.id,
+			cat: r.menu_categories.key,
+			catSort: r.menu_categories.sort_order || 0,
+			category: { ku: r.menu_categories.label_ku, ar: r.menu_categories.label_ar },
+			name: { ku: r.name_ku, ar: r.name_ar },
+			desc: { ku: r.desc_ku || '', ar: r.desc_ar || '' },
+			price: r.price,
+			img: r.img || ''
+		  }))
+		  .sort((a,b) => a.catSort - b.catSort);
+	  } catch(e) { console.error('Menu fetch failed:', e); }
+	}
+
+	function startMenuRealtime() {
+	  const ws_url = SUPABASE_URL.replace('https://','wss://') + '/realtime/v1/websocket?apikey=' + SUPABASE_KEY + '&vsn=1.0.0';
+	  let ws;
+	  function connect(){
+		ws = new WebSocket(ws_url);
+		ws.onopen = () => {
+		  ws.send(JSON.stringify({ topic:'realtime:public:menu_items', event:'phx_join', payload:{}, ref:'1' }));
+		  ws.send(JSON.stringify({ topic:'realtime:public:menu_categories', event:'phx_join', payload:{}, ref:'2' }));
+		  setInterval(() => { if(ws.readyState===1) ws.send(JSON.stringify({topic:'phoenix',event:'heartbeat',payload:{},ref:'3'})); }, 30000);
+		};
+		ws.onmessage = async (e) => {
+		  const msg = JSON.parse(e.data);
+		  if ((msg.topic==='realtime:public:menu_items' || msg.topic==='realtime:public:menu_categories')
+			  && ['INSERT','UPDATE','DELETE'].includes(msg.event)) {
+			await fetchMenuData();
+			renderTabs(); renderMenu();
+		  }
+		};
+		ws.onclose = () => setTimeout(connect, 3000);
+		ws.onerror = () => ws.close();
+	  }
+	  connect();
+	}
 
 	/* ---- INIT ---- */
-	renderTabs(); renderMenu(); updateCartBar(); renderCartDrawer();
+	(async function initMenu(){
+	  await fetchMenuData();
+	  renderTabs(); renderMenu(); updateCartBar(); renderCartDrawer();
+	  startMenuRealtime();
+	})();
+
   </script>
 </body>
 </html>
