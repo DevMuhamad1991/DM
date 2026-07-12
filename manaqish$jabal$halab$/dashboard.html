@@ -1505,8 +1505,8 @@ function openCategoryForm(id){
   const cat = id ? MENU_CATEGORIES.find(c=>c.id===id) : null;
   document.getElementById('menu-modal-body').innerHTML = `
     <div class="settings-card-title" style="margin-bottom:16px">${cat?'دەستکاریکردنی کەتەگۆری':'کەتەگۆری نوێ'}</div>
-    <div class="form-group"><label class="form-label">کۆدی کەتەگۆری (English, بێ بۆشایی)</label><input type="text" class="form-input" id="cat-key" value="${cat?cat.key:''}" placeholder="pizza"/></div>
     <div class="form-group"><label class="form-label">ناو بە کوردی</label><input type="text" class="form-input" id="cat-label-ku" value="${cat?cat.label_ku:''}"/></div>
+
     <div class="form-group"><label class="form-label">ناو بە عەرەبی</label><input type="text" class="form-input" id="cat-label-ar" value="${cat?cat.label_ar:''}"/></div>
     <div style="display:flex;gap:10px;margin-top:6px">
       <button class="save-btn" onclick="saveCategory(${cat?cat.id:'null'})"><i class="ri-save-line"></i>پاشەکەوتکردن</button>
@@ -1516,12 +1516,13 @@ function openCategoryForm(id){
 }
 
 async function saveCategory(id){
-  const key = document.getElementById('cat-key').value.trim();
   const label_ku = document.getElementById('cat-label-ku').value.trim();
   const label_ar = document.getElementById('cat-label-ar').value.trim();
-  if(!key || !label_ku || !label_ar){ showToast('هەموو خانەکان پڕبکەرەوە'); return; }
-  const body = { key, label_ku, label_ar };
+  if(!label_ku || !label_ar){ showToast('هەموو خانەکان پڕبکەرەوە'); return; }
+  const body = { label_ku, label_ar };
+  if(!id){ body.key = 'cat_' + Date.now(); }
   try{
+
     if(id){
       await fetch(`${SUPABASE_URL}/rest/v1/menu_categories?id=eq.${id}`, {
         method:'PATCH',
