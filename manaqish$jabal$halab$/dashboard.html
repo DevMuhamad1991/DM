@@ -1449,18 +1449,23 @@ async function renderMenuPage(){
 
 async function loadMenuData(){
   try{
-    const [catRes, itemRes] = await Promise.all([
-      fetch(`${SUPABASE_URL}/rest/v1/menu_categories?select=*&order=sort_order.asc`, {
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-      }),
-      fetch(`${SUPABASE_URL}/rest/v1/menu_items?select=*,menu_categories(key,label_ku)&order=sort_order.asc`, {
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-      })
-    ]);
-    MENU_CATEGORIES = await catRes.json();
-    MENU_ITEMS = await itemRes.json();
+    const catRes = await fetch(`${SUPABASE_URL}/rest/v1/menu_categories?select=*&order=sort_order.asc`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+    });
+    const catJson = await catRes.json();
+    console.log('CATEGORIES RESPONSE:', catRes.status, catJson);
+
+    const itemRes = await fetch(`${SUPABASE_URL}/rest/v1/menu_items?select=*,menu_categories(key,label_ku)&order=sort_order.asc`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+    });
+    const itemJson = await itemRes.json();
+    console.log('ITEMS RESPONSE:', itemRes.status, itemJson);
+
+    MENU_CATEGORIES = Array.isArray(catJson) ? catJson : [];
+    MENU_ITEMS = Array.isArray(itemJson) ? itemJson : [];
   }catch(e){ console.error('Menu load failed:', e); }
 }
+
 
 function renderMenuCategories(){
   document.getElementById('menu-cat-count').textContent = MENU_CATEGORIES.length + ' کەتەگۆری';
@@ -1522,6 +1527,7 @@ async function saveCategory(id){
   const body = { label_ku, label_ar };
   if(!id){ body.key = 'cat_' + Date.now(); }
   try{
+    console.log('Saving category:', body);
 
     if(id){
       await fetch(`${SUPABASE_URL}/rest/v1/menu_categories?id=eq.${id}`, {
