@@ -996,7 +996,7 @@
 		if (v) el.placeholder = v;
 	  });
 	  // Language change touches every text string, so a full rebuild is needed here.
-	  renderTabs(); buildMenuDOM(); renderCartDrawer(); renderModalSummary();
+	  renderTabs(); updateMenuLanguage(); renderCartDrawer(); renderModalSummary();
 	}
 
 	/* ---- TABS ---- */
@@ -1136,6 +1136,23 @@
 		buildMenuDOM();
 	  }
 	}
+function updateMenuLanguage() {
+  Object.entries(cardEls).forEach(([id, card]) => {
+    const item = MENU_DATA.find(m => m.id === Number(id));
+    if (!item) return;
+    const nameEl = card.querySelector('.card-name');
+    const descEl = card.querySelector('.card-desc');
+    const btnSpan = card.querySelector('.add-btn span');
+    if (nameEl) nameEl.textContent = item.name[currentLang];
+    if (descEl) descEl.textContent = item.desc[currentLang];
+    if (btnSpan) btnSpan.textContent = t('addToCart');
+  });
+  Object.entries(sectionEls).forEach(([cat, {headingEl}]) => {
+    const item = MENU_DATA.find(m => m.cat === cat);
+    if (item && headingEl) headingEl.textContent = item.category[currentLang];
+  });
+}
+
 
 	function buildCard(item) {
 	  const card=document.createElement('div');
@@ -1327,8 +1344,17 @@ const waMsg = encodeURIComponent(
   `\n🍽️ خواردنەکان:\n${itemsText}\n\n` +
   `💰 کۆی گشتی: ${total.toLocaleString()} IQD`
 );
-window.open(`https://wa.me/${ownerPhone}?text=${waMsg}`, '_blank');
+const waWindow = window.open(`https://wa.me/${ownerPhone}?text=${waMsg}`, '_blank');
+setTimeout(() => {
+  if (!waWindow || waWindow.closed || typeof waWindow.closed === 'undefined') {
+    showWhatsAppWarning();
+  }
+}, 700);
 
+}
+
+function showWhatsAppWarning() {
+  alert('⚠️ داواکارییەکەت تۆمار کرا، بەڵام نەمانتوانی پەیامی واتسئەپ بنێرین.\n\nتکایە دڵنیابەرەوە کە واتسئەپ لەسەر مۆبایلەکەت دامەزراوە، یان پەیوەندیمان پێوە بکە بۆ دڵنیابوونەوە لە داواکارییەکەت.');
 }
 
 function shareLocation() {
