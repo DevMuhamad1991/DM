@@ -1458,6 +1458,7 @@ async function submitOrder() {
   });
 
   // send to Supabase
+  let orderId = null;
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/orders`, {
       method: 'POST',
@@ -1465,7 +1466,7 @@ async function submitOrder() {
         'Content-Type': 'application/json',
         'apikey': SUPABASE_KEY,
         'Authorization': 'Bearer ' + SUPABASE_KEY,
-        'Prefer': 'return=minimal'
+        'Prefer': 'return=representation'
       },
       body: JSON.stringify({
         customer_name: name,
@@ -1479,10 +1480,13 @@ async function submitOrder() {
     });
 
     if (!res.ok) throw new Error('Supabase error');
+    const createdRows = await res.json();
+    if (createdRows && createdRows[0]) orderId = createdRows[0].id;
   } catch(e) {
     console.error(e);
     // هەڵەیەک هەبوو، بەڵام باز نادەین — داواکاری نیشان دەدەین
   }
+
 
   document.getElementById('checkout-form-view').classList.add('hidden');
   document.getElementById('checkout-success-view').classList.remove('hidden');
@@ -1490,8 +1494,9 @@ async function submitOrder() {
   // WhatsApp بۆ خاوەنی خواردنگە
 const ownerPhone = '9647517371460';
 const itemsText = items.map(i => `• ${i.name} × ${i.qty} — ${(i.price*i.qty).toLocaleString()} IQD`).join('\n');
+const orderNumberText = orderId ? `#${String(orderId).padStart(4,'0')}` : '';
 const waMsg = encodeURIComponent(
-  `🛵 داواکاری نوێ!\n\n` +
+  `🛵 داواکاری نوێ! ${orderNumberText}\n\n` +
   `👤 ناو: ${name}\n` +
   `📞 تەلەفۆن: ${phone}\n` +
   `📍 ناونیشان: ${address}\n` +
