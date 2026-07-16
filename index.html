@@ -17,7 +17,7 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
-  :root{
+:root{
 	--bg:#0B0B0B;
 	--bg-2:#111111;
 	--fg:#FFFFFF;
@@ -25,7 +25,9 @@
 	--gray-dim:#5c5c5c;
 	--line:rgba(255,255,255,0.08);
 	--glow:rgba(255,255,255,0.55);
+	--accent:#FFFFFF;
   }
+
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
   body{
@@ -133,6 +135,19 @@
   }
 
   /* language switch */
+  .settings-btn{
+	position:fixed; top:22px; inset-inline-start:22px; z-index:20;
+	width:38px; height:38px; border-radius:50%;
+	border:1px solid var(--line);
+	background:rgba(255,255,255,0.04);
+	backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+	color:var(--gray); font-size:15px;
+	display:flex; align-items:center; justify-content:center;
+	cursor:pointer;
+	transition:all .3s ease;
+  }
+  .settings-btn:hover{ color:#fff; border-color:rgba(255,255,255,.25); }
+
   .lang-switch{
 	position:fixed; top:22px; inset-inline-end:22px; z-index:20;
 	display:flex; gap:6px;
@@ -147,7 +162,7 @@
 	cursor:pointer; transition:all .3s ease; display:flex; align-items:center; gap:7px;
 	white-space:nowrap;
   }
-  .lang-btn.active{ background:#fff; color:#000; font-weight:600; }
+  .lang-btn.active{ background:var(--accent); color:#000; font-weight:600; }
   .lang-btn:not(.active){ opacity:.85; }
   .lang-btn:not(.active):hover{ color:#fff; opacity:1; }
   .flag-icon{
@@ -166,10 +181,11 @@
 	opacity:0; animation:reveal .8s ease forwards .1s;
   }
   .eyebrow .dot{
-	width:6px; height:6px; border-radius:50%; background:#fff;
-	box-shadow:0 0 10px #fff, 0 0 20px rgba(255,255,255,.5);
+	width:6px; height:6px; border-radius:50%; background:var(--accent);
+	box-shadow:0 0 10px var(--accent), 0 0 20px var(--accent);
 	animation:pulseDot 1.8s ease-in-out infinite;
   }
+
   @keyframes pulseDot{ 0%,100%{ opacity:1; } 50%{ opacity:.35; } }
 
   h1.brand{
@@ -192,12 +208,13 @@
 	opacity:0; animation:reveal .9s ease forwards .4s;
   }
 
-  .desc{
+    .desc{
 	margin-top:26px;
 	max-width:680px;
 	color:var(--gray);
-	font-size:clamp(15px, 2vw, 17px);
+	font-size:clamp(0.9375rem, 2vw, 1.0625rem);
 	line-height:2;
+
 	opacity:0; animation:reveal .9s ease forwards .55s;
   }
 
@@ -208,7 +225,7 @@
 	opacity:0; animation:reveal .9s ease forwards .7s;
   }
   .chip{
-	font-size:13px; color:var(--gray);
+	font-size:0.8125rem; color:var(--gray);
 	border:1px solid var(--line);
 	background:rgba(255,255,255,.03);
 	backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
@@ -216,9 +233,10 @@
 	transition:all .35s cubic-bezier(.4,0,.2,1);
   }
   .chip:hover{
-	color:#fff; border-color:rgba(255,255,255,.3); transform:translateY(-3px);
+	color:#fff; border-color:var(--accent); transform:translateY(-3px);
 	box-shadow:0 8px 24px rgba(255,255,255,.06);
   }
+
 
   @keyframes reveal{ from{ opacity:0; transform:translateY(16px); } to{ opacity:1; transform:translateY(0); } }
 
@@ -287,7 +305,8 @@
   .cta-btn{
 	display:inline-flex; align-items:center; justify-content:center; gap:8px;
 	width:100%;
-	background:#fff; color:#000; font-weight:600; font-size:13.5px;
+	background:var(--accent); color:#000; font-weight:600; font-size:13.5px;
+
 	padding:11px 16px; border-radius:100px;
 	text-decoration:none;
 	transition:transform .3s ease, opacity .3s ease;
@@ -401,7 +420,7 @@
 	border:none; padding:0; cursor:pointer;
 	transition:all .3s ease;
   }
-  .banner-dot.active{ width:22px; border-radius:4px; background:#fff; }
+  .banner-dot.active{ width:22px; border-radius:4px; background:var(--accent); }
   .banner-dot:hover{ background:rgba(255,255,255,.7); }
 
   /* ===================== SERVICES GRID + MODAL ===================== */
@@ -445,9 +464,10 @@
   }
   .service-card:hover{
 	transform:translateY(-5px);
-	border-color:rgba(255,255,255,.25);
+	border-color:var(--accent);
 	box-shadow:0 12px 30px rgba(255,255,255,.06);
   }
+
 
   /* Fixed aspect-ratio image instead of a fixed px height so every
 	 card looks identical regardless of column count / viewport width */
@@ -470,7 +490,7 @@
 	display:flex; align-items:center; justify-content:center;
 	padding:12px 8px;
 	min-height:44px;
-	font-size:13.5px; font-weight:500; color:var(--fg);
+	font-size:0.84375rem; font-weight:500; color:var(--fg);
 	line-height:1.35;
   }
 
@@ -518,11 +538,11 @@
   .modal-close:hover{ background:#fff; color:#000; border-color:#fff; }
   .modal-content{ padding:24px 22px 30px; }
   .modal-title{ font-size:19px; font-weight:600; margin-bottom:10px; }
-  .modal-desc{ color:var(--gray); font-size:14.5px; line-height:1.95; }
+  .modal-desc{ color:var(--gray); font-size:0.90625rem; line-height:1.95; }
   .modal-order-btn{
 	display:inline-flex; align-items:center; justify-content:center; gap:8px;
 	width:100%; margin-top:22px;
-	background:#fff; color:#000; font-weight:600; font-size:14px;
+	background:var(--accent); color:#000; font-weight:600; font-size:14px;
 	padding:13px 16px; border-radius:100px;
 	text-decoration:none;
 	transition:transform .3s ease, opacity .3s ease;
@@ -545,9 +565,10 @@
 	transition:transform .3s ease, border-color .3s ease, background .3s ease;
   }
   .modal-share-btn:hover{
-	background:#fff; color:#000; border-color:#fff;
+	background:var(--accent); color:#000; border-color:var(--accent);
 	transform:translateY(-2px);
   }
+
   .share-toast{
 	position:absolute; bottom:14px; left:50%;
 	transform:translateX(-50%) translateY(8px);
@@ -604,7 +625,7 @@
 	display:inline-flex; align-items:center; justify-content:center; gap:8px;
 	transition:transform .3s ease, opacity .3s ease, background .3s ease;
   }
-  .confirm-btn.confirm-yes{ background:#fff; color:#000; }
+  .confirm-btn.confirm-yes{ background:var(--accent); color:#000; }
   .confirm-btn.confirm-yes:hover{ transform:translateY(-2px); opacity:.9; }
   .confirm-btn.confirm-no{
 	background:transparent; color:var(--gray);
@@ -617,6 +638,68 @@
   @media (max-width: 560px){
 	.lang-switch{ top:16px; inset-inline-end:16px; }
 	.divider{ height:40px; margin-top:34px; }
+  }
+
+  /* ===================== SETTINGS / CUSTOMIZE MODAL ===================== */
+  .settings-overlay{
+	position:fixed; inset:0; z-index:300;
+	background:rgba(0,0,0,.75);
+	backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+	display:flex; align-items:center; justify-content:center;
+	padding:20px;
+	opacity:0; visibility:hidden;
+	transition:opacity .35s ease, visibility .35s ease;
+  }
+  .settings-overlay.show{ opacity:1; visibility:visible; }
+  .settings-box{
+	position:relative;
+	width:100%; max-width:380px;
+	background:#111214;
+	border:1px solid var(--line);
+	border-radius:20px;
+	padding:28px 22px 24px;
+	transform:translateY(20px) scale(.96);
+	transition:transform .4s cubic-bezier(.4,0,.2,1);
+  }
+  .settings-overlay.show .settings-box{ transform:translateY(0) scale(1); }
+  .settings-title{ font-size:17px; font-weight:600; margin-bottom:22px; text-align:center; }
+  .settings-section{ margin-bottom:22px; }
+  .settings-label{ font-size:13px; color:var(--gray); margin-bottom:12px; }
+  .color-swatches{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+  .swatch{
+	width:34px; height:34px; border-radius:50%;
+	border:2px solid transparent;
+	cursor:pointer;
+	transition:transform .25s ease, border-color .25s ease;
+	position:relative;
+  }
+  .swatch:hover{ transform:scale(1.1); }
+  .swatch.selected{ border-color:#fff; box-shadow:0 0 0 3px rgba(255,255,255,.15); }
+  .font-size-row{ display:flex; gap:8px; }
+  .font-size-btn{
+	flex:1;
+	background:rgba(255,255,255,.03);
+	border:1px solid var(--line);
+	color:var(--gray);
+	font-family:inherit; font-size:13px;
+	padding:10px 6px; border-radius:10px;
+	cursor:pointer;
+	transition:all .25s ease;
+  }
+  .font-size-btn:hover{ color:#fff; }
+  .font-size-btn.selected{ background:#fff; color:#000; border-color:#fff; font-weight:600; }
+  .settings-reset{
+	width:100%;
+	background:transparent; border:1px solid var(--line);
+	color:var(--gray); font-family:inherit; font-size:13px;
+	padding:11px; border-radius:100px;
+	cursor:pointer;
+	transition:all .25s ease;
+  }
+  .settings-reset:hover{ color:#fff; border-color:rgba(255,255,255,.3); }
+
+  @media (max-width: 560px){
+	.settings-btn{ top:16px; inset-inline-start:16px; }
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -640,6 +723,10 @@
 <div class="glow-orb one"></div>
 <div class="glow-orb two"></div>
 <div class="cursor-glow" id="cursorGlow"></div>
+
+<button class="settings-btn" id="settingsBtn" aria-label="Settings">
+  <i class="fa-solid fa-house"></i>
+</button>
 
 <div class="lang-switch" role="group" aria-label="Language switch">
   <button class="lang-btn active" data-lang="ckb" aria-label="کوردی">
@@ -816,6 +903,37 @@
   <div class="copyright">© 2026 DevMuhamad.com — <span data-i18n="rights">All Rights Reserved.</span></div>
 </footer>
 
+<!-- CUSTOMIZE SETTINGS MODAL -->
+<div class="settings-overlay" id="settingsOverlay">
+  <div class="settings-box">
+	<button class="modal-close" id="settingsClose" aria-label="Close">&times;</button>
+	<div class="settings-title" data-i18n="settingsTitle">کەستمایزکردنی ڕووکار</div>
+
+	<div class="settings-section">
+	  <div class="settings-label" data-i18n="settingsColor">ڕەنگی ڕووکار</div>
+	  <div class="color-swatches" id="colorSwatches">
+		<button class="swatch" data-color="#FFFFFF" style="background:#FFFFFF" aria-label="White"></button>
+		<button class="swatch" data-color="#7DD3FC" style="background:#7DD3FC" aria-label="Blue"></button>
+		<button class="swatch" data-color="#86EFAC" style="background:#86EFAC" aria-label="Green"></button>
+		<button class="swatch" data-color="#FDBA74" style="background:#FDBA74" aria-label="Orange"></button>
+		<button class="swatch" data-color="#F9A8D4" style="background:#F9A8D4" aria-label="Pink"></button>
+		<button class="swatch" data-color="#C4B5FD" style="background:#C4B5FD" aria-label="Purple"></button>
+	  </div>
+	</div>
+
+	<div class="settings-section">
+	  <div class="settings-label" data-i18n="settingsFont">قەبارەی فۆنت</div>
+	  <div class="font-size-row">
+		<button class="font-size-btn" data-size="14" data-i18n="fontSmall">بچووک</button>
+		<button class="font-size-btn" data-size="16" data-i18n="fontMedium">ئاسایی</button>
+		<button class="font-size-btn" data-size="18" data-i18n="fontLarge">گەورە</button>
+	  </div>
+	</div>
+
+	<button class="settings-reset" id="settingsReset" data-i18n="settingsReset">گەڕانەوە بۆ دۆخی سەرەتایی</button>
+  </div>
+</div>
+
 <!-- WHATSAPP CONFIRM DIALOG -->
 <div class="confirm-overlay" id="confirmOverlay">
   <div class="confirm-box">
@@ -889,9 +1007,17 @@
 	  confirmYes:"بەڵێ، پەیوەندی بکە",
 	  	  confirmNo:"پاشگەزبوونەوە",
 	  shareText:"سەیری ئەم خزمەتگوزارییە بکە لە DevMuhamad.com: ",
-	  shareCopied:"لینک کۆپی کرا ✓",
+	  	  shareCopied:"لینک کۆپی کرا ✓",
+	  settingsTitle:"کەستمایزکردنی ڕووکار",
+	  settingsColor:"ڕەنگی ڕووکار",
+	  settingsFont:"قەبارەی فۆنت",
+	  fontSmall:"بچووک",
+	  fontMedium:"ئاسایی",
+	  fontLarge:"گەورە",
+	  settingsReset:"گەڕانەوە بۆ دۆخی سەرەتایی",
 	  dir:"rtl"
 	},
+
 
 
 
@@ -923,9 +1049,17 @@
 	  confirmYes:"نعم، تواصل الآن",
 	  	  confirmNo:"إلغاء",
 	  shareText:"شاهد هذه الخدمة على DevMuhamad.com: ",
-	  shareCopied:"تم نسخ الرابط ✓",
+	  	  shareCopied:"تم نسخ الرابط ✓",
+	  settingsTitle:"تخصيص المظهر",
+	  settingsColor:"لون الواجهة",
+	  settingsFont:"حجم الخط",
+	  fontSmall:"صغير",
+	  fontMedium:"عادي",
+	  fontLarge:"كبير",
+	  settingsReset:"إعادة الضبط الافتراضي",
 	  dir:"rtl"
 	}
+
 
 
 
@@ -974,9 +1108,58 @@
 	btn.addEventListener("click", ()=> applyLang(btn.dataset.lang));
   });
 
-  let savedLang = "ckb";
+    let savedLang = "ckb";
   try{ savedLang = localStorage.getItem("dm_lang") || "ckb"; }catch(e){}
   applyLang(savedLang);
+
+  /* ---------- Customize: accent color + font size ---------- */
+  (function initCustomize(){
+	const settingsBtn = document.getElementById("settingsBtn");
+	const settingsOverlay = document.getElementById("settingsOverlay");
+	const settingsClose = document.getElementById("settingsClose");
+	const swatches = document.querySelectorAll(".swatch");
+	const fontBtns = document.querySelectorAll(".font-size-btn");
+	const resetBtn = document.getElementById("settingsReset");
+	const root = document.documentElement;
+	if(!settingsBtn || !settingsOverlay) return;
+
+	const DEFAULT_ACCENT = "#FFFFFF";
+	const DEFAULT_FONT = "16";
+
+	function applyAccent(color){
+	  root.style.setProperty("--accent", color);
+	  swatches.forEach(s => s.classList.toggle("selected", s.dataset.color.toLowerCase() === color.toLowerCase()));
+	  try{ localStorage.setItem("dm_accent", color); }catch(e){}
+	}
+	function applyFontSize(size){
+	  root.style.fontSize = size + "px";
+	  fontBtns.forEach(b => b.classList.toggle("selected", b.dataset.size === size));
+	  try{ localStorage.setItem("dm_fontsize", size); }catch(e){}
+	}
+
+	let savedAccent = DEFAULT_ACCENT, savedFont = DEFAULT_FONT;
+	try{ savedAccent = localStorage.getItem("dm_accent") || DEFAULT_ACCENT; }catch(e){}
+	try{ savedFont = localStorage.getItem("dm_fontsize") || DEFAULT_FONT; }catch(e){}
+	applyAccent(savedAccent);
+	applyFontSize(savedFont);
+
+	swatches.forEach(s => s.addEventListener("click", ()=> applyAccent(s.dataset.color)));
+	fontBtns.forEach(b => b.addEventListener("click", ()=> applyFontSize(b.dataset.size)));
+	resetBtn.addEventListener("click", ()=>{ applyAccent(DEFAULT_ACCENT); applyFontSize(DEFAULT_FONT); });
+
+	function openSettings(){
+	  settingsOverlay.classList.add("show");
+	  document.body.style.overflow = "hidden";
+	}
+	function closeSettings(){
+	  settingsOverlay.classList.remove("show");
+	  document.body.style.overflow = "";
+	}
+	settingsBtn.addEventListener("click", openSettings);
+	settingsClose.addEventListener("click", closeSettings);
+	settingsOverlay.addEventListener("click", (e)=>{ if(e.target === settingsOverlay) closeSettings(); });
+	document.addEventListener("keydown", (e)=>{ if(e.key === "Escape" && settingsOverlay.classList.contains("show")) closeSettings(); });
+  })();
 
   /* ---------- Splash ---------- */
   window.addEventListener("load", ()=>{
