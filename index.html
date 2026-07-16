@@ -529,6 +529,39 @@
   }
   .modal-order-btn:hover{ transform:translateY(-2px); opacity:.9; }
 
+  .modal-btn-row{
+	display:flex; gap:10px; margin-top:22px;
+  }
+  .modal-btn-row .modal-order-btn{ margin-top:0; flex:1; }
+  .modal-share-btn{
+	flex-shrink:0;
+	width:48px; height:48px;
+	border-radius:50%;
+	border:1px solid var(--line);
+	background:rgba(255,255,255,.03);
+	color:var(--fg); font-size:16px;
+	display:flex; align-items:center; justify-content:center;
+	cursor:pointer;
+	transition:transform .3s ease, border-color .3s ease, background .3s ease;
+  }
+  .modal-share-btn:hover{
+	background:#fff; color:#000; border-color:#fff;
+	transform:translateY(-2px);
+  }
+  .share-toast{
+	position:absolute; bottom:14px; left:50%;
+	transform:translateX(-50%) translateY(8px);
+	background:#fff; color:#000; font-size:12.5px; font-weight:600;
+	padding:8px 16px; border-radius:100px;
+	opacity:0; visibility:hidden; pointer-events:none;
+	transition:opacity .3s ease, transform .3s ease, visibility .3s ease;
+	white-space:nowrap;
+  }
+  .share-toast.show{
+	opacity:1; visibility:visible;
+	transform:translateX(-50%) translateY(0);
+  }
+
   /* ===================== WHATSAPP CONFIRM DIALOG ===================== */
   .confirm-overlay{
 	position:fixed; inset:0; z-index:400;
@@ -807,10 +840,17 @@
 	<div class="modal-content">
 	  <div class="modal-title" id="modalTitle"></div>
 	  <p class="modal-desc" id="modalDesc"></p>
-	  <a class="modal-order-btn" id="modalOrderBtn" href="#" target="_blank" rel="noopener">
-		<i class="fa-brands fa-whatsapp"></i>
-		<span data-i18n="orderBtn">داواکردن</span>
-	  </a>
+		  <div class="modal-btn-row">
+		<a class="modal-order-btn" id="modalOrderBtn" href="#" target="_blank" rel="noopener">
+		  <i class="fa-brands fa-whatsapp"></i>
+		  <span data-i18n="orderBtn">داواکردن</span>
+		</a>
+		<button class="modal-share-btn" id="modalShareBtn" aria-label="Share">
+		  <i class="fa-solid fa-share-nodes"></i>
+		</button>
+	  </div>
+	  <div class="share-toast" id="shareToast" data-i18n="shareCopied">لینک کۆپی کرا ✓</div>
+
 	</div>
   </div>
 </div>
@@ -847,9 +887,12 @@
 	  confirmTitle:"دەتەوێت پەیوەندی بکەیت؟",
 	  confirmDesc:"بە کرتەکردنی \"بەڵێ\"، بۆ WhatsApp دەبردرێیت بۆ پەیوەندیکردن.",
 	  confirmYes:"بەڵێ، پەیوەندی بکە",
-	  confirmNo:"پاشگەزبوونەوە",
+	  	  confirmNo:"پاشگەزبوونەوە",
+	  shareText:"سەیری ئەم خزمەتگوزارییە بکە لە DevMuhamad.com: ",
+	  shareCopied:"لینک کۆپی کرا ✓",
 	  dir:"rtl"
 	},
+
 
 
 
@@ -878,9 +921,12 @@
 	  confirmTitle:"هل تريد التواصل معنا؟",
 	  confirmDesc:"بالضغط على \"نعم\"، سيتم تحويلك إلى واتساب للتواصل.",
 	  confirmYes:"نعم، تواصل الآن",
-	  confirmNo:"إلغاء",
+	  	  confirmNo:"إلغاء",
+	  shareText:"شاهد هذه الخدمة على DevMuhamad.com: ",
+	  shareCopied:"تم نسخ الرابط ✓",
 	  dir:"rtl"
 	}
+
 
 
 
@@ -1146,6 +1192,10 @@
 	const modalOrderBtn = document.getElementById("modalOrderBtn");
 	if(!overlay) return;
 
+		const modalShareBtn = document.getElementById("modalShareBtn");
+	const shareToast = document.getElementById("shareToast");
+	let currentServiceName = "";
+
 	function openModal(card){
 	  const key = card.dataset.key;
 	  const t = dict[currentLang];
@@ -1155,11 +1205,31 @@
 	  modalTitle.textContent = t[key + "t"] || "";
 	  modalDesc.textContent = t[key + "d"] || "";
 	  const serviceName = t[key + "t"] || "";
+	  currentServiceName = serviceName;
 	  const waMessage = encodeURIComponent((t.orderMsg || "") + serviceName);
 	  modalOrderBtn.href = "https://wa.me/9647509628683?text=" + waMessage;
 	  overlay.classList.add("show");
 	  document.body.style.overflow = "hidden";
 	}
+
+	async function handleShare(){
+	  const t = dict[currentLang];
+	  const shareData = {
+		title: "DevMuhamad.com — " + currentServiceName,
+		text: (t.shareText || "") + currentServiceName,
+		url: window.location.href
+	  };
+	  if(navigator.share){
+		try{ await navigator.share(shareData); }catch(err){ /* user cancelled */ }
+	  } else {
+		try{
+		  await navigator.clipboard.writeText(shareData.text + " " + shareData.url);
+		  shareToast.classList.add("show");
+		  setTimeout(()=> shareToast.classList.remove("show"), 2200);
+		}catch(err){ /* clipboard failed silently */ }
+	  }
+	}
+	modalShareBtn.addEventListener("click", handleShare);
 
 	function closeModal(){
 	  overlay.classList.remove("show");
