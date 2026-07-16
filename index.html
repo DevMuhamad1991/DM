@@ -519,6 +519,16 @@
   .modal-content{ padding:24px 22px 30px; }
   .modal-title{ font-size:19px; font-weight:600; margin-bottom:10px; }
   .modal-desc{ color:var(--gray); font-size:14.5px; line-height:1.95; }
+  .modal-order-btn{
+	display:inline-flex; align-items:center; justify-content:center; gap:8px;
+	width:100%; margin-top:22px;
+	background:#fff; color:#000; font-weight:600; font-size:14px;
+	padding:13px 16px; border-radius:100px;
+	text-decoration:none;
+	transition:transform .3s ease, opacity .3s ease;
+  }
+  .modal-order-btn:hover{ transform:translateY(-2px); opacity:.9; }
+
 
   @media (max-width: 560px){
 	.lang-switch{ top:16px; inset-inline-end:16px; }
@@ -730,9 +740,14 @@
 	<div class="modal-content">
 	  <div class="modal-title" id="modalTitle"></div>
 	  <p class="modal-desc" id="modalDesc"></p>
+	  <a class="modal-order-btn" id="modalOrderBtn" href="#" target="_blank" rel="noopener">
+		<i class="fa-brands fa-whatsapp"></i>
+		<span data-i18n="orderBtn">داواکردن</span>
+	  </a>
 	</div>
   </div>
 </div>
+
 
 <script>
 (function(){
@@ -759,9 +774,12 @@
 	  footerContactTitle:"پەیوەندیمان پێوە بکە",
 	  footerCtaTitle:"ئامادەیت پڕۆژەکەت دەست پێبکەیت؟",
 	  footerCtaText:"پەیامێکمان بۆ بنێرە بە WhatsApp، لە کەمترین کاتدا وەڵامت دەدەینەوە.",
-	  footerCtaBtn:"دەستپێکردنی گفتوگۆ",
+		  footerCtaBtn:"دەستپێکردنی گفتوگۆ",
+	  orderBtn:"داواکردن",
+	  orderMsg:"سڵاو، دەمەوێت زانیاری زیاتر لەسەر ئەم خزمەتگوزارییە بزانم: ",
 	  dir:"rtl"
 	},
+
 
 	ar: {
 	  eyebrow: "قيد التحضير",
@@ -782,9 +800,12 @@
 	  footerContactTitle:"تواصل معنا",
 	  footerCtaTitle:"جاهز لبدء مشروعك؟",
 	  footerCtaText:"أرسل لنا رسالة عبر واتساب وسنرد عليك في أقرب وقت.",
-	  footerCtaBtn:"ابدأ المحادثة",
+		  footerCtaBtn:"ابدأ المحادثة",
+	  orderBtn:"اطلب الآن",
+	  orderMsg:"مرحباً، أرغب بمعرفة المزيد عن هذه الخدمة: ",
 	  dir:"rtl"
 	}
+
 
   };
 
@@ -1008,7 +1029,8 @@
 	const modalImg = document.getElementById("modalImg");
 	const modalTitle = document.getElementById("modalTitle");
 	const modalDesc = document.getElementById("modalDesc");
-	const closeBtn = document.getElementById("modalClose");
+		const closeBtn = document.getElementById("modalClose");
+	const modalOrderBtn = document.getElementById("modalOrderBtn");
 	if(!overlay) return;
 
 	function openModal(card){
@@ -1019,9 +1041,13 @@
 	  modalImg.alt = t[key + "t"] || "";
 	  modalTitle.textContent = t[key + "t"] || "";
 	  modalDesc.textContent = t[key + "d"] || "";
+	  const serviceName = t[key + "t"] || "";
+	  const waMessage = encodeURIComponent((t.orderMsg || "") + serviceName);
+	  modalOrderBtn.href = "https://wa.me/9647509628683?text=" + waMessage;
 	  overlay.classList.add("show");
 	  document.body.style.overflow = "hidden";
 	}
+
 	function closeModal(){
 	  overlay.classList.remove("show");
 	  document.body.style.overflow = "";
