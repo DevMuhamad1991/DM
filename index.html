@@ -716,6 +716,21 @@
 	color:var(--gray);
 	font-family:'JetBrains Mono', monospace;
   }
+  .bg-swatch{ border:2px solid var(--line); }
+  .bg-style-row{ display:flex; gap:8px; }
+  .bg-style-btn{
+	flex:1;
+	background:rgba(255,255,255,.03);
+	border:1px solid var(--line);
+	color:var(--gray);
+	font-family:inherit; font-size:0.78125rem;
+	padding:10px 6px; border-radius:10px;
+	cursor:pointer;
+	transition:all .25s ease;
+  }
+  .bg-style-btn:hover{ color:#fff; }
+  .bg-style-btn.selected{ background:var(--accent); color:#000; border-color:var(--accent); font-weight:600; }
+
 
   .settings-reset{
 	width:100%;
@@ -966,8 +981,29 @@
 	  <div class="font-slider-value" id="fontSliderValue">16px</div>
 	</div>
 
+	<div class="settings-section">
+	  <div class="settings-label" data-i18n="settingsBgColor">ڕەنگی پاشبنەما</div>
+	  <div class="color-swatches" id="bgColorSwatches">
+		<button class="swatch bg-swatch" data-color="#0B0B0B" style="background:#0B0B0B" aria-label="Black"></button>
+		<button class="swatch bg-swatch" data-color="#000000" style="background:#000000" aria-label="Pure Black"></button>
+		<button class="swatch bg-swatch" data-color="#0A0F1A" style="background:#0A0F1A" aria-label="Dark Blue"></button>
+		<button class="swatch bg-swatch" data-color="#0A140F" style="background:#0A140F" aria-label="Dark Green"></button>
+		<button class="swatch bg-swatch" data-color="#14100A" style="background:#14100A" aria-label="Dark Brown"></button>
+		<button class="swatch bg-swatch" data-color="#150A14" style="background:#150A14" aria-label="Dark Purple"></button>
+	  </div>
+	</div>
+
+	<div class="settings-section">
+	  <div class="settings-label" data-i18n="settingsBgStyle">شێوازی پاشبنەما</div>
+	  <div class="bg-style-row">
+		<button class="bg-style-btn" data-style="dots" data-i18n="bgStyleDots">خاڵ‌خاڵ</button>
+		<button class="bg-style-btn" data-style="plain" data-i18n="bgStylePlain">سادە</button>
+		<button class="bg-style-btn" data-style="grid" data-i18n="bgStyleGrid">خەتی چوارگۆشە</button>
+	  </div>
+	</div>
 
 	<button class="settings-reset" id="settingsReset" data-i18n="settingsReset">گەڕانەوە بۆ دۆخی سەرەتایی</button>
+
   </div>
 </div>
 
@@ -1051,9 +1087,15 @@
 	  fontSmall:"بچووک",
 	  fontMedium:"ئاسایی",
 	  fontLarge:"گەورە",
-	  settingsReset:"گەڕانەوە بۆ دۆخی سەرەتایی",
+	  	  settingsReset:"گەڕانەوە بۆ دۆخی سەرەتایی",
+	  settingsBgColor:"ڕەنگی پاشبنەما",
+	  settingsBgStyle:"شێوازی پاشبنەما",
+	  bgStyleDots:"خاڵ‌خاڵ",
+	  bgStylePlain:"سادە",
+	  bgStyleGrid:"خەتی چوارگۆشە",
 	  dir:"rtl"
 	},
+
 
 
 
@@ -1093,9 +1135,15 @@
 	  fontSmall:"صغير",
 	  fontMedium:"عادي",
 	  fontLarge:"كبير",
-	  settingsReset:"إعادة الضبط الافتراضي",
+	  	  settingsReset:"إعادة الضبط الافتراضي",
+	  settingsBgColor:"لون الخلفية",
+	  settingsBgStyle:"نمط الخلفية",
+	  bgStyleDots:"نقاط",
+	  bgStylePlain:"بسيط",
+	  bgStyleGrid:"شبكة مربعات",
 	  dir:"rtl"
 	}
+
 
 
 
@@ -1151,18 +1199,24 @@
 
   /* ---------- Customize: accent color + font size ---------- */
   (function initCustomize(){
-	const settingsBtn = document.getElementById("settingsBtn");
+		const settingsBtn = document.getElementById("settingsBtn");
 	const settingsOverlay = document.getElementById("settingsOverlay");
 	const settingsClose = document.getElementById("settingsClose");
-	const swatches = document.querySelectorAll(".swatch");
+	const swatches = document.querySelectorAll(".swatch:not(.bg-swatch)");
+	const bgSwatches = document.querySelectorAll(".bg-swatch");
+	const bgStyleBtns = document.querySelectorAll(".bg-style-btn");
 	const fontSlider = document.getElementById("fontSlider");
 	const fontSliderValue = document.getElementById("fontSliderValue");
 	const resetBtn = document.getElementById("settingsReset");
 	const root = document.documentElement;
+	const bgCanvas = document.getElementById("bg-canvas");
+	const gridOverlay = document.querySelector(".grid-overlay");
 	if(!settingsBtn || !settingsOverlay) return;
 
 	const DEFAULT_ACCENT = "#FFFFFF";
 	const DEFAULT_FONT = "16";
+	const DEFAULT_BG = "#0B0B0B";
+	const DEFAULT_BG_STYLE = "dots";
 
 	function applyAccent(color){
 	  root.style.setProperty("--accent", color);
@@ -1175,16 +1229,38 @@
 	  fontSliderValue.textContent = size + "px";
 	  try{ localStorage.setItem("dm_fontsize", size); }catch(e){}
 	}
+	function applyBgColor(color){
+	  root.style.setProperty("--bg", color);
+	  bgSwatches.forEach(s => s.classList.toggle("selected", s.dataset.color.toLowerCase() === color.toLowerCase()));
+	  try{ localStorage.setItem("dm_bgcolor", color); }catch(e){}
+	}
+	function applyBgStyle(style){
+	  if(bgCanvas) bgCanvas.style.display = (style === "dots") ? "" : "none";
+	  if(gridOverlay) gridOverlay.style.display = (style === "grid") ? "" : "none";
+	  bgStyleBtns.forEach(b => b.classList.toggle("selected", b.dataset.style === style));
+	  try{ localStorage.setItem("dm_bgstyle", style); }catch(e){}
+	}
 
-	let savedAccent = DEFAULT_ACCENT, savedFont = DEFAULT_FONT;
+	let savedAccent = DEFAULT_ACCENT, savedFont = DEFAULT_FONT, savedBg = DEFAULT_BG, savedBgStyle = DEFAULT_BG_STYLE;
 	try{ savedAccent = localStorage.getItem("dm_accent") || DEFAULT_ACCENT; }catch(e){}
 	try{ savedFont = localStorage.getItem("dm_fontsize") || DEFAULT_FONT; }catch(e){}
+	try{ savedBg = localStorage.getItem("dm_bgcolor") || DEFAULT_BG; }catch(e){}
+	try{ savedBgStyle = localStorage.getItem("dm_bgstyle") || DEFAULT_BG_STYLE; }catch(e){}
 	applyAccent(savedAccent);
 	applyFontSize(savedFont);
+	applyBgColor(savedBg);
+	applyBgStyle(savedBgStyle);
 
 	swatches.forEach(s => s.addEventListener("click", ()=> applyAccent(s.dataset.color)));
+	bgSwatches.forEach(s => s.addEventListener("click", ()=> applyBgColor(s.dataset.color)));
+	bgStyleBtns.forEach(b => b.addEventListener("click", ()=> applyBgStyle(b.dataset.style)));
 	fontSlider.addEventListener("input", ()=> applyFontSize(fontSlider.value));
-	resetBtn.addEventListener("click", ()=>{ applyAccent(DEFAULT_ACCENT); applyFontSize(DEFAULT_FONT); });
+	resetBtn.addEventListener("click", ()=>{
+	  applyAccent(DEFAULT_ACCENT);
+	  applyFontSize(DEFAULT_FONT);
+	  applyBgColor(DEFAULT_BG);
+	  applyBgStyle(DEFAULT_BG_STYLE);
+	});
 
 	function openSettings(){
 	  settingsOverlay.classList.add("show");
