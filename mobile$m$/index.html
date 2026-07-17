@@ -1572,7 +1572,7 @@ const waMsg = encodeURIComponent(
   `📞 الهاتف: ${phone}\n` +
   `📍 العنوان: ${address}\n` +
   `${note ? '📝 ملاحظة: ' + note + '\n' : ''}` +
-  `\n🍽️ الطلبات:\n${itemsText}\n\n` +
+  `\n📦 الطلبات:\n${itemsText}\n\n` +
   `💰 المجموع الكلي: ${total.toLocaleString()} IQD`
 );
 const waWindow = window.open(`https://wa.me/${ownerPhone}?text=${waMsg}`, '_blank');
