@@ -1044,14 +1044,13 @@
 		  <label class="form-label" data-i18n="formPhone">ژمارەی مۆبایل</label>
 		  <input type="tel" id="f-phone" class="form-input" dir="ltr" placeholder="07XX XXX XXXX" />
 		</div>
-		<div class="form-group">
-		  <label class="form-label" data-i18n="formAddress">ناونیشان</label>
-		  <input type="text" id="f-address" class="form-input" data-i18n-placeholder="formAddressPH" />
-		</div>
-    <button type="button" onclick="shareLocation()" style="width:100%;padding:11px;border-radius:var(--radius-btn);background:var(--accent-light);color:var(--accent);border:1.5px solid rgba(224,123,42,0.25);font-size:0.86rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:15px;cursor:pointer;">
-  <i class="ri-map-pin-line"></i>
-  <span> ناردنی لۆکەیشن</span>
+<input type="hidden" id="f-address" value="" />
+
+<button type="button" id="location-btn" onclick="shareLocation()" style="width:100%;padding:11px;border-radius:var(--radius-btn);background:var(--accent-light);color:var(--accent);border:1.5px solid rgba(224,123,42,0.25);font-size:0.86rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:15px;cursor:pointer;transition:var(--transition);">
+  <i class="ri-map-pin-line" id="location-btn-icon"></i>
+  <span id="location-btn-text">ناردنی لۆکەیشن</span>
 </button>
+
 
 
 		<div class="form-group">
@@ -1434,17 +1433,21 @@ async function submitOrder() {
   const address = document.getElementById('f-address').value.trim();
 
   // validate
-    [['f-name',name],['f-phone',phone],['f-address',address]].forEach(([id,val])=>{
+[['f-name',name],['f-phone',phone]].forEach(([id,val])=>{
     document.getElementById(id).style.borderColor = val ? '' : 'var(--danger)';
     if(val) document.getElementById(id).style.boxShadow='';
   });
   if(!name||!phone||!address) return;
 
   if(!address.includes('google.com/maps')) {
-    document.getElementById('f-address').style.borderColor = 'var(--danger)';
-    document.getElementById('f-address').placeholder = '📍 تکایە لۆکەیشنەکەت بنێرە!';
+    const locBtn = document.getElementById('location-btn');
+    locBtn.style.borderColor = 'var(--danger)';
+    locBtn.style.background = 'rgba(214,69,69,0.08)';
+    locBtn.style.color = 'var(--danger)';
+    alert('📍 تکایە پێش ناردنی داواکاری، لۆکەیشنەکەت بنێرە!');
     return;
   }
+
 
 
 
@@ -1521,17 +1524,30 @@ function shareLocation() {
     alert('براوزەرەکەت لۆکەیشن پشتگیری ناکات');
     return;
   }
-  
+
+  const btn = document.getElementById('location-btn');
+  const btnText = document.getElementById('location-btn-text');
+  const btnIcon = document.getElementById('location-btn-icon');
+  const wasSet = !!document.getElementById('f-address').value;
+
   navigator.geolocation.getCurrentPosition(
     pos => {
       const lat = pos.coords.latitude;
       const lng = pos.coords.longitude;
       const url = `https://www.google.com/maps?q=${lat},${lng}`;
       document.getElementById('f-address').value = url;
-      document.getElementById('f-address').style.borderColor = 'var(--success)';
+
+      btn.style.background = 'var(--success)';
+      btn.style.color = '#fff';
+      btn.style.borderColor = 'var(--success)';
+      btnIcon.className = 'ri-check-double-line';
+      btnText.textContent = wasSet ? 'لۆکەیشن نوێ کرایەوە' : 'لۆکەیشنەکەت دانرا';
+
+      if (wasSet) {
+        setTimeout(() => { btnText.textContent = 'لۆکەیشنەکەت دانرا'; }, 2000);
+      }
     },
     err => {
-      // کۆدی هەڵە دیاری بکە
       if(err.code === 1) {
         alert('❌ مۆڵەتی لۆکەیشن نەدراوە\n\nتکایە:\n• لەسەر مۆبایل: ئایکۆنی قفل/لۆکەیشن لە بالای براوزەر بکەوە\n• مۆڵەتی لۆکەیشن بدە، پاشان دووبارە هەوڵ بدەرەوە');
       } else if(err.code === 2) {
@@ -1545,6 +1561,7 @@ function shareLocation() {
 }
 
 
+
 function resetAfterOrder() {
   // تەنها سەبەتە پاک دەکەینەوە — زانیاری کریار دەمێنێتەوە
   cart=[]; saveCart(); updateCartBar(); renderCartDrawer();
@@ -1553,6 +1570,13 @@ function resetAfterOrder() {
   document.getElementById('f-note').value='';
   document.getElementById('f-note').style.borderColor='';
   document.getElementById('f-note').style.boxShadow='';
+  document.getElementById('f-address').value = '';
+const locBtn = document.getElementById('location-btn');
+locBtn.style.background = 'var(--accent-light)';
+locBtn.style.color = 'var(--accent)';
+locBtn.style.borderColor = 'rgba(224,123,42,0.25)';
+document.getElementById('location-btn-icon').className = 'ri-map-pin-line';
+document.getElementById('location-btn-text').textContent = 'ناردنی لۆکەیشن';
 
   document.getElementById('checkout-form-view').classList.remove('hidden');
   document.getElementById('checkout-success-view').classList.add('hidden');
