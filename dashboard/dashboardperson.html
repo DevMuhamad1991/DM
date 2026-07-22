@@ -1043,7 +1043,19 @@ function clientFormHtml(c){
   <div class="field"><label>Physical address</label><input id="f-address" value="${escapeHtml(c.address)}" placeholder="City, Country"></div>
   <div class="field-row">
     <div class="field"><label>Registration date</label><input id="f-regdate" type="date" value="${c.regDate}"></div>
-    <div class="field"><label>Profile photo URL (optional)</label><input id="f-photo" value="${escapeHtml(c.photo||'')}" placeholder="https://…"></div>
+    <div class="field">
+      <label>Profile photo</label>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div id="photo-preview" style="width:52px;height:52px;border-radius:50%;overflow:hidden;background:var(--blue-dim);display:flex;align-items:center;justify-content:center;flex:none;">
+          ${c.photo ? `<img src="${c.photo}" style="width:100%;height:100%;object-fit:cover;">` : `<span style="font-family:'Outfit';font-weight:700;color:var(--blue);">${initials(c.name||'?')}</span>`}
+        </div>
+        <label class="btn btn-ghost btn-sm" style="cursor:pointer;">
+          ${ic('upload')} هەڵبژاردنی وێنە
+          <input type="file" id="f-photofile" accept="image/*" capture="environment" style="display:none;">
+        </label>
+      </div>
+      <input type="hidden" id="f-photo" value="${escapeHtml(c.photo||'')}">
+    </div>
   </div>
   <div class="field"><label>Notes</label><textarea id="f-notes" placeholder="Internal notes about this client…">${escapeHtml(c.notes)}</textarea></div>
   `;
@@ -1053,6 +1065,18 @@ function openClientForm(existing){
     title: existing ? 'Edit client' : 'Add client',
     bodyHtml: clientFormHtml(existing),
     footHtml: `<button class="btn btn-ghost" id="modal-cancel">Cancel</button><button class="btn btn-primary" id="modal-save">${ic('save')} Save client</button>`
+  });
+  const photoFileInput = document.getElementById('f-photofile');
+  if (photoFileInput) photoFileInput.addEventListener('change', (e)=>{
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 3*1024*1024){ toast('وێنەکە زۆر گەورەیە (زۆرترین 3MB)','error'); return; }
+    const reader = new FileReader();
+    reader.onload = ()=>{
+      document.getElementById('f-photo').value = reader.result;
+      document.getElementById('photo-preview').innerHTML = `<img src="${reader.result}" style="width:100%;height:100%;object-fit:cover;">`;
+    };
+    reader.readAsDataURL(file);
   });
   document.getElementById('modal-cancel').onclick = closeModal;
   document.getElementById('modal-save').onclick = async ()=>{
