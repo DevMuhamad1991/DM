@@ -1851,7 +1851,20 @@ function generateReceiptPdf(sale, kind){
   doc.setFontSize(9); doc.setTextColor(120,120,120);
   doc.text(`We appreciate your trust. For questions, reach us at ${s.companyEmail||''}`, 14, ty+32, {maxWidth:180});
 
-  doc.save(`${kind}-${(client?.name||'client').replace(/\s+/g,'-')}-${sale.id.slice(-6)}.pdf`);
+  const fileName = `${kind}-${(client?.name||'client').replace(/\s+/g,'-')}-${sale.id.slice(-6)}.pdf`;
+  const pdfBlob = doc.output('blob');
+  const pdfFile = new File([pdfBlob], fileName, {type:'application/pdf'});
+
+  if (navigator.share && navigator.canShare && navigator.canShare({files:[pdfFile]})){
+    navigator.share({
+      files:[pdfFile],
+      title: fileName,
+      text: `${kind==='invoice'?'Invoice':'Receipt'} for ${client?.name||''}`
+    }).catch(()=>{});
+  } else {
+    doc.save(fileName);
+  }
+}
 }
 function sendWhatsAppReminder(client){
   const s = STATE.settings;
