@@ -331,7 +331,15 @@ tbody tr:hover{background:var(--line-soft);}
   .tb-title{font-size:17px;}
   .page-head{flex-direction:column;align-items:flex-start;}
   .page-head > div:last-child{width:100%;display:flex;flex-wrap:wrap;gap:8px;}
-  .dropdown{width:min(340px,92vw);right:-8px;}
+  .dropdown{
+    position:fixed;
+    top:calc(var(--topbar-h) + 8px);
+    left:12px;
+    right:12px;
+    width:auto;
+    max-height:75vh;
+    overflow-y:auto;
+  }
 }
 @media(max-width:640px){
   /* Turn dense tables into stacked cards on phones */
@@ -1208,17 +1216,17 @@ function viewSales(){
         const sys = systemById(s.systemId);
         const fin = saleFinal(s), rem = saleRemaining(s);
         return `<tr>
-          <td class="cell-flex"><span class="avatar-sm">${initials(clientName(s.clientId))}</span>${escapeHtml(clientName(s.clientId))}</td>
-          <td>${escapeHtml(sys?.name||'—')}</td>
-          <td class="num">${s.qty}</td>
-          <td class="num">${fmtMoney((sys?.originalPrice||0)*s.qty)}</td>
-          <td class="num">${fmtMoney((sys?.discount||0)*s.qty)}</td>
-          <td class="num" style="font-weight:700;">${fmtMoney(fin)}</td>
-          <td class="num" style="color:var(--good);">${fmtMoney(s.paid)}</td>
-          <td class="num" style="color:${rem>0?'var(--bad)':'var(--mute)'};">${fmtMoney(rem)}</td>
-          <td>${paymentBadge(s.status)}</td>
-          <td class="mono" style="color:var(--mute);">${fmtDate(s.saleDate)}</td>
-          <td><div class="row-actions">
+          <td class="cell-flex" data-label="Client"><span class="avatar-sm">${initials(clientName(s.clientId))}</span>${escapeHtml(clientName(s.clientId))}</td>
+          <td data-label="System">${escapeHtml(sys?.name||'—')}</td>
+          <td class="num" data-label="Qty">${s.qty}</td>
+          <td class="num" data-label="Original">${fmtMoney((sys?.originalPrice||0)*s.qty)}</td>
+          <td class="num" data-label="Discount">${fmtMoney((sys?.discount||0)*s.qty)}</td>
+          <td class="num" data-label="Final" style="font-weight:700;">${fmtMoney(fin)}</td>
+          <td class="num" data-label="Paid" style="color:var(--good);">${fmtMoney(s.paid)}</td>
+          <td class="num" data-label="Remaining" style="color:${rem>0?'var(--bad)':'var(--mute)'};">${fmtMoney(rem)}</td>
+          <td data-label="Status">${paymentBadge(s.status)}</td>
+          <td class="mono" data-label="Date" style="color:var(--mute);">${fmtDate(s.saleDate)}</td>
+          <td data-label="Actions"><div class="row-actions">
             <button class="act-btn" data-invoice-sale="${s.id}">${ic('invoice')}</button>
             <button class="act-btn" data-edit-sale="${s.id}">${ic('edit')}</button>
             <button class="act-btn danger" data-del-sale="${s.id}">${ic('trash')}</button>
