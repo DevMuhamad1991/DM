@@ -377,6 +377,13 @@ tbody tr:hover{background:var(--line-soft);}
   .content{padding:12px;}
   .card-pad{padding:16px;}
 }
+.settings-grid{grid-template-columns:220px 1fr;}
+.settings-nav{flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:4px;}
+@media(max-width:880px){
+  .settings-grid{grid-template-columns:1fr;}
+  .settings-nav{flex-direction:row;}
+  .settings-nav .snav-item{white-space:nowrap;flex:none;}
+}
 
 .sidebar-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:190;}
 .sidebar-backdrop.active{display:block;}
@@ -1731,7 +1738,7 @@ let settingsTab = 'company';
 function viewSettings(){
   return `
   <div class="page-head"><div><h2 class="section-title">Settings</h2><p class="section-sub">Company profile, currency, tax &amp; backend</p></div></div>
-  <div class="grid" style="grid-template-columns:220px 1fr;align-items:start;">
+<div class="grid settings-grid" style="align-items:start;">
     <div class="card card-pad settings-nav">
       ${[['company','Company information'],['finance','Currency & tax'],['appearance','Appearance'],['backend','Backend & backup'],['roles','Roles & permissions']].map(([id,label])=>`<div class="snav-item ${settingsTab===id?'active':''}" data-stab="${id}">${label}</div>`).join('')}
     </div>
