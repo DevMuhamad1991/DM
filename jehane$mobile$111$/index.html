@@ -1380,6 +1380,18 @@ kbd {
 @media (max-width: 480px) {
   .apps-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
 }
+.home-btn {
+  width: 36px; height: 36px;
+  border: none; background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 10px; cursor: pointer;
+  color: var(--text2);
+  display: none; align-items: center; justify-content: center;
+  font-size: 18px;
+  transition: all var(--transition);
+}
+.home-btn.show { display: flex; }
+.home-btn:hover { background: var(--card-hover); color: var(--text); }
 </style>
 </head>
 <body>
@@ -1413,9 +1425,9 @@ kbd {
 
   <nav class="sidebar-nav">
 	<div class="nav-section">
-	  <div class="nav-item active" data-page="dashboard" onclick="navigate(this)">
-		<i class="ti ti-layout-dashboard"></i> داشبۆرد
-	  </div>
+<div class="nav-item" data-page="dashboard" onclick="navigate(this)">
+	<i class="ti ti-layout-dashboard"></i> داشبۆرد
+</div>
 	</div>
 	<div class="nav-section">
 	  <div class="nav-item" data-page="inventory" onclick="navigate(this)">
@@ -1475,6 +1487,9 @@ kbd {
   <!-- HEADER -->
   <header class="header">
 	<button class="menu-btn" onclick="toggleSidebar()"><i class="ti ti-menu-2"></i></button>
+	<button class="home-btn" id="homeBtn" onclick="navigate(null,'apps')" title="گەڕانەوە بۆ سەرەکی">
+	  <i class="ti ti-home"></i>
+	</button>
 	<div class="header-search">
 	  <i class="ti ti-search"></i>
 <input type="text" placeholder="گەرانی گشتی..." id="globalSearch" oninput="globalSearchFn(this.value)" onfocus="globalSearchFn('')" onblur="setTimeout(()=>closeSearch(),200)">
@@ -1516,37 +1531,41 @@ kbd {
     </div>
   </div>
   <div class="apps-grid">
-    <div class="app-launch-card" style="--app-color:#6C63FF" onclick="navigate(null,'inventory')">
+<div class="app-launch-card" id="appCard-inventory" style="--app-color:#6C63FF" onclick="navigate(null,'inventory')">
 <div class="app-launch-icon"><i class="ti ti-package"></i></div>
 <div class="app-launch-name">کاڵا <span class="app-launch-badge" id="appBadge-inventory">0</span></div>
     </div>
-<div class="app-launch-card" style="--app-color:#00D9A6" onclick="navigate(null,'sales')">
+<div class="app-launch-card" id="appCard-sales" style="--app-color:#00D9A6" onclick="navigate(null,'sales')">
   <div class="app-launch-icon"><i class="ti ti-shopping-cart"></i></div>
   <div class="app-launch-name">فرۆشتن <span class="app-launch-badge" id="appBadge-sales">0</span></div>
 </div>
-<div class="app-launch-card" style="--app-color:#F7B731" onclick="navigate(null,'repairs')">
+<div class="app-launch-card" id="appCard-repairs" style="--app-color:#F7B731" onclick="navigate(null,'repairs')">
   <div class="app-launch-icon"><i class="ti ti-tool"></i></div>
   <div class="app-launch-name">چاکسازی <span class="app-launch-badge" id="appBadge-repairs">0</span></div>
 </div>
-<div class="app-launch-card" style="--app-color:#FF6B6B" onclick="navigate(null,'debts')">
+<div class="app-launch-card" id="appCard-debts" style="--app-color:#FF6B6B" onclick="navigate(null,'debts')">
   <div class="app-launch-icon"><i class="ti ti-credit-card"></i></div>
   <div class="app-launch-name">قەرزەکان <span class="app-launch-badge" id="appBadge-debts">0</span></div>
 </div>
-<div class="app-launch-card" style="--app-color:#38BDF8" onclick="navigate(null,'expenses')">
+<div class="app-launch-card" id="appCard-expenses" style="--app-color:#38BDF8" onclick="navigate(null,'expenses')">
   <div class="app-launch-icon"><i class="ti ti-wallet"></i></div>
   <div class="app-launch-name">خەرجییەکان <span class="app-launch-badge" id="appBadge-expenses">0</span></div>
 </div>
-<div class="app-launch-card" style="--app-color:#A78BFA" onclick="navigate(null,'plans')">
+<div class="app-launch-card" id="appCard-plans" style="--app-color:#A78BFA" onclick="navigate(null,'plans')">
   <div class="app-launch-icon"><i class="ti ti-notebook"></i></div>
   <div class="app-launch-name">پلانەکان <span class="app-launch-badge" id="appBadge-plans">0</span></div>
 </div>
-    <div class="app-launch-card" style="--app-color:#6C63FF" onclick="navigate(null,'reports')">
+<div class="app-launch-card" id="appCard-reports" style="--app-color:#6C63FF" onclick="navigate(null,'reports')">
       <div class="app-launch-icon"><i class="ti ti-chart-bar"></i></div>
       <div class="app-launch-name">ڕاپۆرتەکان</div>
     </div>
-    <div class="app-launch-card" style="--app-color:#9AA3B5" onclick="navigate(null,'dashboard')">
+<div class="app-launch-card" id="appCard-dashboard" style="--app-color:#9AA3B5" onclick="navigate(null,'dashboard')">
       <div class="app-launch-icon"><i class="ti ti-layout-dashboard"></i></div>
       <div class="app-launch-name">داشبۆرد</div>
+    </div>
+    <div class="app-launch-card" id="appCard-settings" style="--app-color:#8B95A5" onclick="navigate(null,'settings')">
+      <div class="app-launch-icon"><i class="ti ti-settings"></i></div>
+      <div class="app-launch-name">ڕێکخستن</div>
     </div>
   </div>
 </div>
@@ -3313,10 +3332,10 @@ function handleUserRealtimeChange(payload) {
 
 
 function getCurrentPage() {
-  const active = document.querySelector('.nav-item.active');
-  if(active) return active.dataset.page;
   const activePage = document.querySelector('.page.active');
-  return activePage ? activePage.id.replace('page-','') : 'dashboard';
+  if(activePage) return activePage.id.replace('page-','');
+  const active = document.querySelector('.nav-item.active');
+  return active ? active.dataset.page : 'dashboard';
 }
 
 // پرۆسەکردنی sync queue کاتێک ئۆنلاین دەبێتەوە
@@ -3556,6 +3575,7 @@ function navigate(el, page) {
   if(ni) ni.classList.add('active');
   document.getElementById('page-'+page)?.classList.add('active');
   document.getElementById('headerPageTitle').textContent = pageNames[page]||'';
+  document.getElementById('homeBtn').classList.toggle('show', page !== 'apps');
   closeSidebar();
  if(page === 'sales') {
     saleCatFilter = '';
@@ -5673,12 +5693,15 @@ function applyRolePermissions() {
   const isAdmin = currentUser && currentUser.role === 'admin';
   const settingsNav = document.querySelector('.nav-item[data-page="settings"]');
   if(settingsNav) settingsNav.style.display = isAdmin ? '' : 'none';
+  const settingsCard = document.getElementById('appCard-settings');
+  if(settingsCard) settingsCard.style.display = isAdmin ? '' : 'none';
 
   PERM_SECTIONS.forEach(sec => {
     const nav = document.querySelector('.nav-item[data-page="'+sec+'"]');
     if(nav) nav.style.display = can(sec,'view') ? '' : 'none';
+    const card = document.getElementById('appCard-'+sec);
+    if(card) card.style.display = can(sec,'view') ? '' : 'none';
   });
-
   const label = document.getElementById('sidebarUserLabel');
   if(label) {
     if(currentUser) {
