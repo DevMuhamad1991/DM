@@ -203,9 +203,10 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:
   </a>
 
   <p>
-    <span id="footerRights">هەموو مافەکان پارێزراون</span> &copy; 2025 &mdash;
-    <span id="footerMadeByLabel">دروستکراوە لەلایەن</span>
-    <a href="#" id="footerWaLink" target="_blank" style="color:var(--gold);text-decoration:none;font-weight:600"></a>
+    <span id="footerRights">All rights reserved</span> &copy; 2025 &mdash;
+    <span id="footerMadeByLabel">Developed by</span>
+    <a href="#" id="footerWaLink" target="_blank" style="color:#FF6B35;text-decoration:none;font-weight:700"></a>
+    <i class="fa-solid fa-laptop-code" style="color:#FF6B35;margin-inline-start:4px"></i>
   </p>
 </footer>
 
@@ -498,8 +499,7 @@ function applyI18nStatic(){
   document.getElementById('emptyTitle').textContent = t('no_results');
   document.getElementById('emptySub').textContent = t('try_other');
   document.getElementById('priceLabel').textContent = t('price');
-  document.getElementById('footerRights').textContent = t('rights');
-  document.getElementById('footerMadeByLabel').textContent = t('made_by');
+    document.getElementById('footerRights').textContent = t('rights');
 }
 
 /* ════════════════════════════════════════════════════════════════
