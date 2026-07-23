@@ -1329,7 +1329,57 @@ kbd {
   .content { padding-bottom: 130px; }
 }
 
-
+/* ── APPS HOME LAUNCHER ── */
+.apps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.app-launch-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.app-launch-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card);
+  border-color: var(--app-color);
+}
+.app-launch-icon {
+  position: relative;
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  background: var(--app-color);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; color: #fff;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+}
+.app-launch-name {
+  font-size: 13px; font-weight: 700;
+  color: var(--text); text-align: center;
+  display: flex; align-items: center; gap: 6px; justify-content: center;
+}
+.app-launch-badge {
+  background: var(--app-color);
+  color: #fff;
+  font-size: 10.5px; font-weight: 800;
+  min-width: 20px; height: 20px;
+  border-radius: 10px;
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0 6px;
+  line-height: 1;
+}
+@media (max-width: 480px) {
+  .apps-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+}
 </style>
 </head>
 <body>
@@ -1353,7 +1403,7 @@ kbd {
 
 <!-- SIDEBAR -->
 <div class="sidebar" id="sidebar">
-<div class="sidebar-logo">
+<div class="sidebar-logo" style="cursor:pointer" onclick="navigate(null,'apps')">
 	<div class="sidebar-logo-icon"><i class="ti ti-device-mobile"></i></div>
 	<div class="sidebar-logo-text">
 <h1 id="sidebarStoreName">Mobile Store</h1>
@@ -1458,9 +1508,51 @@ kbd {
 
   <!-- CONTENT -->
   <div class="content">
+<div class="page active" id="page-apps">
+  <div class="page-title">
+    <div>
+      <h2 id="appsGreetName">بەخێربێیت</h2>
+      <p id="appsGreetDate"></p>
+    </div>
+  </div>
+  <div class="apps-grid">
+    <div class="app-launch-card" style="--app-color:#6C63FF" onclick="navigate(null,'inventory')">
+<div class="app-launch-icon"><i class="ti ti-package"></i></div>
+<div class="app-launch-name">کاڵا <span class="app-launch-badge" id="appBadge-inventory">0</span></div>
+    </div>
+<div class="app-launch-card" style="--app-color:#00D9A6" onclick="navigate(null,'sales')">
+  <div class="app-launch-icon"><i class="ti ti-shopping-cart"></i></div>
+  <div class="app-launch-name">فرۆشتن <span class="app-launch-badge" id="appBadge-sales">0</span></div>
+</div>
+<div class="app-launch-card" style="--app-color:#F7B731" onclick="navigate(null,'repairs')">
+  <div class="app-launch-icon"><i class="ti ti-tool"></i></div>
+  <div class="app-launch-name">چاکسازی <span class="app-launch-badge" id="appBadge-repairs">0</span></div>
+</div>
+<div class="app-launch-card" style="--app-color:#FF6B6B" onclick="navigate(null,'debts')">
+  <div class="app-launch-icon"><i class="ti ti-credit-card"></i></div>
+  <div class="app-launch-name">قەرزەکان <span class="app-launch-badge" id="appBadge-debts">0</span></div>
+</div>
+<div class="app-launch-card" style="--app-color:#38BDF8" onclick="navigate(null,'expenses')">
+  <div class="app-launch-icon"><i class="ti ti-wallet"></i></div>
+  <div class="app-launch-name">خەرجییەکان <span class="app-launch-badge" id="appBadge-expenses">0</span></div>
+</div>
+<div class="app-launch-card" style="--app-color:#A78BFA" onclick="navigate(null,'plans')">
+  <div class="app-launch-icon"><i class="ti ti-notebook"></i></div>
+  <div class="app-launch-name">پلانەکان <span class="app-launch-badge" id="appBadge-plans">0</span></div>
+</div>
+    <div class="app-launch-card" style="--app-color:#6C63FF" onclick="navigate(null,'reports')">
+      <div class="app-launch-icon"><i class="ti ti-chart-bar"></i></div>
+      <div class="app-launch-name">ڕاپۆرتەکان</div>
+    </div>
+    <div class="app-launch-card" style="--app-color:#9AA3B5" onclick="navigate(null,'dashboard')">
+      <div class="app-launch-icon"><i class="ti ti-layout-dashboard"></i></div>
+      <div class="app-launch-name">داشبۆرد</div>
+    </div>
+  </div>
+</div>
 
 	<!-- ═══════════════════════ DASHBOARD ═══════════════════════ -->
-	<div class="page active" id="page-dashboard">
+<div class="page" id="page-dashboard">
 	 <div class="page-title">
   <div>
     <h2>داشبۆرد</h2>
@@ -3222,7 +3314,9 @@ function handleUserRealtimeChange(payload) {
 
 function getCurrentPage() {
   const active = document.querySelector('.nav-item.active');
-  return active ? active.dataset.page : 'dashboard';
+  if(active) return active.dataset.page;
+  const activePage = document.querySelector('.page.active');
+  return activePage ? activePage.id.replace('page-','') : 'dashboard';
 }
 
 // پرۆسەکردنی sync queue کاتێک ئۆنلاین دەبێتەوە
@@ -3447,7 +3541,7 @@ const DB = {
 // ══════════════════════════════════════════
 
 const pageNames = { 
-  dashboard:'داشبۆرد', inventory:'کاڵا', sales:'فرۆشتن', 
+  apps:'سەرەکی', dashboard:'داشبۆرد', inventory:'کاڵا', sales:'فرۆشتن', 
   repairs:'چاکسازی', debts:'قەرزەکان', reports:'ڕاپۆرتەکان', 
   plans:'پلانەکان', expenses:'خەرجییەکان', settings:'ڕێکخستن'
 };
@@ -3472,7 +3566,8 @@ function navigate(el, page) {
   renderPage(page);
 }
 function renderPage(p) {
-  if(p==='dashboard') renderDashboard();
+  if(p==='apps') renderAppsHome();
+  else if(p==='dashboard') renderDashboard();
   else if(p==='inventory') renderInventory();
   else if(p==='sales') renderSales();
   else if(p==='repairs') renderRepairs();
@@ -4055,6 +4150,24 @@ const estKB = (estBytes / 1024).toFixed(1).toLocaleString('en');
 // ══════════════════════════════════════════
 let chartInstances = {};
 function destroyChart(id) { if(chartInstances[id]){ chartInstances[id].destroy(); delete chartInstances[id]; } }
+function renderAppsHome() {
+  document.getElementById('appsGreetDate').textContent = new Date().toLocaleDateString('ku',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('appsGreetName').textContent = 'بەخێربێیت' + (currentUser ? ' ' + currentUser.name : '');
+
+  const products = DB.get('products');
+  const sales = DB.get('sales');
+  const repairs = DB.get('repairs');
+  const debts = DB.get('debts');
+  const plans = CACHE.plans || [];
+  const expenses = CACHE.expenses || [];
+
+  document.getElementById('appBadge-inventory').textContent = fmtN(products.length);
+  document.getElementById('appBadge-sales').textContent = fmtN(sales.filter(s=>isInPeriod(s.createdAt,'today')).length);
+  document.getElementById('appBadge-repairs').textContent = fmtN(repairs.filter(r=>!['completed','delivered'].includes(r.status)).length);
+  document.getElementById('appBadge-debts').textContent = fmtN(debts.filter(d=>d.status==='pending').length);
+  document.getElementById('appBadge-expenses').textContent = fmtN(expenses.filter(e=>isInPeriod(e.createdAt,'month')).length);
+  document.getElementById('appBadge-plans').textContent = fmtN(plans.filter(p=>p.status!=='done').length);
+}
 function renderDashboard() {
   document.getElementById('dashDate').textContent = new Date().toLocaleDateString('ku',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   const products = DB.get('products');
