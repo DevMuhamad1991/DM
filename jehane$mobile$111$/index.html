@@ -893,23 +893,6 @@ body.bg-none::before { background: none; }
 .fab-menu-item i {
   font-size: 18px;
 }
-/* ── UTILITY FAB (help / status / logout) ── */
-.fab-utility {
-  left: auto;
-  right: 24px;
-  background: var(--card);
-  color: var(--text2);
-  border: 1px solid var(--card-border);
-  box-shadow: var(--shadow-card);
-}
-.fab-utility:hover {
-  background: var(--card-hover);
-  transform: scale(1.1);
-}
-.fab-menu-utility {
-  left: auto;
-  right: 24px;
-}
 .fab-conn-dot {
   width: 10px; height: 10px;
   border-radius: 50%;
@@ -918,6 +901,7 @@ body.bg-none::before { background: none; }
   flex-shrink: 0;
   transition: background 0.3s ease;
 }
+
 /* ── MOBILE RESPONSIVE ── */
 @media (max-width: 768px) {
 
@@ -3078,24 +3062,18 @@ kbd {
 
 <!-- FAB -->
 <button class="fab" id="fabBtn" onclick="toggleFab()">
-  <i class="ti ti-plus" id="fabIcon"></i>
+  <i class="ti ti-dots-vertical" id="fabIcon"></i>
 </button>
 <div class="fab-menu" id="fabMenu">
-  <div class="fab-menu-item" onclick="fabAction('sale')">
-    <i class="ti ti-shopping-cart-plus"></i> فرۆشتنی نوێ
+  <div class="fab-menu-item" onclick="fabAction('help')">
+    <i class="ti ti-help-circle"></i> چۆن بەکاربێنم؟
   </div>
-  <div class="fab-menu-item" onclick="fabAction('repair')">
-    <i class="ti ti-tool"></i> چاکسازی نوێ
+  <div class="fab-menu-item" onclick="fabAction('conn')">
+    <span class="fab-conn-dot" id="fabConnDot"></span> دۆخی داتا
   </div>
-  <div class="fab-menu-item" onclick="fabAction('debt')">
-    <i class="ti ti-credit-card"></i> قەرزی نوێ
+  <div class="fab-menu-item" style="color:var(--danger)" onclick="fabAction('logout')">
+    <i class="ti ti-logout"></i> دەرچوون
   </div>
-  <div class="fab-menu-item" onclick="fabAction('product')">
-    <i class="ti ti-package"></i> کاڵای نوێ
-  </div>
-  <div class="fab-menu-item" onclick="fabAction('expense')">
-  <i class="ti ti-wallet"></i> خەرجی نوێ
-</div>
 </div>
 
 <!-- BARCODE SCANNER MODAL -->
@@ -3149,22 +3127,6 @@ kbd {
 <!-- IMAGE FULLSCREEN MODAL -->
 <div class="modal-overlay" id="imageFullscreenModal" onclick="closeModal('imageFullscreenModal')" style="background:rgba(0,0,0,0.9)">
   <img id="fullscreenImg" src="" style="max-width:95%;max-height:95vh;border-radius:8px;object-fit:contain">
-</div>
-
-<!-- UTILITY FAB -->
-<button class="fab fab-utility" id="utilityFabBtn" onclick="toggleUtilityFab()">
-  <i class="ti ti-dots-vertical" id="utilityFabIcon"></i>
-</button>
-<div class="fab-menu fab-menu-utility" id="utilityFabMenu">
-  <div class="fab-menu-item" onclick="utilityFabAction('help')">
-    <i class="ti ti-help-circle"></i> چۆن بەکاربێنم؟
-  </div>
-  <div class="fab-menu-item" onclick="utilityFabAction('conn')">
-    <span class="fab-conn-dot" id="fabConnDot"></span> دۆخی داتا
-  </div>
-  <div class="fab-menu-item" style="color:var(--danger)" onclick="utilityFabAction('logout')">
-    <i class="ti ti-logout"></i> دەرچوون
-  </div>
 </div>
 
 </div>
@@ -5830,31 +5792,6 @@ function toggleFab() {
 }
 function fabAction(type) {
   toggleFab();
-if(type === 'sale') { navigate(null,'sales'); setTimeout(()=>document.getElementById('quickSaleSearch').focus(),300); }
-  else if(type === 'repair') { navigate(null,'repairs'); setTimeout(()=>openRepairModal(),300); }
-  else if(type === 'debt') { navigate(null,'debts'); setTimeout(()=>openDebtModal(),300); }
-  else if(type === 'product') { navigate(null,'inventory'); setTimeout(()=>openProductModal(),300); }
-  else if(type === 'expense') { 
-  navigate(null,'expenses'); 
-  setTimeout(()=>openExpenseModal(),300); 
-}
-
-}
-// داخستنی FAB کاتێک دەرەوەی کلیک دەکرێت
-document.addEventListener('click', e => {
-  if(fabOpen && !e.target.closest('#fabBtn') && !e.target.closest('#fabMenu')) {
-    toggleFab();
-  }
-});
-let utilityFabOpen = false;
-function toggleUtilityFab() {
-  utilityFabOpen = !utilityFabOpen;
-  document.getElementById('utilityFabMenu').classList.toggle('open', utilityFabOpen);
-  document.getElementById('utilityFabIcon').className = utilityFabOpen ? 'ti ti-x' : 'ti ti-dots-vertical';
-}
-
-function utilityFabAction(type) {
-  toggleUtilityFab();
   if(type === 'help') {
     openHelpModal();
   } else if(type === 'conn') {
@@ -5867,13 +5804,12 @@ function utilityFabAction(type) {
     if(confirm('دڵنیایت لە دەرچوون؟')) logoutUser();
   }
 }
-
+// داخستنی FAB کاتێک دەرەوەی کلیک دەکرێت
 document.addEventListener('click', e => {
-  if(utilityFabOpen && !e.target.closest('#utilityFabBtn') && !e.target.closest('#utilityFabMenu')) {
-    toggleUtilityFab();
+  if(fabOpen && !e.target.closest('#fabBtn') && !e.target.closest('#fabMenu')) {
+    toggleFab();
   }
 });
-
 // ══════════════════════════════════════════
 //  EXPENSES
 // ══════════════════════════════════════════
