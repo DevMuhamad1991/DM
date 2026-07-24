@@ -1468,6 +1468,9 @@ function buildQrOptions(){
     type: 'svg',
     data: document.getElementById('qrLink').value.trim(),
     image: document.getElementById('qrLogoUrl').value || undefined,
+    qrOptions: {
+      errorCorrectionLevel: 'H'
+    },
     dotsOptions: {
       color: document.getElementById('qrDotsColorT').value,
       type: document.querySelector('#qrDotsType .on')?.dataset.val || 'rounded'
