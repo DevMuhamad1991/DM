@@ -185,7 +185,7 @@ body::before {
 
 /* ── MAIN ── */
 .main {
-  margin-right: var(--sidebar-w);
+  margin-right: 0;
   flex: 1;
   min-height: 100vh;
   display: flex; flex-direction: column;
@@ -781,12 +781,7 @@ select.filter-input { cursor: pointer; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
-  .sidebar { transform: translateX(100%); }
-  .sidebar.open { transform: translateX(0); }
-  .sidebar-overlay { display: block; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
-  .sidebar-overlay.open { opacity: 1; pointer-events: all; }
   .main { margin-right: 0; }
-  .menu-btn { display: flex; }
   .form-row { grid-template-columns: 1fr; }
   .charts-grid { grid-template-columns: 1fr; }
   .stats-grid { grid-template-columns: repeat(2,1fr); }
@@ -1007,7 +1002,31 @@ body.bg-none::before { background: none; }
 .fab-menu-item i {
   font-size: 18px;
 }
-
+/* ── UTILITY FAB (help / status / logout) ── */
+.fab-utility {
+  left: auto;
+  right: 24px;
+  background: var(--card);
+  color: var(--text2);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-card);
+}
+.fab-utility:hover {
+  background: var(--card-hover);
+  transform: scale(1.1);
+}
+.fab-menu-utility {
+  left: auto;
+  right: 24px;
+}
+.fab-conn-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--success);
+  display: inline-block;
+  flex-shrink: 0;
+  transition: background 0.3s ease;
+}
 /* ── MOBILE RESPONSIVE ── */
 @media (max-width: 768px) {
 
@@ -1469,84 +1488,10 @@ kbd {
   <div class="loading-spinner"></div>
 </div>
 
-<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
-
-<!-- SIDEBAR -->
-<div class="sidebar" id="sidebar">
-<div class="sidebar-logo" style="cursor:pointer" onclick="navigate(null,'apps')">
-	<div class="sidebar-logo-icon"><i class="ti ti-device-mobile"></i></div>
-	<div class="sidebar-logo-text">
-<h1 id="sidebarStoreName">Mobile Store</h1>
-	  <p id="sidebarUserLabel"></p>
-	</div>
-  </div>
-
-  <nav class="sidebar-nav">
-	<div class="nav-section">
-<div class="nav-item" data-page="dashboard" onclick="navigate(this)">
-	<i class="ti ti-layout-dashboard"></i> داشبۆرد
-</div>
-	</div>
-	<div class="nav-section">
-	  <div class="nav-item" data-page="inventory" onclick="navigate(this)">
-		<i class="ti ti-package"></i> کاڵا
-	  </div>
-	  <div class="nav-item" data-page="sales" onclick="navigate(this)">
-		<i class="ti ti-shopping-cart"></i> فرۆشتن
-	  </div>
-<div class="nav-item" data-page="repairs" onclick="navigate(this)">
-		<i class="ti ti-tool"></i> صیانە
-		<span class="nav-badge" id="repairBadge">0</span>
-	  </div>
-	  <div class="nav-item" data-page="debts" onclick="navigate(this)">
-		<i class="ti ti-credit-card"></i> قەرزەکان
-		<span class="nav-badge" id="debtBadge">0</span>
-	  </div>
-	</div>
-	<div class="nav-section">
-
-
-	  <div class="nav-item" data-page="reports" onclick="navigate(this)">
-		<i class="ti ti-chart-bar"></i> ڕاپۆرتەکان
-	  </div>
-    
-      <div class="nav-item" data-page="plans" onclick="navigate(this)">
-  <i class="ti ti-notebook"></i> پلانەکان
-</div>
-
-<div class="nav-item" data-page="expenses" onclick="navigate(this)">
-  <i class="ti ti-wallet"></i> خەرجییەکان
-</div>
-   <div class="nav-item" data-page="barcode" onclick="navigate(this)">
-  <i class="ti ti-barcode"></i> بارکۆد
-</div>
-   <div class="nav-item" data-page="settings" onclick="navigate(this)">
-  <i class="ti ti-settings"></i> ڕێکخستن
-</div>
-
-	</div>
-  </nav>
-
-<div class="sidebar-footer" style="flex-direction:column;gap:10px;align-items:stretch">
-  <div class="flex items-center" style="justify-content:center">
-    <span class="conn-status loading" id="connStatus"><span class="conn-dot"></span> پەیوەندی...</span>
-  </div>
-  <button class="footer-btn" onclick="openHelpModal()">
-    <i class="ti ti-help-circle"></i> چۆن بەکاربێنم؟
-  </button>
-  <button class="footer-btn" onclick="logoutUser()" style="color:var(--danger)">
-    <i class="ti ti-logout"></i> دەرچوون
-  </button>
-</div>
-
-  </div>
-</div>
-
 <!-- MAIN -->
 <div class="main">
   <!-- HEADER -->
   <header class="header">
-	<button class="menu-btn" onclick="toggleSidebar()"><i class="ti ti-menu-2"></i></button>
 	<button class="home-btn" id="homeBtn" onclick="navigate(null,'apps')" title="گەڕانەوە بۆ سەرەکی">
 	  <i class="ti ti-home"></i>
 	</button>
@@ -3319,6 +3264,21 @@ kbd {
   <img id="fullscreenImg" src="" style="max-width:95%;max-height:95vh;border-radius:8px;object-fit:contain">
 </div>
 
+<!-- UTILITY FAB -->
+<button class="fab fab-utility" id="utilityFabBtn" onclick="toggleUtilityFab()">
+  <i class="ti ti-dots-vertical" id="utilityFabIcon"></i>
+</button>
+<div class="fab-menu fab-menu-utility" id="utilityFabMenu">
+  <div class="fab-menu-item" onclick="utilityFabAction('help')">
+    <i class="ti ti-help-circle"></i> چۆن بەکاربێنم؟
+  </div>
+  <div class="fab-menu-item" onclick="utilityFabAction('conn')">
+    <span class="fab-conn-dot" id="fabConnDot"></span> دۆخی داتا
+  </div>
+  <div class="fab-menu-item" style="color:var(--danger)" onclick="utilityFabAction('logout')">
+    <i class="ti ti-logout"></i> دەرچوون
+  </div>
+</div>
 
 </div>
 
@@ -3573,11 +3533,12 @@ let SETTINGS = { store_name:'Mobile Store', store_phone:'', store_address:'', pr
 
 
 function setConnStatus(state) {
-  const el = document.getElementById('connStatus');
-  if (!el) return;
-  if (state === 'online') { el.className = 'conn-status online'; el.innerHTML = '<span class="conn-dot"></span> DevMuhamad@ '; }
-  else if (state === 'offline') { el.className = 'conn-status offline'; el.innerHTML = '<span class="conn-dot"></span> پەیوەندی نیە'; }
-  else { el.className = 'conn-status loading'; el.innerHTML = '<span class="conn-dot"></span> پەیوەندی...'; }
+  const dot = document.getElementById('fabConnDot');
+  if(dot) {
+    dot.style.background = state === 'online' ? 'var(--success)'
+      : state === 'offline' ? 'var(--danger)' : 'var(--warning)';
+  }
+  updateInfoConnStatus();
 }
 
 // Map DB row (snake_case) <-> App object (camelCase)
@@ -3794,8 +3755,8 @@ function toggleSidebar() {
   document.getElementById('sidebarOverlay').classList.toggle('open');
 }
 function closeSidebar() {
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sidebarOverlay').classList.remove('open');
+  document.getElementById('sidebar')?.classList.remove('open');
+  document.getElementById('sidebarOverlay')?.classList.remove('open');
 }
 let isDark = true;
 async function toggleTheme() {
@@ -5994,6 +5955,33 @@ if(type === 'sale') { navigate(null,'sales'); setTimeout(()=>document.getElement
 document.addEventListener('click', e => {
   if(fabOpen && !e.target.closest('#fabBtn') && !e.target.closest('#fabMenu')) {
     toggleFab();
+  }
+});
+let utilityFabOpen = false;
+function toggleUtilityFab() {
+  utilityFabOpen = !utilityFabOpen;
+  document.getElementById('utilityFabMenu').classList.toggle('open', utilityFabOpen);
+  document.getElementById('utilityFabIcon').className = utilityFabOpen ? 'ti ti-x' : 'ti ti-dots-vertical';
+}
+
+function utilityFabAction(type) {
+  toggleUtilityFab();
+  if(type === 'help') {
+    openHelpModal();
+  } else if(type === 'conn') {
+    navigate(null,'settings');
+    setTimeout(()=>{
+      const el = document.querySelector('.settings-menu-item[data-s="info"]');
+      if(el) openSettingsSection(el);
+    }, 250);
+  } else if(type === 'logout') {
+    if(confirm('دڵنیایت لە دەرچوون؟')) logoutUser();
+  }
+}
+
+document.addEventListener('click', e => {
+  if(utilityFabOpen && !e.target.closest('#utilityFabBtn') && !e.target.closest('#utilityFabMenu')) {
+    toggleUtilityFab();
   }
 });
 
