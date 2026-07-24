@@ -68,6 +68,30 @@ input,textarea,select{font-family:inherit;font-size:14px}
 .status-dot.bad{background:var(--danger)}
 .lock-btn{color:var(--faint);font-size:15px;padding:8px}
 
+.app-grid-wrap{max-width:980px;margin:0 auto;padding:24px 16px 80px}
+.app-grid-title{font-size:15px;color:var(--muted);margin-bottom:16px;font-weight:600}
+.app-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:560px){.app-grid{grid-template-columns:repeat(2,1fr)}}
+.app-card{
+  position:relative;aspect-ratio:1/1;border-radius:22px;
+  background:var(--acc);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  color:#fff;transition:.18s;box-shadow:0 8px 20px rgba(0,0,0,.25);
+}
+.app-card:active{transform:scale(.94)}
+@media(hover:hover){.app-card:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(0,0,0,.35)}}
+.app-card-icon{font-size:30px}
+.app-card-label{font-size:13px;font-weight:700}
+.app-card-badge{
+  position:absolute;top:8px;left:8px;background:rgba(0,0,0,.35);
+  color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;
+  min-width:20px;text-align:center;
+}
+.home-btn{
+  display:flex;align-items:center;gap:6px;background:var(--layer1);border:1px solid rgba(212,175,55,.2);
+  color:var(--gold);padding:7px 14px;border-radius:99px;font-size:12.5px;font-weight:600;
+}
+#tabs.hidden-nav, main.hidden-nav{display:none}
+
 main{max-width:980px;margin:0 auto;padding:0 16px 80px}
 .panel{display:none;animation:fade .2s ease}
 .panel.on{display:block}
@@ -228,19 +252,58 @@ main{max-width:980px;margin:0 auto;padding:0 16px 80px}
 <div id="app">
   <div class="topbar">
 	<div class="brand"><i class="fa-solid fa-burger"></i> داشبۆرد </div>
-	<div style="display:flex;align-items:center;gap:14px">
+	<div style="display:flex;align-items:center;gap:10px">
 	  <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--faint)">
 		<span class="status-dot" id="statusDot"></span>
 		<span id="statusText">پەیوەندی نەکراوە</span>
 	  </div>
+  <button class="home-btn" id="homeBtn" title="سەرەکی" style="display:none">
+    <i class="fa-solid fa-house"></i> سەرەکی
+  </button>
 <button class="lock-btn" id="lockBtn" title="داخستن" style="display:flex;align-items:center;gap:6px;background:rgba(225,85,85,.12);border:1px solid rgba(225,85,85,.25);color:var(--danger);padding:7px 14px;border-radius:99px;font-size:12.5px;font-weight:600;transition:.2s">
   <i class="fa-solid fa-right-from-bracket"></i> دەرچوون
 </button>
 	</div>
   </div>
 
-  <div class="tabs" id="tabs">
-	<button class="tab on" data-tab="conn"><i class="fa-solid fa-plug"></i> پەیوەندی</button>
+  <div class="app-grid-wrap" id="appGridWrap">
+    <div class="app-grid-title">هەموو بەشەکان</div>
+    <div class="app-grid" id="appGrid">
+      <button class="app-card" data-tab="conn" style="--acc:#3B6E8F">
+        <div class="app-card-icon"><i class="fa-solid fa-plug"></i></div>
+        <div class="app-card-label">پەیوەندی</div>
+      </button>
+      <button class="app-card" data-tab="design" style="--acc:#8E5DA6">
+        <div class="app-card-icon"><i class="fa-solid fa-palette"></i></div>
+        <div class="app-card-label">دیزاین</div>
+      </button>
+      <button class="app-card" data-tab="food" style="--acc:#D9822B">
+        <div class="app-card-icon"><i class="fa-solid fa-bowl-food"></i></div>
+        <div class="app-card-label">خواردن</div>
+        <div class="app-card-badge" id="badgeFood">0</div>
+      </button>
+      <button class="app-card" data-tab="cat" style="--acc:#4C8C5C">
+        <div class="app-card-icon"><i class="fa-solid fa-layer-group"></i></div>
+        <div class="app-card-label">کەتەگۆری</div>
+        <div class="app-card-badge" id="badgeCat">0</div>
+      </button>
+      <button class="app-card" data-tab="footer" style="--acc:#7A6A5A">
+        <div class="app-card-icon"><i class="fa-solid fa-shoe-prints"></i></div>
+        <div class="app-card-label">فوتەر</div>
+      </button>
+      <button class="app-card" data-tab="security" style="--acc:#C24545">
+        <div class="app-card-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <div class="app-card-label">پاراستن</div>
+      </button>
+      <button class="app-card" data-tab="activity" style="--acc:#C9A227">
+        <div class="app-card-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+        <div class="app-card-label">چالاکی</div>
+      </button>
+    </div>
+  </div>
+
+  <div class="tabs hidden-nav" id="tabs">
+	<button class="tab" data-tab="conn"><i class="fa-solid fa-plug"></i> پەیوەندی</button>
 	<button class="tab" data-tab="design"><i class="fa-solid fa-palette"></i> دیزاین</button>
 	<button class="tab" data-tab="food"><i class="fa-solid fa-bowl-food"></i> خواردن</button>
 	<button class="tab" data-tab="cat"><i class="fa-solid fa-layer-group"></i> کەتەگۆری</button>
@@ -249,7 +312,7 @@ main{max-width:980px;margin:0 auto;padding:0 16px 80px}
   <button class="tab" data-tab="activity"><i class="fa-solid fa-clock-rotate-left"></i> چالاکی</button>
   </div>
 
-  <main>
+  <main class="hidden-nav" id="mainContent">
 
 <!-- ===== CONNECTION ===== -->
 <section class="panel on" id="panel-conn">
@@ -667,27 +730,56 @@ sb.from('meals').select('*').order('sort', {ascending:true}),
   if(el) el.textContent = (SETTINGS?.view_count || 0).toLocaleString();
   renderFoodList();
   renderCatList();
-    if(SETTINGS) fillDesignForm();
+  if(SETTINGS) fillDesignForm();
   if(SETTINGS) fillFooterForm();
   if(SETTINGS) fillAnnouncementForm();
+  updateAppBadges();
 }
-
 function catsOfMeal(mealId){
   return MEAL_CATS.filter(mc=>mc.meal_id===mealId).map(mc=>mc.cat_id);
 }
-
-
 /* ═══════════════════════════════════════════════════════════
    3. TABS
 ═══════════════════════════════════════════════════════════ */
+function openSection(tabName){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on', t.dataset.tab===tabName));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.getElementById('panel-'+tabName).classList.add('on');
+  document.getElementById('appGridWrap').style.display='none';
+  document.getElementById('tabs').classList.remove('hidden-nav');
+  document.getElementById('mainContent').classList.remove('hidden-nav');
+  document.getElementById('homeBtn').style.display='flex';
+  if(tabName==='activity') loadActivity();
+}
+
+function goHome(){
+  document.getElementById('appGridWrap').style.display='block';
+  document.getElementById('tabs').classList.add('hidden-nav');
+  document.getElementById('mainContent').classList.add('hidden-nav');
+  document.getElementById('homeBtn').style.display='none';
+  updateAppBadges();
+}
+
 document.getElementById('tabs').addEventListener('click', e=>{
   const tab = e.target.closest('.tab');
   if(!tab) return;
-  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on', t===tab));
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
-  document.getElementById('panel-'+tab.dataset.tab).classList.add('on');
-  if(tab.dataset.tab==='activity') loadActivity();
+  openSection(tab.dataset.tab);
 });
+
+document.getElementById('appGrid').addEventListener('click', e=>{
+  const card = e.target.closest('.app-card');
+  if(!card) return;
+  openSection(card.dataset.tab);
+});
+
+document.getElementById('homeBtn').addEventListener('click', goHome);
+
+function updateAppBadges(){
+  const bf = document.getElementById('badgeFood');
+  const bc = document.getElementById('badgeCat');
+  if(bf) bf.textContent = MEALS.length;
+  if(bc) bc.textContent = CATS.length;
+}
 
 
 function guardConnected(){
@@ -1308,8 +1400,6 @@ document.getElementById('saveAdminPinBtn').addEventListener('click', ()=>{
   document.getElementById('newAdminPinConfirm').value = '';
   toast('پین کۆدی سڕینەوە گۆڕدرا ✓');
 });
-
-
 </script>
 </body>
 </html>
