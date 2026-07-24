@@ -3727,11 +3727,8 @@ const DB = {
 const pageNames = { 
   apps:'سەرەکی', dashboard:'داشبۆرد', inventory:'کاڵا', sales:'فرۆشتن', 
   repairs:'چاکسازی', debts:'قەرزەکان', reports:'ڕاپۆرتەکان', 
-  plans:'پلانەکان', expenses:'خەرجییەکان', settings:'ڕێکخستن'
+  plans:'پلانەکان', expenses:'خەرجییەکان', barcode:'بارکۆد', settings:'ڕێکخستن'
 };
-
-
-
 function navigate(el, page) {
   page = page || el.dataset.page;
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
@@ -3761,11 +3758,9 @@ function renderPage(p) {
   else if(p==='plans') renderPlans();
   else if(p==='settings') renderSettings();
   else if(p==='expenses') renderExpenses();
+  else if(p==='barcode') renderBarcodePage();
 
 }
-
-
-
 // ══════════════════════════════════════════
 //  SIDEBAR / THEME
 // ══════════════════════════════════════════
@@ -5845,8 +5840,8 @@ async function init() {
   }
 }
 
-const PERM_SECTIONS = ['dashboard','inventory','sales','repairs','debts','plans','expenses','reports'];
-const PERM_LABELS = {dashboard:'داشبۆرد',inventory:'کاڵا',sales:'فرۆشتن',repairs:'چاکسازی',debts:'قەرزەکان',plans:'پلانەکان',expenses:'خەرجییەکان',reports:'ڕاپۆرتەکان'};
+const PERM_SECTIONS = ['dashboard','inventory','sales','repairs','debts','plans','expenses','reports','barcode'];
+const PERM_LABELS = {dashboard:'داشبۆرد',inventory:'کاڵا',sales:'فرۆشتن',repairs:'چاکسازی',debts:'قەرزەکان',plans:'پلانەکان',expenses:'خەرجییەکان',reports:'ڕاپۆرتەکان',barcode:'بارکۆد'};
 
 function can(section, action) {
   if(!currentUser) return false;
@@ -6853,6 +6848,236 @@ function renderEmployees() {
       <button class="btn btn-ghost btn-sm btn-icon" onclick="openEmployeeModal('${u.id}')"><i class="ti ti-edit"></i></button>
       <button class="btn btn-danger btn-sm btn-icon" onclick="deleteEmployee('${u.id}')"><i class="ti ti-trash"></i></button>
     </div>`).join('');
+}
+
+// ══════════════════════════════════════════
+//  BARCODE
+// ══════════════════════════════════════════
+let bcSelected = new Set();
+let bcCurrentGenId = null;
+
+function renderBarcodePage() {
+  const products = DB.get('products');
+  const q = document.getElementById('bcSearch').value.toLowerCase();
+  const filter = document.getElementById('bcFilter').value;
+
+  const filtered = products.filter(p => {
+    const matchQ = !q || p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q);
+    const matchF = !filter || (filter==='has' ? !!p.barcode : !p.barcode);
+    return matchQ && matchF;
+  });
+
+  const body = document.getElementById('barcodeListBody');
+  if(!filtered.length) {
+    body.innerHTML = '<div class="empty-state"><i class="ti ti-barcode"></i><p>هیچ کاڵایەک نەدۆزرایەوە</p></div>';
+    updateBcSelectedCount();
+    return;
+  }
+
+  body.innerHTML = filtered.map(p => `
+    <div class="barcode-list-item">
+      <input type="checkbox" class="bc-check" data-id="${p.id}" 
+        ${bcSelected.has(p.id) ? 'checked' : ''} 
+        onchange="toggleBarcodeSelect('${p.id}', this.checked)"
+        style="width:18px;height:18px;cursor:pointer;flex-shrink:0">
+      ${p.imageUrl ? `<img src="${p.imageUrl}">` : `<div style="width:40px;height:40px;border-radius:8px;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-photo" style="color:var(--text3)"></i></div>`}
+      <div class="barcode-list-info">
+        <div class="barcode-list-name">${p.name} <span class="td-muted" style="font-weight:400">${p.brand}</span></div>
+        ${p.barcode 
+          ? `<div class="barcode-list-code">${p.barcode}</div>` 
+          : `<div class="barcode-no-code">هیچ بارکۆدێکی نییە</div>`}
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="openGenBarcodeModal('${p.id}')">
+        <i class="ti ${p.barcode ? 'ti-refresh' : 'ti-plus'}"></i> ${p.barcode ? 'گۆڕین' : 'دروستکردن'}
+      </button>
+    </div>`).join('');
+
+  updateBcSelectedCount();
+}
+
+function toggleBarcodeSelect(id, checked) {
+  if(checked) bcSelected.add(id);
+  else bcSelected.delete(id);
+  updateBcSelectedCount();
+}
+
+function selectAllBarcodes(select) {
+  const checks = document.querySelectorAll('.bc-check');
+  checks.forEach(cb => {
+    const id = cb.dataset.id;
+    cb.checked = select;
+    if(select) bcSelected.add(id);
+    else bcSelected.delete(id);
+  });
+  updateBcSelectedCount();
+}
+
+function updateBcSelectedCount() {
+  document.getElementById('bcSelectedCount').textContent = `${bcSelected.size} کاڵا هەڵبژێردراوە`;
+}
+
+function openGenBarcodeModal(id) {
+  bcCurrentGenId = id;
+  const p = DB.get('products').find(x=>x.id===id);
+  if(!p) return;
+  document.getElementById('genBarcodeProductName').textContent = `${p.name} — ${p.brand}`;
+  document.getElementById('genBarcodeMethod').value = 'auto';
+  openModal('genBarcodeModal');
+}
+
+function generateAutoBarcode() {
+  // کۆدێکی ١٢ ژمارەیی بەپێی کات و ژمارەی هەڕەمەکی (شێوازی EAN-13 بەبێ چێک-ژمارە)
+  const ts = Date.now().toString().slice(-9);
+  const rnd = Math.floor(Math.random()*900+100);
+  return `2${ts}${rnd}`.slice(0,13);
+}
+
+async function confirmGenerateBarcode() {
+  const method = document.getElementById('genBarcodeMethod').value;
+  const p = DB.get('products').find(x=>x.id===bcCurrentGenId);
+  if(!p) return;
+
+  const newBarcode = method === 'id' ? p.id.replace(/-/g,'').slice(0,13) : generateAutoBarcode();
+
+  const btn = document.getElementById('genBarcodeBtn');
+  btn.disabled = true;
+  try {
+    const { error } = await sb.from('products').update({ barcode: newBarcode }).eq('id', p.id);
+    if(error) throw error;
+    const idx = CACHE.products.findIndex(x=>x.id===p.id);
+    if(idx>-1) CACHE.products[idx].barcode = newBarcode;
+    toast('بارکۆد دروستکرا: ' + newBarcode, 'success');
+    closeModal('genBarcodeModal');
+    renderBarcodePage();
+    reloadTable('products');
+  } catch(err) {
+    toast('کێشە: ' + (err.message||err), 'error');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function getBcSelectedProducts() {
+  return DB.get('products').filter(p => bcSelected.has(p.id) && p.barcode);
+}
+
+function buildBarcodeLabelHTML(p, forPrint) {
+  const showName = document.getElementById('bcShowName').checked;
+  const showPrice = document.getElementById('bcShowPrice').checked;
+  const showBrand = document.getElementById('bcShowBrand').checked;
+  const svgId = `bc-svg-${p.id}${forPrint?'-print':''}`;
+  let textLines = '';
+  if(showName) textLines += `<div>${p.name}</div>`;
+  if(showBrand) textLines += `<div>${p.brand}${p.category?' • '+p.category:''}</div>`;
+  if(showPrice) textLines += `<div><b>${fmt(p.sellPrice)}</b></div>`;
+  return `<div class="barcode-label-item">
+    <svg id="${svgId}"></svg>
+    <div class="barcode-label-text">${textLines}</div>
+  </div>`;
+}
+
+function renderBarcodeSVGs(products, forPrint) {
+  products.forEach(p => {
+    const svgId = `bc-svg-${p.id}${forPrint?'-print':''}`;
+    const el = document.getElementById(svgId);
+    if(!el) return;
+    try {
+      JsBarcode(el, p.barcode, {
+        format: 'CODE128', width: 1.6, height: 40,
+        displayValue: true, fontSize: 12, margin: 4
+      });
+    } catch(e) { console.error('barcode render error', e); }
+  });
+}
+
+function previewBarcodeLabels() {
+  const selected = getBcSelectedProducts();
+  if(!selected.length) { toast('تکایە کاڵایەک هەڵبژێرە کە بارکۆدی هەبێت', 'error'); return; }
+
+  const cols = document.getElementById('bcCols').value;
+  const grid = document.getElementById('barcodePreviewGrid');
+  grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+  grid.innerHTML = selected.map(p => buildBarcodeLabelHTML(p, false)).join('');
+  openModal('previewBarcodeModal');
+  setTimeout(() => renderBarcodeSVGs(selected, false), 50);
+}
+
+function printBarcodeLabels() {
+  const selected = getBcSelectedProducts();
+  if(!selected.length) { toast('تکایە کاڵایەک هەڵبژێرە کە بارکۆدی هەبێت', 'error'); return; }
+
+  const cols = document.getElementById('bcCols').value;
+  const size = document.getElementById('bcLabelSize').value;
+  const showName = document.getElementById('bcShowName').checked;
+  const showPrice = document.getElementById('bcShowPrice').checked;
+  const showBrand = document.getElementById('bcShowBrand').checked;
+
+  const barH = size==='small' ? 30 : size==='large' ? 55 : 42;
+  const fontSize = size==='small' ? 10 : size==='large' ? 14 : 12;
+
+  // دروستکردنی بارکۆدەکان وەک وێنە (base64) پێش کردنەوەی پەنجەرەی چاپ
+  const tempSvgs = selected.map(p => {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    JsBarcode(svg, p.barcode, { format:'CODE128', width:1.6, height:barH, displayValue:true, fontSize, margin:4 });
+    return { id: p.id, svgHtml: svg.outerHTML };
+  });
+
+  const labelsHTML = selected.map((p) => {
+    const svgObj = tempSvgs.find(s=>s.id===p.id);
+    let textLines = '';
+    if(showName) textLines += `<div>${p.name}</div>`;
+    if(showBrand) textLines += `<div>${p.brand}${p.category?' • '+p.category:''}</div>`;
+    if(showPrice) textLines += `<div style="font-weight:700">${fmt(p.sellPrice)}</div>`;
+    return `<div class="lbl">
+      ${svgObj.svgHtml}
+      <div class="lbl-text">${textLines}</div>
+    </div>`;
+  }).join('');
+
+  const html = `
+    <!DOCTYPE html>
+    <html lang="ku" dir="rtl">
+    <head>
+      <meta charset="UTF-8">
+      <title>چاپکردنی بارکۆد</title>
+      <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: Tahoma, sans-serif; padding:10px; }
+        .grid {
+          display:grid;
+          grid-template-columns: repeat(${cols}, 1fr);
+          gap:8px;
+        }
+        .lbl {
+          border:1px dashed #999;
+          border-radius:4px;
+          padding:8px;
+          text-align:center;
+          page-break-inside: avoid;
+        }
+        .lbl svg { max-width:100%; }
+        .lbl-text { font-size:${fontSize}px; color:#000; margin-top:4px; line-height:1.4; }
+        @media print { @page { margin:8mm; } }
+      </style>
+    </head>
+    <body>
+      <div class="grid">${labelsHTML}</div>
+      <script>
+        window.onload = function() { window.print(); setTimeout(()=>window.close(), 1000); }
+      <\/script>
+    </body>
+    </html>`;
+
+  if(/Mobi|Android/i.test(navigator.userAgent)) {
+    const w = window.open('about:blank');
+    if(w) { w.document.write(html); w.document.close(); }
+    return;
+  }
+  const blob = new Blob([html], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  const win = window.open(url, '_blank', 'width=500,height=700');
+  if(!win) { toast('تکایە popup بلۆکەکە غەیری چالاک بکە', 'error'); return; }
+  setTimeout(()=> URL.revokeObjectURL(url), 5000);
 }
 
 init();
