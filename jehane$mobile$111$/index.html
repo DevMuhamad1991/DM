@@ -3701,11 +3701,17 @@ function buildNotifications() {
   document.getElementById('notifDot').style.display = notifs.length ? 'block' : 'none';
   // badges
   const pendingRepairs = repairs.filter(r=>!['completed','delivered'].includes(r.status)).length;
-  document.getElementById('repairBadge').textContent = pendingRepairs;
-  document.getElementById('repairBadge').style.display = pendingRepairs ? 'inline-flex' : 'none';
+  const repairBadgeEl = document.getElementById('repairBadge');
+  if(repairBadgeEl) {
+    repairBadgeEl.textContent = pendingRepairs;
+    repairBadgeEl.style.display = pendingRepairs ? 'inline-flex' : 'none';
+  }
   const pendingDebts = debts.filter(d=>d.status==='pending').length;
-  document.getElementById('debtBadge').textContent = pendingDebts;
-  document.getElementById('debtBadge').style.display = pendingDebts ? 'inline-flex' : 'none';
+  const debtBadgeEl = document.getElementById('debtBadge');
+  if(debtBadgeEl) {
+    debtBadgeEl.textContent = pendingDebts;
+    debtBadgeEl.style.display = pendingDebts ? 'inline-flex' : 'none';
+  }
   const hasNotifs = notifs.length > 0;
   if(hasNotifs && !hadNotifs) playAlert();
 
