@@ -1273,7 +1273,7 @@ kbd {
 }
 .home-btn {
   width: 36px; height: 36px;
-  border: none; background: var(--card);
+  border: none;
   border: 1px solid var(--card-border);
   border-radius: 10px; cursor: pointer;
   color: var(--text2);
@@ -1281,8 +1281,18 @@ kbd {
   font-size: 18px;
   transition: all var(--transition);
 }
-.home-btn.show { display: flex; }
+.home-btn.show {
+  display: flex;
+  background: var(--primary-light);
+  color: var(--primary);
+  border-color: rgba(108,99,255,0.25);
+}
 .home-btn:hover { background: var(--card-hover); color: var(--text); }
+.home-btn.show:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
 /* ── BARCODE PAGE ── */
 .barcode-settings-card {
   background: var(--card);
